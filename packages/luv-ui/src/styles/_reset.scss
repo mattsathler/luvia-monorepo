@@ -1,0 +1,76 @@
+@use './colors' as *;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    background-color: var-color(background);
+    overflow-x: hidden;
+    user-select: none;
+    font-family: Nunito;
+    color: var-color(text);
+}
+
+html,
+body,
+app-root {
+    height: 100%;
+}
+
+body,
+.ql-container {
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    background: none;
+    border: none;
+    outline: none;
+    color: var-color(text);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var-color(placeholder);
+}
+
+span {
+    color: var-color(text);
+}

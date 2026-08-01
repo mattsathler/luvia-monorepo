@@ -1,0 +1,55 @@
+@use '../../styles/colors' as colors;
+
+@mixin checkbox-variant($color) {
+    color:var(--#{$color});
+
+    &:checked {
+        background-color: var(--#{$color});
+        border-color: var(--#{$color});
+    }
+}
+
+input[type="checkbox"].checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background-color: var(--surface);
+    border: 1px solid var(--placeholder);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    vertical-align: middle;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01);
+
+    &:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+    &:checked::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 10px;
+        width: 4px;
+        height: 12px;
+        border: solid var(--surface);
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+    @each $name, $value in colors.$color-keys {
+        &.#{$name} {
+            @include checkbox-variant($name);
+        }
+    }
+}
+
+/* VARIANTES */

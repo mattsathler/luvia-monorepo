@@ -1,0 +1,19 @@
+@use '../../styles/colors' as colors;
+@use "sass:color";
+
+input[type="date"] {
+    background-color: var(--background);
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+    text-indent: 0;
+}
+
+[type="date"]::-webkit-inner-spin-button {
+    display: none;
+}
+
+input[type='date'],
+input[type='time'] {
+    -webkit-appearance: none !important;
+}

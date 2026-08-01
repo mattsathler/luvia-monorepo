@@ -1,0 +1,53 @@
+@use '../../styles/colors' as colors;
+
+.slide-toggle-wrapper {
+    position: relative;
+    height: 22px;
+
+    input[type="checkbox"].slide-toggle-input {
+        position: absolute;
+        inset: 0;
+        width: 42px;
+        height: 22px;
+        top: 0;
+        opacity: 0;
+        margin: 0;
+        cursor: pointer;
+        z-index: 9;
+    }
+
+    .slide-toggle {
+        width: 42px;
+        height: 22px;
+        border-radius: 12px;
+        transition: background-color 0.2s;
+        position: relative;
+        background-color: var(--error);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--surface);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s;
+        }
+    }
+
+    input:checked+.slide-toggle {
+        background-color: var(--success);
+
+        &::before {
+            transform: translateX(20px);
+        }
+    }
+
+    input:disabled+.slide-toggle {
+        opacity: 0.6;
+        cursor: default;
+    }
+}

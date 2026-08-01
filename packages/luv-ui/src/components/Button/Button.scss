@@ -1,0 +1,105 @@
+@use '../../styles/colors' as colors;
+
+// ============================================
+// MIXINS
+// ============================================
+
+@mixin button-base {
+    box-sizing: border-box;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 64px;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+@mixin button-variant($color) {
+    background-color: var(--#{$color});
+    color: var(--text);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01);
+
+    &:hover:not(.outline, :disabled) {
+        background-color: color-mix(in srgb, var(--#{$color}) 90%, gray);
+    }
+
+    &:active:not(:disabled, .outline) {
+        background-color: color-mix(in srgb, var(--#{$color}) 100%, gray);
+        box-shadow: none;
+        transform: scale(0.97);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: default;
+        box-shadow: none;
+    }
+}
+
+// ============================================
+// VARIANTS
+// ============================================
+
+button {
+    @include button-base;
+}
+
+/* VARIANTES */
+
+@each $name, $value in colors.$color-keys {
+    button.#{$name} {
+        @include button-variant($name);
+    }
+}
+
+/* FORMAS */
+button.circle {
+    border-radius: 50%;
+    padding: 8px;
+    flex-shrink: 0;
+}
+
+button.outline {
+    background: transparent;
+    border: 2px solid;
+
+    @each $name, $value in colors.$color-keys {
+        &.#{$name} {
+            color: $value !important;
+            border-color: $value !important;
+        }
+    }
+
+    span {
+        color: inherit;
+    }
+
+    &:hover:not(.outline) {
+        background-color: color-mix(in srgb, currentColor 15%, white);
+    }
+}
+
+/* TAMANHOS */
+button.sm {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+}
+
+button.lg {
+    padding: 16px 24px;
+    font-size: 1.1rem;
+}
+
+@media screen and (max-width: 425px) {
+    button:not(.circle) {
+        width: 100%;
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "luvia-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=game",
+    "dev:docs": "npm run dev --workspace=docs",
+    "build": "npm run build --workspaces",
+    "build:ui": "npm run build --workspace=luv-ui",
+    "build:game": "npm run build --workspace=game",
+    "build:docs": "npm run build --workspace=docs",
+    "clear": "rm -rf node_modules packages/*/node_modules package-lock.json"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "react": "^19.2.8",
+    "sass-embedded": "^1.100.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.0",
+    "vite-plugin-dts": "^5.0.3"
+  }
+}

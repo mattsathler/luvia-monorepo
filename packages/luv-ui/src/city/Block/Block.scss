@@ -1,0 +1,56 @@
+.tile {
+    position: relative;
+    width: calc(var(--size) + 2px);
+    height: calc(var(--size) + 2px);
+    transform: none;
+
+    .face {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-blend-mode: multiply;
+    }
+
+    .top {
+        background:
+            var(--texture),
+            color-mix(in srgb,
+                var(--color),
+                black calc(60% * ((1 - var(--sun-y)) + 0.3 * var(--sun-y))));
+
+        background-size: cover;
+        background-blend-mode: multiply;
+
+        clip-path: polygon(50% 0%, 100% 25%, 50% 50%, 0% 25%);
+    }
+
+    .left {
+        background: var(--texture),
+            color-mix(in srgb,
+                var(--color),
+                black calc(60% * ((1 - var(--sun-y)) + (1 - var(--sun-x)) * var(--sun-y))));
+        background-size: cover;
+        background-blend-mode: multiply;
+
+        clip-path: polygon(0% 25%, 50% 50%, 50% 100%, 0% 75%);
+    }
+
+    .right {
+        background: var(--texture),
+            color-mix(in srgb,
+                var(--color),
+                black calc(60% * ((1 - var(--sun-y)) + var(--sun-x) * var(--sun-y))));
+
+        background-size: cover;
+        background-blend-mode: multiply;
+
+        clip-path: polygon(50% 50%, 100% 25%, 100% 75%, 50% 100%);
+    }
+}
+
+.iso-grid .tile {
+    position: absolute;
+    left: calc((var(--x) - var(--y)) * (var(--size) / 2));
+    top: calc((var(--x) + var(--y)) * (var(--size) / 4) - var(--z) * (var(--size) / 2));
+    z-index: calc(var(--x) + var(--y) + var(--z));
+}

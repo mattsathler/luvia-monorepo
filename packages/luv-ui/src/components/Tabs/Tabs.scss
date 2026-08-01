@@ -1,0 +1,36 @@
+@use '../../styles/colors' as colors;
+
+div.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px !important;
+    margin-bottom: 24px;
+
+    button {
+        background-color: transparent;
+        border-radius: 8px;
+        box-sizing: border-box;
+        width: 100%;
+        flex: 1 1 120px;
+
+        &.active {
+            overflow: hidden;
+            background-color: var(--primary);
+        }
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+    div.tabs {
+        flex-direction: column;
+        gap: 16px !important;
+        margin-bottom: 16px;
+
+        button {
+            max-width: none;
+            width: 100%;
+        }
+
+    }
+}

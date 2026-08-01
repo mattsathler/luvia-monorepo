@@ -1,0 +1,525 @@
+@use 'colors' as *;
+
+// ==========================
+// CONFIGURAÇÕES
+// ==========================
+
+$space-scale: (
+    0: 0px,
+    1: 1px,
+    2: 2px,
+    4: 4px,
+    8: 8px,
+    12: 12px,
+    16: 16px,
+    20: 20px,
+    24: 24px,
+    32: 32px,
+    40: 40px,
+    48: 48px,
+    56: 56px,
+    64: 64px,
+    68: 68px,
+    72: 72px,
+    88: 88px,
+    90: 90px,
+    screen-sm: 640px,
+    screen-md: 768px,
+    screen-lg: 1024px,
+    screen-xl: 1280px,
+    screen-2xl: 1536px,
+    128: 128px,
+    148: 148px,
+    164: 164px,
+    240: 240px,
+    320: 320px,
+    480: 480px,
+    640: 640px,
+    768: 768px,
+    1024: 1024px,
+    1280: 1280px,
+    1440: 1440px,
+    1920: 1920px
+);
+
+$max-width-scale: (
+    none: none,
+    full: 100%,
+    screen-sm: 640px,
+    screen-md: 768px,
+    screen-lg: 1024px,
+    screen-xl: 1280px,
+    screen-2xl: 1536px,
+    320: 320px,
+    480: 480px,
+    640: 640px,
+    768: 768px,
+    1024: 1024px,
+    1280: 1280px,
+    1440: 1440px,
+    1920: 1920px
+);
+
+@each $key, $value in $space-scale {
+    .max-w-#{$key} {
+        max-width: $value !important;
+    }
+}
+
+@each $key, $value in $space-scale {
+    .max-h-#{$key} {
+        max-height: $value !important;
+    }
+}
+
+@each $key, $value in $space-scale {
+    .min-w-#{$key} {
+        min-width: $value !important;
+    }
+
+    .min-h-#{$key} {
+        min-height: $value !important;
+    }
+}
+
+.min-h-screen {
+    min-height: 100dvh;
+}
+
+@each $key, $value in $space-scale {
+    .w-#{$key} {
+        width: $value !important;
+    }
+
+    .h-#{$key} {
+        height: $value !important;
+    }
+}
+
+@each $key in 10, 20, 30, 40, 50, 60, 70, 80, 90 {
+    .w-#{$key}-p {
+        width: #{$key + "%"} !important;
+    }
+}
+
+.max-h-50-p {
+    max-height: 50%;
+}
+
+.max-w-50-p {
+    max-width: 50%;
+}
+
+.w-auto {
+    width: auto !important;
+}
+
+.h-auto {
+    height: auto !important;
+}
+
+// ==========================
+// COLOR HELPERS
+// ==========================
+
+@each $name, $value in $color-keys {
+    .bg-#{$name} {
+        background-color: $value !important;
+    }
+}
+
+@each $name, $value in $color-keys {
+    .text-#{$name} {
+        color: $value !important;
+    }
+}
+
+@each $name, $value in $color-keys {
+    .border-#{$name} {
+        border: 2px solid $value
+    }
+}
+
+// ==========================
+// HELPERS DE ESPAÇAMENTO
+// ==========================
+
+@each $key, $value in $space-scale {
+
+    // Margin
+    .m-#{$key} {
+        margin: $value !important;
+    }
+
+    .mt-#{$key} {
+        margin-top: $value !important;
+    }
+
+    .mb-#{$key} {
+        margin-bottom: $value !important;
+    }
+
+    .ml-#{$key} {
+        margin-left: $value !important;
+    }
+
+    .mr-#{$key} {
+        margin-right: $value !important;
+    }
+
+    .mx-#{$key} {
+        margin-left: $value !important;
+        margin-right: $value !important;
+    }
+
+    .my-#{$key} {
+        margin-top: $value !important;
+        margin-bottom: $value !important;
+    }
+
+    // Padding
+    .p-#{$key} {
+        padding: $value !important;
+    }
+
+    .pt-#{$key} {
+        padding-top: $value !important;
+    }
+
+    .pb-#{$key} {
+        padding-bottom: $value !important;
+    }
+
+    .pl-#{$key} {
+        padding-left: $value !important;
+    }
+
+    .pr-#{$key} {
+        padding-right: $value !important;
+    }
+
+    .px-#{$key} {
+        padding-left: $value !important;
+        padding-right: $value !important;
+    }
+
+    .py-#{$key} {
+        padding-top: $value !important;
+        padding-bottom: $value !important;
+    }
+}
+
+// ==========================
+// DISPLAY
+// ==========================
+
+.d-block {
+    display: block !important;
+}
+
+.d-inline {
+    display: inline !important;
+}
+
+.d-inline-block {
+    display: inline-block !important;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.d-grid {
+    display: grid !important;
+}
+
+.grid-wrap {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+}
+
+.grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr) !important;
+}
+
+.d-none {
+    display: none !important;
+}
+
+// ==========================
+// FLEXBOX
+// ==========================
+
+.flex-row {
+    flex-direction: row !important;
+}
+
+.flex-col {
+    flex-direction: column !important;
+}
+
+.flex-1-1 {
+    flex: 1 1 auto !important;
+}
+
+.flex-0-1 {
+    flex: 0 1 auto !important;
+}
+
+.flex-wrap {
+    flex-wrap: wrap !important;
+}
+
+.items-center {
+    align-items: center !important;
+}
+
+.items-start {
+    align-items: flex-start !important;
+}
+
+.items-end {
+    align-items: flex-end !important;
+}
+
+.justify-center {
+    justify-content: center !important;
+}
+
+.justify-between {
+    justify-content: space-between !important;
+}
+
+.justify-around {
+    justify-content: space-around !important;
+}
+
+.justify-end {
+    justify-content: end !important;
+}
+
+// ==========================
+// TEXTO
+// ==========================
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.text-bold {
+    font-weight: 700 !important;
+}
+
+.text-normal {
+    font-weight: 400 !important;
+}
+
+.text-light {
+    font-weight: 300 !important;
+}
+
+.text-uppercase {
+    text-transform: uppercase !important;
+}
+
+.text-lowercase {
+    text-transform: lowercase !important;
+}
+
+.text-capitalize {
+    text-transform: capitalize !important;
+}
+
+.text-wrap {
+    text-wrap: wrap;
+}
+
+@each $key, $value in $space-scale {
+    .text-size-#{$key} {
+        font-size: $value !important;
+    }
+}
+
+// ==========================
+// POSIÇÃO
+// ==========================
+
+.pos-relative {
+    position: relative !important;
+}
+
+.pos-absolute {
+    position: absolute !important;
+}
+
+.pos-fixed {
+    position: fixed !important;
+}
+
+.pos-sticky {
+    position: sticky !important;
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
+}
+
+.top {
+    top: 0;
+}
+
+.bottom {
+    bottom: 0;
+}
+
+// ==========================
+// OUTROS ÚTEIS
+// ==========================
+
+.w-screen {
+    width: 100dvw !important;
+}
+
+.h-screen {
+    height: 100dvh !important;
+}
+
+.w-full {
+    width: 100% !important;
+}
+
+.h-full {
+    height: 100% !important;
+}
+
+.no-round {
+    border-radius: 0;
+}
+
+.rounded {
+    border-radius: 8px !important;
+}
+
+.rounded-full {
+    border-radius: 9999px !important;
+}
+
+.shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.flat {
+    box-shadow: none !important;
+}
+
+.cursor-normal {
+    cursor: default;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.gap {
+    gap: 24px !important;
+}
+
+.text-nowrap {
+    text-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.hidden {
+    overflow: hidden;
+}
+
+.hidden-x {
+    overflow-x: hidden;
+}
+
+.hidden-y {
+    overflow-y: hidden;
+}
+
+.scroll {
+    overflow: scroll;
+}
+
+.scroll-y {
+    overflow-y: auto;
+}
+
+.scroll-x {
+    overflow-x: auto;
+}
+
+.scroll-auto {
+    overflow: auto;
+}
+
+.z-index-top {
+    z-index: 9999;
+}
+
+.transition-slow {
+    transition: all 0.5s ease;
+}
+
+@each $key, $value in $space-scale {
+    .gap-#{$key} {
+        grid-row-gap: $value;
+        grid-column-gap: $value;
+    }
+}
+
+// ==========================
+// MEDIA SCREEN
+// ==========================
+
+@media screen and (max-width: 768px) {
+    .gap {
+        gap: 16px !important;
+    }
+
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .wrap-medium {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 456px) {
+    @each $key, $value in $space-scale {
+        .text-ellipsis-#{$key} {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: $value;
+        }
+    }
+
+    .wrap-tiny {
+        flex-direction: column;
+    }
+}

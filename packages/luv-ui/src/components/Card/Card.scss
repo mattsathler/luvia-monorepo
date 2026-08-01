@@ -1,0 +1,43 @@
+@use '../../styles/colors' as colors;
+
+@mixin card-base {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 24px;
+    background-color: var(--surface);
+
+    @media screen and (max-width: 768px) {
+        padding: 16px;
+    }
+}
+
+@mixin card-flat {
+    box-shadow: none;
+}
+
+@mixin card-outline {
+    box-shadow: none;
+    border: 1px solid var(--placeholder);
+}
+
+@mixin card-variant($color) {
+    background-color: var(--#{$color}) !important;
+}
+
+.card {
+    @include card-base;
+}
+
+.card.flat {
+    @include card-flat;
+}
+
+.card.outline {
+    @include card-outline;
+}
+
+@each $name, $value in colors.$color-keys {
+    .card.#{$name} {
+        @include card-variant($name);
+    }
+}

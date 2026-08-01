@@ -1,0 +1,92 @@
+// ==========================
+// COLORS.SCSS
+// ==========================
+
+// ========== LIGHT THEME ==========
+$theme-light: (
+    primary: #FF6FAF,
+    altpri: #FF8FC4,
+    secondary: #6EC9FF,
+    background: #FFF7FB,
+    surface: #FFFFFF,
+    placeholder: #C9B8C3,
+    text: #4A3A44,
+    success: #6BE3A1,
+    warn: #FFC86B,
+    error: #FF6B7A,
+    info: #6EC9FF,
+    success-alpha: #6BE3A133,
+    warn-alpha: #FFC86B33,
+    error-alpha: #FF6B7A33,
+    border: #562974,
+);
+
+// ========== DARK THEME ==========
+$theme-dark: (
+    primary: #FF7FB8,
+    altpri: #FF9FCC,
+    secondary: #7ED4FF,
+    background: #1A1418,
+    surface: #241C21,
+    placeholder: #7A6A74,
+    text: #F4EAF0,
+    success: #5FD89A,
+    warn: #FFB85C,
+    error: #FF7A88,
+    info: #7ED4FF,
+    success-alpha: #5FD89A33,
+    warn-alpha: #FFB85C33,
+    error-alpha: #FF7A8833,
+    border: #150b1c,
+);
+
+$theme: $theme-light !default;
+
+// ==========================
+// CSS Custom Properties
+// ==========================
+:root {
+    @each $key, $value in $theme-light {
+        --#{$key}: #{$value};
+    }
+}
+
+[data-theme="dark"] {
+    @each $key, $value in $theme-dark {
+        --#{$key}: #{$value};
+    }
+}
+
+// ==========================
+// Funções de acesso
+// ==========================
+
+@function color($key) {
+    @return map-get($theme, $key);
+}
+
+@function var-color($key) {
+    @return var(--#{$key});
+}
+
+// ==========================
+// Lista de cores para utilitários
+// ==========================
+
+$color-keys: (
+    primary: var-color(primary),
+    altpri: var-color(altpri),
+    secondary: var-color(secondary),
+    tertiary: var-color(tertiary),
+    background: var-color(background),
+    surface: var-color(surface),
+    placeholder: var-color(placeholder),
+    text: var-color(text),
+    success: var-color(success),
+    warn: var-color(warn),
+    error: var-color(error),
+    info: var-color(info),
+    success-alpha: var-color(success-alpha),
+    warn-alpha: var-color(warn-alpha),
+    error-alpha: var-color(error-alpha),
+);

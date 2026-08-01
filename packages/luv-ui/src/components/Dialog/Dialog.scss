@@ -1,0 +1,63 @@
+@use '../../styles/colors' as colors;
+
+@mixin dialog-base {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 32px 24px 24px;
+    background-color: var(--surface);
+
+    @media screen and (max-width: 768px) {
+        padding: 24px 16px 24px;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 16px;
+        background: var(--primary);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        right: 6px;
+
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--surface);
+        box-shadow:
+            -10px 0 0 var(--surface),
+            -20px 0 0 var(--surface);
+    }
+}
+
+@mixin dialog-flat {
+    box-shadow: none;
+}
+
+@mixin dialog-variant($color) {
+    &::before {
+        background: var(--#{$color}) !important;
+    }
+}
+
+.dialog {
+    @include dialog-base;
+}
+
+.dialog.flat {
+    @include dialog-flat;
+}
+
+@each $name, $value in colors.$color-keys {
+    .dialog.#{$name} {
+        @include dialog-variant($name);
+    }
+}
