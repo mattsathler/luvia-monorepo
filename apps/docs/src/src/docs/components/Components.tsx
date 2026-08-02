@@ -1,4 +1,4 @@
-import { Tab, Tabs } from "../../../../../../packages/luv-ui/src";
+import { Tab, Tabs } from "luv-ui";
 
 export default function Components() {
     return <div className="d-flex flex-col gap">
