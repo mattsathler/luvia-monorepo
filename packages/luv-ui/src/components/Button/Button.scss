@@ -8,8 +8,8 @@
     box-sizing: border-box;
     border: none;
     border-radius: 8px;
-    padding: 12px 24px;
-    font-weight: 500;
+    padding: 8px 24px;
+    font-weight: 600;
     transition: all 0.2s ease;
     width: fit-content;
     display: inline-flex;
@@ -24,7 +24,7 @@
 
 @mixin button-variant($color) {
     background-color: var(--#{$color});
-    color: var(--text);
+    color: var(--#{$color}-text);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01);
 
     &:hover:not(.outline, :disabled) {

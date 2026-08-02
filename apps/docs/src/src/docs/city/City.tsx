@@ -1,7 +1,7 @@
 import { TILE_TYPES } from "../../../../../../packages/luv-ui/src/city/Block/models/TilesTypes";
 import { DayCycleControl } from "../../../../../../packages/luv-ui/src/city/CycleControl/CycleControl";
 import { generateCity } from "./ExampleCity";
-import { Block, IsoGrid } from "luv-ui";
+import { Block, IsoGrid, TileData } from "luv-ui";
 
 
 const tiles: TileData[] = generateCity(40);
@@ -9,7 +9,7 @@ const tiles: TileData[] = generateCity(40);
 export default function City() {
     return (
         <div className="d-flex flex-col gap">
-            <div className="dialog primary d-flex flex-col gap">
+            <div className="dialog theme d-flex flex-col gap">
                 <div className="d-flex flex-col gap">
                     <h1 className="text-text">Grid & City Structure</h1>
                     <div className="d-grid grid-wrap gap W-full">

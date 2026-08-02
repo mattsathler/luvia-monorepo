@@ -4,9 +4,11 @@
 
 // ========== LIGHT THEME ==========
 $theme-light: (
-    primary: #FF6FAF,
-    altpri: #FF8FC4,
-    secondary: #6EC9FF,
+    theme: #ff8fc1,
+    primary: #fbcbe2,
+    primary-text: #ff519f,
+    secondary: #afe2ff,
+    secondary-text: #206b96,
     background: #FFF7FB,
     surface: #FFFFFF,
     placeholder: #C9B8C3,
@@ -23,9 +25,11 @@ $theme-light: (
 
 // ========== DARK THEME ==========
 $theme-dark: (
+    theme: #FF7FB8,
     primary: #FF7FB8,
-    altpri: #FF9FCC,
+    primary-text: #FF6FAF,
     secondary: #7ED4FF,
+    secondary-text: #206b96,
     background: #1A1418,
     surface: #241C21,
     placeholder: #7A6A74,
@@ -74,10 +78,11 @@ $theme: $theme-light !default;
 // ==========================
 
 $color-keys: (
+    theme: var-color(theme),
     primary: var-color(primary),
-    altpri: var-color(altpri),
+    primary-text: var-color('primary-text'),
     secondary: var-color(secondary),
-    tertiary: var-color(tertiary),
+    secondary-text: var-color('secondary-text'),
     background: var-color(background),
     surface: var-color(surface),
     placeholder: var-color(placeholder),

@@ -22,6 +22,7 @@ input[type="checkbox"].checkbox {
     position: relative;
     vertical-align: middle;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01);
+    padding: 12px;
 
     &:checked {
         background-color: var(--primary);

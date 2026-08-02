@@ -9,7 +9,7 @@ export default function App() {
         <div className="App d-flex flex-col gap p-24">
             <img src={logo} className="w-240" alt="Luv Logo" />
             <div className="card">
-                <p className="text-text">Welcome to <strong className="text-primary">luv-ui</strong>, a modern UI component and style library for the game Luvia!</p>
+                <p className="text-text">Welcome to <strong className="text-theme">luv-ui</strong>, a modern UI component and style library for the game Luvia!</p>
             </div>
             <Tabs>
                 <Tab title="Components">

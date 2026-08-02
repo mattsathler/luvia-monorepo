@@ -2,7 +2,7 @@ import { Tab, Tabs } from "../../../../../../packages/luv-ui/src";
 
 export default function Components() {
     return <div className="d-flex flex-col gap">
-        <div className="dialog primary">
+        <div className="dialog theme">
             <div className="d-flex flex-col gap">
                 <h1 className="text-text">Buttons, Toggles & Variants</h1>
                 <div className="card outline d-flex flex-col gap">
