@@ -1,21 +1,16 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Character } from '../../domain/entities/character.entity';
-import { CHARACTER_REPOSITORY, CharacterRepository } from '../../domain/repositories/character.repository';
+import { RecomputeCharacterUseCase } from './recompute-character.use-case';
 
+/**
+ * Qualquer leitura do personagem primeiro o recomputa até o momento atual —
+ * ver docs/decisions/0013-sistema-wryd-tick-em-lotes-e-polling.md.
+ */
 @Injectable()
 export class GetCharacterUseCase {
-  constructor(
-    @Inject(CHARACTER_REPOSITORY)
-    private readonly characterRepository: CharacterRepository,
-  ) {}
+  constructor(private readonly recomputeCharacterUseCase: RecomputeCharacterUseCase) {}
 
   async execute(id: string): Promise<Character> {
-    const character = await this.characterRepository.findById(id);
-
-    if (!character) {
-      throw new NotFoundException(`Character ${id} not found`);
-    }
-
-    return character;
+    return this.recomputeCharacterUseCase.execute(id);
   }
 }

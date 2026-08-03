@@ -15,27 +15,55 @@ export class CharacterMongoRepository implements CharacterRepository {
   async save(character: Character): Promise<Character> {
     await this.model.findOneAndUpdate(
       { characterId: character.id },
-      {
-        characterId: character.id,
-        name: character.name,
-        happiness: character.happiness,
-        energy: character.energy,
-        money: character.money,
-        fame: character.fame,
-      },
+      { characterId: character.id, ...this.toFields(character) },
       { upsert: true, new: true },
     );
 
     return character;
   }
 
+  async trySave(character: Character, expectedLastUpdatedAt: Date): Promise<Character | null> {
+    const updated = await this.model
+      .findOneAndUpdate(
+        { characterId: character.id, lastUpdatedAt: expectedLastUpdatedAt },
+        { $set: this.toFields(character) },
+        { new: true },
+      )
+      .exec();
+
+    return updated ? character : null;
+  }
+
   async findById(id: string): Promise<Character | null> {
     const document = await this.model.findOne({ characterId: id }).exec();
+    return document ? this.toDomain(document) : null;
+  }
 
-    if (!document) {
-      return null;
-    }
+  async findStaleBatch(olderThan: Date, limit: number, skip: number): Promise<Character[]> {
+    const documents = await this.model
+      .find({ lastUpdatedAt: { $lt: olderThan } })
+      .sort({ lastUpdatedAt: 1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
 
+    return documents.map((document) => this.toDomain(document));
+  }
+
+  private toFields(character: Character) {
+    return {
+      name: character.name,
+      happiness: character.happiness,
+      energy: character.energy,
+      money: character.money,
+      fame: character.fame,
+      activity: character.activity,
+      activityEndsAt: character.activityEndsAt,
+      lastUpdatedAt: character.lastUpdatedAt,
+    };
+  }
+
+  private toDomain(document: CharacterDocument): Character {
     return new Character({
       id: document.characterId,
       name: document.name,
@@ -43,6 +71,9 @@ export class CharacterMongoRepository implements CharacterRepository {
       energy: document.energy,
       money: document.money,
       fame: document.fame,
+      activity: document.activity,
+      activityEndsAt: document.activityEndsAt,
+      lastUpdatedAt: document.lastUpdatedAt,
     });
   }
 }

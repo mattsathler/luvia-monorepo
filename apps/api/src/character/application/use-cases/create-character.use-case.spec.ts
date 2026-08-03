@@ -7,6 +7,8 @@ describe('CreateCharacterUseCase', () => {
     const characterRepository: jest.Mocked<CharacterRepository> = {
       save: jest.fn(async (character: Character) => character),
       findById: jest.fn(),
+      trySave: jest.fn(),
+      findStaleBatch: jest.fn(),
     };
 
     const useCase = new CreateCharacterUseCase(characterRepository);

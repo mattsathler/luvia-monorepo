@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Activity } from '../../domain/entities/activity';
 
 export type CharacterDocument = HydratedDocument<CharacterModel>;
 
@@ -22,6 +23,15 @@ export class CharacterModel {
 
   @Prop({ required: true, default: 0 })
   fame!: number;
+
+  @Prop({ required: true, default: 'idle' })
+  activity!: Activity;
+
+  @Prop({ type: Date, default: null })
+  activityEndsAt!: Date | null;
+
+  @Prop({ required: true, index: true })
+  lastUpdatedAt!: Date;
 }
 
 export const CharacterSchema = SchemaFactory.createForClass(CharacterModel);
