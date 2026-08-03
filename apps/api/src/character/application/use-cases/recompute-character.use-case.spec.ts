@@ -7,6 +7,7 @@ const T0 = new Date('2026-01-01T00:00:00.000Z');
 function restingCharacterAt(now: Date) {
   return new Character({
     id: 'char-1',
+    accountId: 'acc-1',
     name: 'Ana',
     happiness: 50,
     energy: 50,
@@ -26,6 +27,7 @@ describe('RecomputeCharacterUseCase', () => {
     const characterRepository: jest.Mocked<CharacterRepository> = {
       save: jest.fn(),
       findById: jest.fn(async (_id: string) => character),
+      findByAccountId: jest.fn(),
       trySave: jest.fn(async (updated: Character, _expected: Date) => updated),
       findStaleBatch: jest.fn(),
     };
@@ -51,6 +53,7 @@ describe('RecomputeCharacterUseCase', () => {
         .fn()
         .mockResolvedValueOnce(character)
         .mockResolvedValueOnce(alreadyUpdated),
+      findByAccountId: jest.fn(),
       trySave: jest.fn(async (_character: Character, _expected: Date) => null),
       findStaleBatch: jest.fn(),
     };

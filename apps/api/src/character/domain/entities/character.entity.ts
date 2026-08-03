@@ -2,6 +2,7 @@ import { Activity, CharacterStats, DEFAULT_ACTIVITY, applyActivityEffect } from 
 
 export type CharacterProps = {
   id: string;
+  accountId: string;
   name: string;
   happiness: number;
   energy: number;
@@ -18,6 +19,7 @@ export type CharacterProps = {
  */
 export class Character {
   readonly id: string;
+  readonly accountId: string;
   readonly name: string;
   readonly happiness: number;
   readonly energy: number;
@@ -29,6 +31,7 @@ export class Character {
 
   constructor(props: CharacterProps) {
     this.id = props.id;
+    this.accountId = props.accountId;
     this.name = props.name;
     this.happiness = props.happiness;
     this.energy = props.energy;
@@ -40,12 +43,15 @@ export class Character {
   }
 
   static create(
-    props: { name: string } & Partial<Pick<CharacterProps, 'happiness' | 'energy' | 'money' | 'fame'>>,
+    props: { name: string; accountId: string } & Partial<
+      Pick<CharacterProps, 'happiness' | 'energy' | 'money' | 'fame'>
+    >,
     id: string,
     now: Date = new Date(),
   ): Character {
     return new Character({
       id,
+      accountId: props.accountId,
       name: props.name,
       happiness: props.happiness ?? 100,
       energy: props.energy ?? 100,
@@ -117,6 +123,7 @@ export class Character {
   private withStats(stats: CharacterStats): CharacterProps {
     return {
       id: this.id,
+      accountId: this.accountId,
       name: this.name,
       ...stats,
       activity: this.activity,

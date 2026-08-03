@@ -33,6 +33,7 @@ Os bounded contexts seguem as áreas de jogo já documentadas em `docs/game-desi
 
 | Bounded context | Documentação de referência |
 | --- | --- |
+| Account | [[../decisions/0014-autenticacao-jwt-email-senha]], [[../decisions/0015-multiplos-personagens-por-conta]] |
 | Character | [[../game-design/character-needs]], [[../game-design/progression-fame]], [[../game-design/skills-and-study]], [[../game-design/player-control]] |
 | Employment | [[../game-design/jobs]] |
 | Company | [[../game-design/companies]], [[../game-design/contracts]] |
@@ -41,6 +42,8 @@ Os bounded contexts seguem as áreas de jogo já documentadas em `docs/game-desi
 | Relationship | [[../game-design/relationships]] |
 | Social | [[../game-design/social-interactions]] |
 | Event | [[../game-design/events]] |
+
+`Account` cuida de identidade e emissão de credenciais (registro/login). A verificação de token (guard/estratégia JWT) é infraestrutura transversal em `apps/api/src/shared/auth`, não faz parte do bounded context `Account` — ela só valida a assinatura do token, sem consultar o banco.
 
 ## Observações
 

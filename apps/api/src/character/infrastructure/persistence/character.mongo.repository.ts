@@ -39,6 +39,11 @@ export class CharacterMongoRepository implements CharacterRepository {
     return document ? this.toDomain(document) : null;
   }
 
+  async findByAccountId(accountId: string): Promise<Character[]> {
+    const documents = await this.model.find({ accountId }).exec();
+    return documents.map((document) => this.toDomain(document));
+  }
+
   async findStaleBatch(olderThan: Date, limit: number, skip: number): Promise<Character[]> {
     const documents = await this.model
       .find({ lastUpdatedAt: { $lt: olderThan } })
@@ -52,6 +57,7 @@ export class CharacterMongoRepository implements CharacterRepository {
 
   private toFields(character: Character) {
     return {
+      accountId: character.accountId,
       name: character.name,
       happiness: character.happiness,
       energy: character.energy,
@@ -66,6 +72,7 @@ export class CharacterMongoRepository implements CharacterRepository {
   private toDomain(document: CharacterDocument): Character {
     return new Character({
       id: document.characterId,
+      accountId: document.accountId,
       name: document.name,
       happiness: document.happiness,
       energy: document.energy,

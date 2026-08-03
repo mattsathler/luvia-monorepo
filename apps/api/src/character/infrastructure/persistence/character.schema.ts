@@ -9,6 +9,9 @@ export class CharacterModel {
   @Prop({ required: true, unique: true })
   characterId!: string;
 
+  @Prop({ required: true, index: true })
+  accountId!: string;
+
   @Prop({ required: true })
   name!: string;
 

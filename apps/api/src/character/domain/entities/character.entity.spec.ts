@@ -3,7 +3,7 @@ import { Character } from './character.entity';
 const T0 = new Date('2026-01-01T00:00:00.000Z');
 
 function characterAt(overrides: Partial<Parameters<typeof Character.create>[0]> = {}) {
-  return Character.create({ name: 'Ana', ...overrides }, 'char-1', T0);
+  return Character.create({ name: 'Ana', accountId: 'acc-1', ...overrides }, 'char-1', T0);
 }
 
 describe('Character.recomputeUntil', () => {
@@ -19,6 +19,7 @@ describe('Character.recomputeUntil', () => {
   it('applies resting effect over the elapsed interval', () => {
     const character = new Character({
       id: 'char-1',
+      accountId: 'acc-1',
       name: 'Ana',
       happiness: 50,
       energy: 50,
@@ -41,6 +42,7 @@ describe('Character.recomputeUntil', () => {
   it('applies working effect over the elapsed interval', () => {
     const character = new Character({
       id: 'char-1',
+      accountId: 'acc-1',
       name: 'Ana',
       happiness: 50,
       energy: 50,
@@ -73,6 +75,7 @@ describe('Character.recomputeUntil', () => {
     const activityEndsAt = new Date(T0.getTime() + 10 * 60_000);
     const character = new Character({
       id: 'char-1',
+      accountId: 'acc-1',
       name: 'Ana',
       happiness: 50,
       energy: 50,

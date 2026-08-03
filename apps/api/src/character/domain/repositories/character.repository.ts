@@ -7,6 +7,11 @@ export interface CharacterRepository {
   findById(id: string): Promise<Character | null>;
 
   /**
+   * Todos os personagens de uma conta — ver docs/decisions/0015-multiplos-personagens-por-conta.md.
+   */
+  findByAccountId(accountId: string): Promise<Character[]>;
+
+  /**
    * Salva um Character recomputado apenas se ninguém mais o atualizou desde
    * `expectedLastUpdatedAt` (concorrência otimista). Retorna `null` se outro
    * processo (tick em lote ou outro recompute) já processou esse intervalo —

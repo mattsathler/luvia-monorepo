@@ -7,15 +7,17 @@ describe('CreateCharacterUseCase', () => {
     const characterRepository: jest.Mocked<CharacterRepository> = {
       save: jest.fn(async (character: Character) => character),
       findById: jest.fn(),
+      findByAccountId: jest.fn(),
       trySave: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 
     const useCase = new CreateCharacterUseCase(characterRepository);
 
-    const character = await useCase.execute({ name: 'Ana' });
+    const character = await useCase.execute({ name: 'Ana', accountId: 'acc-1' });
 
     expect(character.name).toBe('Ana');
+    expect(character.accountId).toBe('acc-1');
     expect(character.happiness).toBe(100);
     expect(character.energy).toBe(100);
     expect(character.money).toBe(0);

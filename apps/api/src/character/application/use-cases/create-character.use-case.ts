@@ -5,6 +5,7 @@ import { CHARACTER_REPOSITORY, CharacterRepository } from '../../domain/reposito
 
 export type CreateCharacterInput = {
   name: string;
+  accountId: string;
 };
 
 @Injectable()
@@ -15,7 +16,7 @@ export class CreateCharacterUseCase {
   ) {}
 
   async execute(input: CreateCharacterInput): Promise<Character> {
-    const character = Character.create({ name: input.name }, randomUUID());
+    const character = Character.create({ name: input.name, accountId: input.accountId }, randomUUID());
     return this.characterRepository.save(character);
   }
 }
