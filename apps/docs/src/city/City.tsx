@@ -1,5 +1,5 @@
 import { generateCity } from "./ExampleCity";
-import { Block, IsoGrid } from "luv-ui";
+import { Block, IsoGrid, TILE_TYPES, DayCycleControl } from "luv-ui";
 import type { TileData } from "luv-ui";
 
 const tiles: TileData[] = generateCity(40);

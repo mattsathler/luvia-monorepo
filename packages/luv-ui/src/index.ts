@@ -20,7 +20,9 @@ export { Tabs } from './components/Tabs/Tabs';
 export { Tab } from './components/Tabs/Tab';
 export { Block } from './city/Block/Block';
 export { IsoGrid } from './city/IsoGrid/IsoGrid';
+export { DayCycleControl } from './city/CycleControl/CycleControl';
 
+export { TILE_TYPES };
 export type TileType = keyof typeof TILE_TYPES;
 export type { TileData } from './models/TileData';
 

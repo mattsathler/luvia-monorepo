@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run clean && tsc -p tsconfig.build.json && vite build",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b"
   },

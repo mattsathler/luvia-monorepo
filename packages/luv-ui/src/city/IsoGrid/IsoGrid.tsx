@@ -1,7 +1,7 @@
 import "./IsoGrid.scss";
 import { Block } from "../Block/Block";
 import { TILE_TYPES } from "../Block/models/TilesTypes";
-import { TileData } from "../../models/TileData";
+import type { TileData } from "../../models/TileData";
 
 function getIsoBounds(tiles: TileData[], size: number) {
     let minX = Infinity;
