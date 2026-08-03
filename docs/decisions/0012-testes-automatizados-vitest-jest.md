@@ -24,3 +24,4 @@ Vitest reaproveita a mesma configuração/transformação do Vite já usada por 
 - [[../technical/architecture]]
 - [[0009-ddd-como-arquitetura-principal]]
 - [[0011-stack-backend-nestjs-mongodb-rest]]
+- [[0016-cobertura-de-testes-obrigatoria-100]]
