@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { RecomputeCharacterUseCase } from './recompute-character.use-case';
 import { CharacterRepository } from '../../domain/repositories/character.repository';
 import { Character } from '../../domain/entities/character.entity';
@@ -62,5 +63,55 @@ describe('RecomputeCharacterUseCase', () => {
     const result = await useCase.execute('char-1', now);
 
     expect(result).toBe(alreadyUpdated);
+  });
+
+  it('falls back to the just-computed value when the character disappears after losing the race', async () => {
+    const character = restingCharacterAt(T0);
+    const now = new Date(T0.getTime() + 10 * 60_000);
+
+    const characterRepository: jest.Mocked<CharacterRepository> = {
+      save: jest.fn(),
+      findById: jest.fn().mockResolvedValueOnce(character).mockResolvedValueOnce(null),
+      findByAccountId: jest.fn(),
+      trySave: jest.fn(async (_character: Character, _expected: Date) => null),
+      findStaleBatch: jest.fn(),
+    };
+
+    const useCase = new RecomputeCharacterUseCase(characterRepository);
+    const result = await useCase.execute('char-1', now);
+
+    expect(result.energy).toBe(70);
+  });
+
+  it('throws NotFoundException when the character does not exist', async () => {
+    const characterRepository: jest.Mocked<CharacterRepository> = {
+      save: jest.fn(),
+      findById: jest.fn(async (_id: string) => null),
+      findByAccountId: jest.fn(),
+      trySave: jest.fn(),
+      findStaleBatch: jest.fn(),
+    };
+
+    const useCase = new RecomputeCharacterUseCase(characterRepository);
+
+    await expect(useCase.execute('missing')).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('returns the same character without saving when no time has elapsed', async () => {
+    const character = restingCharacterAt(T0);
+
+    const characterRepository: jest.Mocked<CharacterRepository> = {
+      save: jest.fn(),
+      findById: jest.fn(async (_id: string) => character),
+      findByAccountId: jest.fn(),
+      trySave: jest.fn(),
+      findStaleBatch: jest.fn(),
+    };
+
+    const useCase = new RecomputeCharacterUseCase(characterRepository);
+    const result = await useCase.execute('char-1', T0);
+
+    expect(result).toBe(character);
+    expect(characterRepository.trySave).not.toHaveBeenCalled();
   });
 });
