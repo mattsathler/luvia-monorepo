@@ -21,9 +21,11 @@ Cada bounded context deve ser organizado em quatro camadas:
 - **domain** — entidades, value objects e regras de negócio. Não depende de nenhuma outra camada.
 - **application** — casos de uso que orquestram o domínio.
 - **infrastructure** — integrações externas, persistência e detalhes técnicos.
-- **presentation** — componentes React e rotas. Depende da camada application, nunca acessa infrastructure diretamente.
+- **presentation** — componentes React e rotas (frontend) ou controllers REST (backend). Depende da camada application, nunca acessa infrastructure diretamente.
 
 Em `packages/luv-ui`, a camada `presentation` corresponde aos componentes visuais do design system; o `domain` desse pacote descreve os conceitos próprios de UI/renderização da cidade (ex.: tiles, grid).
+
+Em `apps/api`, cada bounded context é um módulo NestJS próprio, com as quatro camadas como subpastas (`domain/`, `application/`, `infrastructure/`, `presentation/`). Ver [[../decisions/0011-stack-backend-nestjs-mongodb-rest]].
 
 ### Bounded contexts
 
@@ -42,10 +44,11 @@ Os bounded contexts seguem as áreas de jogo já documentadas em `docs/game-desi
 
 ## Observações
 
-A divisão exata de pastas dentro de cada bounded context (ex.: onde ficam testes, DTOs, mappers) ainda não foi definida — **Pendente**.
+A divisão exata de pastas dentro de cada bounded context no frontend (`apps/game`, `packages/luv-ui`) — ex.: onde ficam testes, DTOs, mappers — ainda não foi definida — **Pendente**. No backend (`apps/api`), a convenção já está em uso (ver acima).
 
 ## Referências
 
 - [[tech-stack]]
 - [[code-organization]]
 - [[../decisions/0009-ddd-como-arquitetura-principal]]
+- [[../decisions/0011-stack-backend-nestjs-mongodb-rest]]

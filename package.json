@@ -9,10 +9,12 @@
   "scripts": {
     "dev": "npm run dev --workspace=game",
     "dev:docs": "npm run dev --workspace=docs",
+    "dev:api": "npm run dev --workspace=api",
     "build": "npm run build --workspaces",
     "build:ui": "npm run build --workspace=luv-ui",
     "build:game": "npm run build --workspace=game",
     "build:docs": "npm run build --workspace=docs",
+    "build:api": "npm run build --workspace=api",
     "clear": "rm -rf node_modules packages/*/node_modules package-lock.json"
   },
   "devDependencies": {
