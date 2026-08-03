@@ -28,7 +28,14 @@ Bibliotecas:
 
 Não utilizar Tailwind.
 
+### Backend
+
+O backend do jogo será implementado no mesmo monorepo (não em repositório separado). A estrutura exata (nome do app/pacote, organização das camadas DDD entre frontend e backend) ainda não foi definida — **Pendente**.
+
 ## Referências
 
 - [[code-organization]]
+- [[architecture]]
 - [[../decisions/0007-nao-utilizar-tailwind]]
+- [[../decisions/0009-ddd-como-arquitetura-principal]]
+- [[../decisions/0010-backend-no-mesmo-monorepo]]
