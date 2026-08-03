@@ -16,7 +16,8 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "strict": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["node", "jest"]
   },
   "include": ["src"]
 }

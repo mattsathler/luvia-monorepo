@@ -28,5 +28,11 @@
   "include": [
     "src",
     "../../packages/luv-ui/src"
+  ],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "../../packages/luv-ui/src/**/*.test.ts",
+    "../../packages/luv-ui/src/**/*.test.tsx"
   ]
 }
