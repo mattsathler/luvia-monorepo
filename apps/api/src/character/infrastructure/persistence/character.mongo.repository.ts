@@ -16,7 +16,7 @@ export class CharacterMongoRepository implements CharacterRepository {
     await this.model.findOneAndUpdate(
       { characterId: character.id },
       { characterId: character.id, ...this.toFields(character) },
-      { upsert: true, new: true },
+      { upsert: true, returnDocument: 'after' },
     );
 
     return character;
@@ -27,7 +27,7 @@ export class CharacterMongoRepository implements CharacterRepository {
       .findOneAndUpdate(
         { characterId: character.id, lastUpdatedAt: expectedLastUpdatedAt },
         { $set: this.toFields(character) },
-        { new: true },
+        { returnDocument: 'after' },
       )
       .exec();
 
