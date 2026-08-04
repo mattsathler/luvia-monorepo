@@ -22,3 +22,4 @@ A documentação oficial do projeto vive em `docs/` e é a **fonte de verdade** 
 - Se um assunto estiver marcado como **Pendente** em algum documento, não decidir por conta própria — sinalizar a lacuna ao usuário.
 - Ao propor uma nova funcionalidade, verificar se ela respeita os princípios em `docs/vision/principles.md` (Cozy First, Idle First, Social First, Long Term Progression). Se algum princípio for violado, a proposta deve ser rejeitada.
 - Não inventar mecânicas, lore ou decisões técnicas que não estejam documentadas.
+- Todo endpoint da API (`apps/api`) criado ou alterado deve ser documentado em `docs/technical/api/<módulo>/endpoints.md` antes de ser considerado pronto — ver [[docs/decisions/0017-documentar-todo-endpoint-na-api]].

@@ -12,7 +12,7 @@ O design system vive no pacote `packages/luv-ui` do monorepo.
 
 Existe um Design System chamado **Luv.UI**.
 
-Todo componente visual deve pertencer ao Luv.UI. Evitar CSS repetido.
+Todo componente visual deve pertencer ao Luv.UI. Evitar CSS repetido. Nenhuma app consumidora (`apps/game`, `apps/docs`) pode ter SCSS próprio — ver [[../decisions/0018-proibido-scss-customizado-fora-do-luv-ui]].
 
 ### Temas de cor
 
@@ -43,3 +43,4 @@ O tema escuro é ativado via `[data-theme="dark"]` na raiz do documento.
 - [[visual-art-style]]
 - [[../technical/tech-stack]]
 - [[../technical/css-conventions]]
+- [[../decisions/0018-proibido-scss-customizado-fora-do-luv-ui]]

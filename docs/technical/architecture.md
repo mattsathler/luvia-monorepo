@@ -45,6 +45,8 @@ Os bounded contexts seguem as áreas de jogo já documentadas em `docs/game-desi
 
 `Account` cuida de identidade e emissão de credenciais (registro/login). A verificação de token (guard/estratégia JWT) é infraestrutura transversal em `apps/api/src/shared/auth`, não faz parte do bounded context `Account` — ela só valida a assinatura do token, sem consultar o banco.
 
+Os endpoints REST expostos por cada bounded context do backend estão documentados em [[api/README]] — ver [[../decisions/0017-documentar-todo-endpoint-na-api]].
+
 ## Observações
 
 A divisão exata de pastas dentro de cada bounded context no frontend (`apps/game`, `packages/luv-ui`) — ex.: onde ficam testes, DTOs, mappers — ainda não foi definida — **Pendente**. No backend (`apps/api`), a convenção já está em uso (ver acima).
