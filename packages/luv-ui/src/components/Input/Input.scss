@@ -31,5 +31,5 @@ input {
 input:invalid:not(:focus),
 select:invalid:not(:focus),
 textarea:invalid:not(:focus) {
-    border: 1px solid var(--error);
+    border: 2px solid var(--error);
 }

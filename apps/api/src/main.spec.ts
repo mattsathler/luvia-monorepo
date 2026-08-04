@@ -18,13 +18,14 @@ describe('bootstrap', () => {
     jest.clearAllMocks();
   });
 
-  it('creates the Nest app, applies the global validation pipe, and listens on PORT', async () => {
+  it('creates the Nest app, enables CORS, applies the global validation pipe, and listens on PORT', async () => {
+    const enableCors = jest.fn();
     const useGlobalPipes = jest.fn();
     const listen = jest.fn();
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { NestFactory } = require('@nestjs/core');
-    NestFactory.create.mockResolvedValue({ useGlobalPipes, listen });
+    NestFactory.create.mockResolvedValue({ enableCors, useGlobalPipes, listen });
 
     process.env.PORT = '4000';
 
@@ -32,6 +33,7 @@ describe('bootstrap', () => {
     await bootstrap();
 
     expect(NestFactory.create).toHaveBeenCalled();
+    expect(enableCors).toHaveBeenCalled();
     expect(useGlobalPipes).toHaveBeenCalled();
     expect(listen).toHaveBeenLastCalledWith('4000');
   });
@@ -41,7 +43,7 @@ describe('bootstrap', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { NestFactory } = require('@nestjs/core');
-    NestFactory.create.mockResolvedValue({ useGlobalPipes: jest.fn(), listen });
+    NestFactory.create.mockResolvedValue({ enableCors: jest.fn(), useGlobalPipes: jest.fn(), listen });
 
     delete process.env.PORT;
 

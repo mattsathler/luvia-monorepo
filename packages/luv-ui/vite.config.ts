@@ -8,7 +8,8 @@ export default defineConfig({
         react(),
         dts({
             tsconfigPath: resolve(__dirname, "tsconfig.json"),
-            insertTypesEntry: true
+            insertTypesEntry: true,
+            exclude: ["**/*.test.ts", "**/*.test.tsx", "src/vitest.setup.ts"]
         })
     ],
 
