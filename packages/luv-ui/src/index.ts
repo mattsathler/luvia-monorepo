@@ -18,6 +18,8 @@ import { TILE_TYPES } from './city/Block/models/TilesTypes';
 
 export { Tabs } from './components/Tabs/Tabs';
 export { Tab } from './components/Tabs/Tab';
+export { LuvInput } from './components/Input/LuvInput';
+export type { LuvInputProps } from './components/Input/LuvInput';
 export { Block } from './city/Block/Block';
 export { IsoGrid } from './city/IsoGrid/IsoGrid';
 export { DayCycleControl } from './city/CycleControl/CycleControl';
