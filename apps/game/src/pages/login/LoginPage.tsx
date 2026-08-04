@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useAuth } from "../../auth/AuthContext";
 import { ApiError, UnauthorizedError } from "../../lib/api";
-import { LuvInput, showSnackbar } from "luv-ui";
+import { LuvInput, luviaLogo, showSnackbar } from "luv-ui";
 
 export function LoginPage() {
     const { login } = useAuth();
@@ -31,7 +31,8 @@ export function LoginPage() {
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">
-            <form onSubmit={handleSubmit} className="card d-flex flex-col gap w-50-p">
+            <form onSubmit={handleSubmit} className="card d-flex flex-col gap w-50-p items-center">
+                <img src={luviaLogo} alt="Luvia" className="w-148" />
                 <h1 className="text-text">Entrar</h1>
                 <div className="d-flex w-full flex-col gap items-end">
                     <div className="d-flex flex-col gap w-full">
