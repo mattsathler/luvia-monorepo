@@ -21,6 +21,8 @@ export { Tab } from './components/Tabs/Tab';
 export { LuvInput } from './components/Input/LuvInput';
 export type { LuvInputProps } from './components/Input/LuvInput';
 export { default as luviaLogo } from './assets/luvia-logo-big.png?inline';
+export { LuvModal } from './components/Dialog/LuvModal';
+export type { LuvModalProps, LuvModalVariant } from './components/Dialog/LuvModal';
 export { SnackbarProvider } from './components/Snackbar/SnackbarProvider';
 export { showSnackbar } from './components/Snackbar/snackbar';
 export type { SnackbarOptions, SnackbarVariant } from './components/Snackbar/snackbar';
