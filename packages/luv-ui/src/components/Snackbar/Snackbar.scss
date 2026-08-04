@@ -1,0 +1,22 @@
+.snackbar-viewport {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.snackbar {
+    pointer-events: auto;
+    max-width: 480px;
+    width: max-content;
+    transform: translateY(calc(100% + 24px));
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+
+    &.snackbar-visible {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
