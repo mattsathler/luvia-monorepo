@@ -30,7 +30,6 @@ Sem time de arte, o critério dominante era minimizar o volume de arte necessár
 - Braço e tronco precisam ser cortados a partir da mesma arte de referência, preservando o ponto de encaixe no ombro em cada variação de tronco/roupa criada.
 - `assembleAvatar` (ou equivalente) deve ser implementado como função pura de dados (ids → lista de camadas), independente de o consumidor renderizar em DOM ou, futuramente, em Canvas.
 - NPCs não têm accountId nem persistência — são inteiramente client-side, gerados/sorteados na sessão.
-- **Pendente**: [[../ui-ux/visual-art-style]] define o estilo como "Pixel Art", mas as referências usadas para desenhar esse rig são ilustração pintada, não pixel art. Não decidir essa divergência por conta própria — o estilo final da arte do personagem ainda precisa ser fechado.
 - **Pendente**: se braços terão amplitude/uso de accessory de corpo no futuro, ou se acessórios continuam restritos à cabeça permanentemente.
 
 ## Referências

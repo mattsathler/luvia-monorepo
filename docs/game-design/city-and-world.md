@@ -12,7 +12,7 @@ Existe apenas uma cidade. Todos vivem nela. A cidade é persistente.
 
 ### Mundo
 
-A visualização principal é isométrica. Pixel Art. Cozy. Poucos elementos animados. Sem excesso de efeitos.
+A visualização principal é isométrica. Vetorizado / ilustrado. Cozy. Poucos elementos animados. Sem excesso de efeitos.
 
 ## Referências
 

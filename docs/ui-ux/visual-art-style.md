@@ -6,7 +6,7 @@ Definir a direção de arte do jogo.
 
 ## Decisões consolidadas
 
-- Pixel Art
+- Vetorizado / ilustrado
 - Cozy
 - Pouco contraste
 - Sem cores extremamente saturadas
