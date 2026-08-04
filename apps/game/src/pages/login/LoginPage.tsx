@@ -31,8 +31,8 @@ export function LoginPage() {
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">
+            <img src={luviaLogo} alt="Luvia" className="w-50-p max-w-640" />
             <form onSubmit={handleSubmit} className="card d-flex flex-col gap w-50-p items-center">
-                <img src={luviaLogo} alt="Luvia" className="w-148" />
                 <h1 className="text-text">Entrar</h1>
                 <div className="d-flex w-full flex-col gap items-end">
                     <div className="d-flex flex-col gap w-full">

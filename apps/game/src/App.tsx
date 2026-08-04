@@ -1,6 +1,7 @@
 import { SnackbarProvider } from "luv-ui";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import { LoginPage } from "./pages/login/LoginPage";
+import { HomePage } from "./pages/home/HomePage";
 
 function AppContent() {
     const { isAuthenticated, isValidating, logout } = useAuth();
@@ -17,14 +18,7 @@ function AppContent() {
         return <LoginPage />;
     }
 
-    return (
-        <div className="d-flex flex-col gap p-24">
-            <p className="text-text">Você está logado.</p>
-            <button className="outline primary" onClick={logout}>
-                Sair
-            </button>
-        </div>
-    );
+    return HomePage()
 }
 
 function App() {
