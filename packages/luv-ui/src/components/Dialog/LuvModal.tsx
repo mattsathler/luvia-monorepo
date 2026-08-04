@@ -12,6 +12,7 @@ export type LuvModalProps = {
     closeOnBackdropClick?: boolean;
     closeOnEscape?: boolean;
     children: ReactNode;
+    size?: "small" | "medium" | "large";
 };
 
 export function LuvModal({
@@ -22,6 +23,7 @@ export function LuvModal({
     closeOnBackdropClick = true,
     closeOnEscape = true,
     children,
+    size = "medium",
 }: LuvModalProps) {
     useEffect(() => {
         if (!isOpen || !closeOnEscape) {
@@ -57,13 +59,15 @@ export function LuvModal({
         event.stopPropagation();
     }
 
+    const sizeClass = size === "small" ? "w-20-vw" : size === "medium" ? "w-50-vw" : "w-80-vw";
+
     return createPortal(
         <div className="luv-modal-backdrop d-flex items-center justify-center" onClick={handleBackdropClick}>
             <div
                 role="dialog"
                 aria-modal="true"
                 aria-label={title}
-                className={["dialog", variantClass, "luv-modal"].filter(Boolean).join(" ")}
+                className={["dialog", variantClass, "luv-modal", sizeClass].filter(Boolean).join(" ")}
                 onClick={stopPropagation}
             >
                 <div className="d-flex items-center justify-between gap-8">

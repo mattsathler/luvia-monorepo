@@ -51,6 +51,20 @@ export async function login(email: string, password: string): Promise<LoginRespo
     return response.json();
 }
 
+export async function register(email: string, password: string): Promise<Account> {
+    const response = await fetch(`${API_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
 export async function authFetch(path: string, accessToken: string, init: RequestInit = {}): Promise<Response> {
     const response = await fetch(`${API_URL}${path}`, {
         ...init,

@@ -3,7 +3,11 @@ import { useAuth } from "../../auth/AuthContext";
 import { ApiError, UnauthorizedError } from "../../lib/api";
 import { LuvInput, luviaLogo, showSnackbar } from "luv-ui";
 
-export function LoginPage() {
+type LoginPageProps = {
+    onNavigateToRegister?: () => void;
+};
+
+export function LoginPage({ onNavigateToRegister }: LoginPageProps = {}) {
     const { login } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -68,6 +72,26 @@ export function LoginPage() {
                     <button type="submit" className="primary" disabled={isSubmitting}>
                         {isSubmitting ? "Entrando..." : "Entrar"}
                     </button>
+
+                    <span>
+                        Não tem conta?
+                        {onNavigateToRegister && (
+                            <strong
+                                role="button"
+                                tabIndex={0}
+                                className="text-secondary-text cursor-pointer ml-4"
+                                onClick={onNavigateToRegister}
+                                onKeyDown={(event) => {
+                                    if (event.key === "Enter" || event.key === " ") {
+                                        event.preventDefault();
+                                        onNavigateToRegister();
+                                    }
+                                }}
+                            >
+                                Cadastre-se
+                            </strong>
+                        )}
+                    </span>
                 </div>
             </form>
         </div>

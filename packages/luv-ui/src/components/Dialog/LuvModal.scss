@@ -6,9 +6,11 @@
 }
 
 .luv-modal {
-    max-width: 480px;
-    width: 100%;
     max-height: 90vh;
+    overflow: hidden;
+}
+
+.luve-modal-content {
     overflow-y: auto;
 }
 

@@ -49,7 +49,7 @@ describe("LoginPage", () => {
         await user.type(screen.getByLabelText("Senha"), "correct-horse");
         await user.click(screen.getByRole("button", { name: "Entrar" }));
 
-        expect(showSnackbar).toHaveBeenCalledWith("Bem vindo ao Luvia!", { variant: "success" });
+        expect(showSnackbar).toHaveBeenCalledWith("Bem vindo ao Luvia!", { variant: "success", duration: 7000 });
     });
 
     it("does not show the welcome snackbar when login fails", async () => {
@@ -100,5 +100,58 @@ describe("LoginPage", () => {
         await user.click(screen.getByRole("button", { name: "Entrar" }));
 
         expect(await screen.findByText("Não foi possível conectar. Tente novamente.")).toBeInTheDocument();
+    });
+
+    it("does not render the register link when no handler is provided", () => {
+        render(<LoginPage />);
+
+        expect(screen.queryByRole("button", { name: "Cadastre-se" })).not.toBeInTheDocument();
+    });
+
+    it("navigates to register when the link is clicked", async () => {
+        const onNavigateToRegister = vi.fn();
+        const user = userEvent.setup();
+
+        render(<LoginPage onNavigateToRegister={onNavigateToRegister} />);
+
+        await user.click(screen.getByRole("button", { name: "Cadastre-se" }));
+
+        expect(onNavigateToRegister).toHaveBeenCalledTimes(1);
+    });
+
+    it("navigates to register via keyboard", async () => {
+        const onNavigateToRegister = vi.fn();
+        const user = userEvent.setup();
+
+        render(<LoginPage onNavigateToRegister={onNavigateToRegister} />);
+
+        screen.getByRole("button", { name: "Cadastre-se" }).focus();
+        await user.keyboard("{Enter}");
+
+        expect(onNavigateToRegister).toHaveBeenCalledTimes(1);
+    });
+
+    it("navigates to register when pressing space", async () => {
+        const onNavigateToRegister = vi.fn();
+        const user = userEvent.setup();
+
+        render(<LoginPage onNavigateToRegister={onNavigateToRegister} />);
+
+        screen.getByRole("button", { name: "Cadastre-se" }).focus();
+        await user.keyboard(" ");
+
+        expect(onNavigateToRegister).toHaveBeenCalledTimes(1);
+    });
+
+    it("ignores unrelated keys on the register link", async () => {
+        const onNavigateToRegister = vi.fn();
+        const user = userEvent.setup();
+
+        render(<LoginPage onNavigateToRegister={onNavigateToRegister} />);
+
+        screen.getByRole("button", { name: "Cadastre-se" }).focus();
+        await user.keyboard("a");
+
+        expect(onNavigateToRegister).not.toHaveBeenCalled();
     });
 });

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ApiError, UnauthorizedError, authFetch, login } from "./api";
+import { ApiError, UnauthorizedError, authFetch, login, register } from "./api";
 
 function jsonResponse(status: number, body: unknown): Response {
     return {
@@ -59,6 +59,32 @@ describe("login", () => {
 
         await expect(login("ana@example.com", "whatever")).rejects.toThrow("Erro inesperado");
         await expect(login("ana@example.com", "whatever")).rejects.toBeInstanceOf(ApiError);
+    });
+});
+
+describe("register", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("returns the parsed body on success", async () => {
+        const body = { id: "acc-1", email: "ana@example.com" };
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(201, body)));
+
+        const result = await register("ana@example.com", "correct-horse");
+
+        expect(result).toEqual(body);
+        expect(fetch).toHaveBeenCalledWith(
+            expect.stringContaining("/auth/register"),
+            expect.objectContaining({ method: "POST" }),
+        );
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(409, { message: "Email already in use" })));
+
+        await expect(register("ana@example.com", "whatever")).rejects.toThrow("Email already in use");
+        await expect(register("ana@example.com", "whatever")).rejects.toBeInstanceOf(ApiError);
     });
 });
 

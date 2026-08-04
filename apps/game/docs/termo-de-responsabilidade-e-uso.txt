@@ -1,0 +1,181 @@
+TERMO DE RESPONSABILIDADE E USO — LUVIA
+Última atualização: 04 de agosto de 2026
+Versão: 1.0
+
+1. INTRODUÇÃO
+
+Este Termo de Responsabilidade e Uso ("Termo") estabelece as regras, direitos, deveres e obrigações que regem a relação entre você ("Jogador", "Usuário" ou "Você") e Luvia ("Jogo", "Plataforma", "Nós"), um MMORPG Social Idle acessado via navegador web, no qual o Jogador administra a vida simulada de um personagem dentro de uma cidade virtual persistente e compartilhada com outros jogadores.
+
+A leitura completa deste Termo é obrigatória. O aceite deste Termo é condição indispensável para a criação de conta e utilização do Jogo. Ao marcar a caixa de aceite no momento do cadastro, você declara que leu, compreendeu e concorda integralmente com todas as disposições aqui descritas, bem como com a Política de Privacidade e demais documentos complementares (Código de Conduta, quando aplicável).
+
+Caso não concorde com qualquer parte deste Termo, você não deve concluir o cadastro nem utilizar o Jogo.
+
+2. DEFINIÇÕES
+
+2.1. "Conta": registro individual e intransferível que dá acesso ao Jogo, vinculado a um endereço de e-mail e credenciais de autenticação.
+
+2.2. "Personagem": entidade virtual controlada pelo Jogador dentro do mundo simulado de Luvia.
+
+2.3. "Itens Virtuais": qualquer bem digital dentro do Jogo, incluindo, mas não se limitando a, moeda virtual, itens de customização, imóveis virtuais, empregos, contratos e demais recursos simulados da economia do Jogo.
+
+2.4. "Conteúdo Gerado pelo Usuário" (CGU): qualquer texto, nome, apelido, descrição, imagem de perfil, mensagem, ou outro conteúdo criado, enviado ou publicado pelo Jogador dentro da Plataforma.
+
+2.5. "Equipe": desenvolvedores, administradores, moderadores e colaboradores responsáveis pela manutenção e operação de Luvia.
+
+3. ELEGIBILIDADE E CADASTRO
+
+3.1. Idade mínima. O uso de Luvia é permitido a partir de 13 (treze) anos de idade. Jogadores entre 13 e 18 anos declaram possuir autorização de seus pais ou responsáveis legais para utilizar o Jogo e aceitar este Termo.
+
+3.2. Veracidade das informações. O Jogador se compromete a fornecer dados verdadeiros, completos e atualizados no momento do cadastro (e-mail, senha e demais informações solicitadas). É proibido o uso de e-mails falsos, temporários ou pertencentes a terceiros sem autorização.
+
+3.3. Conta única. Cada pessoa deve manter apenas uma conta ativa, salvo autorização expressa da Equipe. A criação de múltiplas contas para burlar restrições, manipular rankings, obter vantagens indevidas na economia do Jogo ou evadir punições é expressamente proibida e sujeita às penalidades descritas na Seção 8.
+
+3.4. Segurança da conta. O Jogador é o único responsável por manter a confidencialidade de sua senha e demais credenciais de acesso. Todas as ações realizadas a partir de uma conta são de responsabilidade do titular dessa conta, mesmo que praticadas por terceiros com ou sem autorização do titular. Recomenda-se fortemente o uso de senhas fortes e únicas.
+
+3.5. Comunicação de incidentes. Em caso de suspeita de acesso não autorizado, o Jogador deve comunicar a Equipe imediatamente através dos canais oficiais de suporte.
+
+4. NATUREZA DO JOGO E DA CONTA
+
+4.1. Licença de uso. Ao aceitar este Termo, a Equipe concede ao Jogador uma licença pessoal, limitada, não exclusiva, intransferível e revogável para acessar e utilizar Luvia estritamente para fins de entretenimento pessoal e não comercial.
+
+4.2. Titularidade da conta e dos itens virtuais. A Conta, o Personagem e todos os Itens Virtuais associados são de propriedade da Equipe e são disponibilizados ao Jogador apenas em regime de licença de uso. O Jogador não adquire qualquer direito de propriedade, real ou equiparado, sobre Contas, Personagens, moeda virtual ou Itens Virtuais, ainda que estes tenham sido obtidos mediante progresso, esforço ou eventual pagamento.
+
+4.3. Vedação de comercialização. É proibida a compra, venda, troca, aluguel ou transferência de Contas, Personagens ou Itens Virtuais por dinheiro real ou qualquer outro bem fora do ambiente e dos mecanismos oficiais do Jogo ("RMT — Real Money Trading"). Transações dessa natureza não serão reconhecidas, amparadas ou revertidas pela Equipe.
+
+4.4. Ausência de valor de resgate. Moedas e Itens Virtuais não possuem valor monetário no mundo real, não são convertíveis em dinheiro e não constituem instrumento de investimento, poupança ou qualquer forma de ativo financeiro.
+
+4.5. Alterações no Jogo. A Equipe se reserva o direito de, a qualquer momento, modificar, adicionar, remover ou reequilibrar mecânicas, itens, funcionalidades, valores da economia virtual e regras de progressão, visando a saúde do jogo e a experiência coletiva dos jogadores, sem que isso gere direito a indenização.
+
+5. CUIDADOS E RESPONSABILIDADES DO JOGADOR
+
+5.1. Uso responsável. O Jogador compromete-se a utilizar o Jogo de forma consciente, respeitando limites saudáveis de tempo de tela e evitando o uso excessivo ou compulsivo. Recomenda-se pausas regulares durante sessões de jogo prolongadas.
+
+5.2. Ambiente familiar. Recomenda-se que responsáveis legais de jogadores menores de idade acompanhem e supervisionem o uso do Jogo, incluindo o tempo de exposição e as interações sociais realizadas na Plataforma.
+
+5.3. Dispositivos e conexão. O Jogador é responsável por possuir dispositivo, navegador e conexão à internet compatíveis e adequados para o uso do Jogo, bem como pelos custos de acesso à internet (dados móveis, provedor, energia elétrica), que não são de responsabilidade da Equipe.
+
+5.4. Backup e perda de progresso. Embora a Equipe empregue esforços razoáveis para preservar a integridade dos dados de jogo, o Jogador reconhece que falhas técnicas, manutenções, ataques cibernéticos ou eventos de força maior podem resultar em perda parcial ou total de progresso, itens ou dados de conta, sem que isso gere direito a indenização, salvo em caso de dolo ou culpa grave comprovada da Equipe.
+
+5.5. Software de terceiros. O uso de programas, scripts, extensões de navegador, bots, macros ou qualquer ferramenta de automação não autorizada para interagir com o Jogo é de responsabilidade exclusiva do Jogador e pode resultar em suspensão ou banimento, além de eventuais riscos de segurança para o próprio dispositivo do usuário.
+
+5.6. Verificação de canais oficiais. O Jogador deve certificar-se de estar acessando o Jogo através dos domínios e aplicativos oficiais, evitando sites, downloads ou promoções fraudulentas que se façam passar por Luvia com o objetivo de phishing ou roubo de credenciais.
+
+6. CONDUTA DO JOGADOR
+
+Ao utilizar Luvia, o Jogador se compromete a:
+
+6.1. Respeito à comunidade. Tratar os demais jogadores e a Equipe com respeito, civilidade e boa-fé, ainda que em situações de conflito ou competição dentro do jogo.
+
+6.2. É expressamente proibido:
+
+a) Praticar ou incitar discurso de ódio, discriminação, assédio, perseguição (stalking), ameaças, bullying ou qualquer forma de abuso contra outros jogadores ou membros da Equipe;
+
+b) Publicar, enviar ou exibir Conteúdo Gerado pelo Usuário que seja ofensivo, pornográfico, violento, ilegal, difamatório ou que viole direitos de terceiros (incluindo propriedade intelectual, imagem e privacidade);
+
+c) Utilizar nomes de usuário, nomes de personagem ou descrições que contenham palavrões, conteúdo sexual, referências a discriminação, dados pessoais de terceiros, ou que se façam passar por membros da Equipe ("impersonation");
+
+d) Explorar falhas, bugs, vulnerabilidades ou brechas de segurança do Jogo para obter vantagem indevida. Bugs identificados devem ser reportados aos canais oficiais de suporte e não devem ser divulgados publicamente antes da correção;
+
+e) Utilizar cheats, hacks, engenharia reversa, modificação de cliente, interceptação ou manipulação de tráfego de rede, ou qualquer outro meio técnico não autorizado para alterar o funcionamento do Jogo;
+
+f) Praticar golpes, fraudes, estelionato ou engenharia social contra outros jogadores, incluindo falsas promessas de troca de itens, phishing de credenciais ou indução a prejuízo dentro ou fora do Jogo;
+
+g) Comercializar Contas, Itens Virtuais ou moeda do Jogo por dinheiro real ou fora dos mecanismos oficiais (RMT), conforme item 4.3;
+
+h) Realizar spam, propaganda não autorizada, divulgação de outros serviços, sites ou jogos concorrentes, ou envio de mensagens em massa não solicitadas;
+
+i) Utilizar o Jogo para fins comerciais não autorizados pela Equipe, tais como venda de serviços, coaching pago, ou monetização de conteúdo dentro do ambiente do Jogo sem consentimento prévio;
+
+j) Tentar acessar, atacar, sobrecarregar ou comprometer os servidores, bancos de dados ou infraestrutura de Luvia (incluindo ataques de negação de serviço, injeção de código, ou tentativas de acesso não autorizado a contas de terceiros);
+
+k) Coletar, extrair ou armazenar dados de outros jogadores (scraping) sem autorização;
+
+l) Utilizar o Jogo para menores de 13 anos ou permitir que menores sob sua responsabilidade o façam sem a devida supervisão.
+
+6.3. Denúncias. O Jogador pode e deve reportar violações a este Termo por meio dos canais oficiais de suporte/denúncia. Denúncias falsas ou feitas de má-fé com o intuito de prejudicar outro jogador também constituem violação deste Termo.
+
+7. CONTEÚDO GERADO PELO USUÁRIO
+
+7.1. Responsabilidade pelo conteúdo. O Jogador é integral e exclusivamente responsável por qualquer Conteúdo Gerado pelo Usuário que publicar, incluindo eventuais consequências civis e criminais decorrentes desse conteúdo perante terceiros e autoridades competentes.
+
+7.2. Licença sobre o conteúdo. Ao publicar CGU dentro do Jogo, o Jogador concede à Equipe uma licença mundial, gratuita, não exclusiva e sublicenciável para hospedar, exibir, reproduzir e distribuir esse conteúdo estritamente no contexto de operação e divulgação do Jogo (por exemplo, capturas de tela promocionais), respeitada a Política de Privacidade.
+
+7.3. Moderação. A Equipe se reserva o direito de remover, editar ou ocultar qualquer CGU que viole este Termo, a qualquer momento e sem aviso prévio, bem como de aplicar as penalidades cabíveis ao autor.
+
+8. PENALIDADES E MODERAÇÃO
+
+8.1. Medidas disciplinares. O descumprimento deste Termo pode resultar, isolada ou cumulativamente, nas seguintes medidas, a critério da Equipe e conforme a gravidade da infração:
+
+a) Advertência formal;
+b) Remoção ou reversão de conteúdo, itens ou vantagens obtidas indevidamente;
+c) Suspensão temporária da Conta;
+d) Banimento permanente da Conta, sem direito a reembolso de eventuais valores gastos;
+e) Bloqueio de IP, dispositivo ou demais identificadores técnicos;
+f) Comunicação às autoridades competentes, quando a conduta configurar ilícito civil ou penal.
+
+8.2. Direito de defesa. O Jogador penalizado poderá solicitar revisão da medida aplicada por meio dos canais oficiais de suporte, apresentando as razões que entender cabíveis. A decisão final sobre a manutenção ou reversão da penalidade cabe à Equipe.
+
+8.3. Reincidência. A reincidência em infrações será considerada agravante e poderá resultar em penalidades mais severas, incluindo banimento imediato e definitivo.
+
+8.4. Sem obrigação de aviso prévio para infrações graves. Em casos de infrações graves (incluindo, mas não se limitando a, fraude, ataques à infraestrutura, discurso de ódio ou conteúdo ilegal), a Equipe poderá aplicar suspensão ou banimento imediato, independentemente de aviso prévio.
+
+9. PROPRIEDADE INTELECTUAL
+
+9.1. Todos os direitos de propriedade intelectual relativos a Luvia, incluindo, mas não se limitando a, código-fonte, design, identidade visual, marca, logotipo, textos, ilustrações, sons, mecânicas de jogo e demais elementos criativos, pertencem exclusivamente à Equipe/desenvolvedores de Luvia ou a seus licenciadores, sendo protegidos pela legislação de direitos autorais e propriedade industrial aplicável.
+
+9.2. É vedada a reprodução, distribuição, engenharia reversa, descompilação, modificação ou criação de obras derivadas do Jogo sem autorização expressa e por escrito da Equipe, ressalvadas as exceções previstas em lei.
+
+10. PRIVACIDADE E PROTEÇÃO DE DADOS
+
+10.1. O tratamento de dados pessoais realizado por Luvia é regido por Política de Privacidade específica, disponibilizada separadamente ao Jogador, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD) e demais legislações aplicáveis.
+
+10.2. Ao aceitar este Termo, o Jogador reconhece que dados de cadastro, dados de uso e interações dentro do Jogo poderão ser coletados e tratados conforme descrito na Política de Privacidade, podendo exercer, a qualquer momento, os direitos previstos na legislação de proteção de dados junto aos canais oficiais de suporte.
+
+11. ISENÇÃO DE GARANTIAS E LIMITAÇÃO DE RESPONSABILIDADE
+
+11.1. O Jogo é fornecido "no estado em que se encontra" ("as is") e "conforme disponibilidade" ("as available"), sem garantias de que estará livre de erros, interrupções, falhas de segurança ou disponibilidade ininterrupta.
+
+11.2. A Equipe não garante resultado, progresso, ranking ou desempenho específico dentro do Jogo, tratando-se de experiência de entretenimento cujo resultado depende de fatores dinâmicos e da interação entre jogadores.
+
+11.3. A Equipe não se responsabiliza por danos indiretos, incidentais, lucros cessantes ou prejuízos decorrentes de uso indevido do Jogo, de condutas de terceiros (incluindo outros jogadores), de indisponibilidade temporária dos serviços, ou de eventos fora de seu controle razoável (força maior), respeitados os limites impostos pela legislação consumerista aplicável.
+
+11.4. Nada neste Termo exclui ou limita direitos que não possam ser legalmente excluídos ou limitados, incluindo os direitos assegurados pelo Código de Defesa do Consumidor (Lei nº 8.078/1990), quando aplicável.
+
+12. SUSPENSÃO, ENCERRAMENTO E EXCLUSÃO DE CONTA
+
+12.1. Encerramento pelo Jogador. O Jogador pode solicitar a exclusão de sua Conta a qualquer momento, através dos canais oficiais de suporte, observado o prazo de retenção de dados exigido por lei ou necessário para fins de segurança e prevenção a fraudes.
+
+12.2. Encerramento pela Equipe. A Equipe poderá suspender ou encerrar contas inativas por período prolongado, ou em razão de descontinuação do Jogo, mediante aviso prévio razoável quando operacionalmente possível.
+
+12.3. Efeitos do encerramento. O encerramento da Conta, por qualquer motivo, implica a perda de acesso ao Personagem, Itens Virtuais e progresso associado, sem direito a indenização ou reembolso, ressalvadas as hipóteses legalmente asseguradas.
+
+13. ALTERAÇÕES DESTE TERMO
+
+13.1. A Equipe poderá alterar este Termo a qualquer momento, para refletir mudanças legais, operacionais ou de funcionalidades do Jogo.
+
+13.2. Alterações relevantes serão comunicadas ao Jogador por meio de aviso no Jogo, e-mail cadastrado, ou outro meio de comunicação eficaz, com antecedência razoável sempre que possível.
+
+13.3. A continuidade do uso do Jogo após a entrada em vigor das alterações constitui aceite tácito do novo Termo. Caso o Jogador não concorde com as alterações, deverá cessar o uso do Jogo e poderá solicitar a exclusão de sua Conta.
+
+14. DISPOSIÇÕES GERAIS
+
+14.1. Independência das cláusulas. Caso qualquer disposição deste Termo seja considerada nula, inválida ou inexequível, as demais disposições permanecerão em pleno vigor e efeito.
+
+14.2. Tolerância. A eventual tolerância da Equipe quanto ao descumprimento de qualquer disposição deste Termo não implica renúncia ao direito de exigir o cumprimento das demais disposições, nem novação.
+
+14.3. Cessão. O Jogador não poderá ceder ou transferir seus direitos e obrigações decorrentes deste Termo sem prévia autorização da Equipe. A Equipe poderá ceder este Termo em caso de reorganização societária, sucessão ou transferência de titularidade do Jogo, mediante comunicação aos usuários.
+
+14.4. Legislação aplicável e foro. Este Termo é regido pelas leis da República Federativa do Brasil. Fica eleito o foro do domicílio do Jogador para dirimir eventuais controvérsias decorrentes deste Termo, ressalvada disposição legal em contrário.
+
+14.5. Canais de contato. Dúvidas, denúncias, solicitações e exercício de direitos relacionados a este Termo devem ser dirigidos aos canais oficiais de suporte disponibilizados dentro do Jogo ou em seu site oficial.
+
+15. DECLARAÇÃO DE ACEITE
+
+Ao marcar a caixa "Li e aceito o Termo de Responsabilidade e Uso" no momento do cadastro, o Jogador declara, para todos os fins de direito, que:
+
+a) Tem idade mínima exigida neste Termo, ou possui autorização de seus pais/responsáveis legais para o uso do Jogo, conforme item 3.1;
+b) Leu e compreendeu integralmente todas as cláusulas deste Termo;
+c) Concorda livre e espontaneamente com todos os seus termos e condições;
+d) Está ciente de que o descumprimento deste Termo pode resultar nas penalidades descritas na Seção 8, incluindo o banimento definitivo de sua Conta.
+
+O aceite deste Termo é obrigatório e constitui condição prévia e indispensável para a criação de conta e utilização de Luvia.

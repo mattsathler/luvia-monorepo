@@ -60,6 +60,30 @@ $max-width-scale: (
     1920: 1920px
 );
 
+$vw-scale: (
+    10: 10vw,
+    20: 20vw,
+    30: 30vw,
+    40: 40vw,
+    50: 50vw,
+    60: 60vw,
+    70: 70vw,
+    80: 80vw,
+    90: 90vw
+);
+
+$vh-scale: (
+    10: 10vh,
+    20: 20vh,
+    30: 30vh,
+    40: 40vh,
+    50: 50vh,
+    60: 60vh,
+    70: 70vh,
+    80: 80vh,
+    90: 90vh
+);
+
 @each $key, $value in $space-scale {
     .max-w-#{$key} {
         max-width: $value !important;
@@ -84,6 +108,18 @@ $max-width-scale: (
 
 .min-h-screen {
     min-height: 100dvh;
+}
+
+@each $key, $value in $vw-scale {
+    .w-#{$key}-vw {
+        width: $value !important;
+    }
+}
+
+@each $key, $value in $vh-scale {
+    .h-#{$key}-vh {
+        height: $value !important;
+    }
 }
 
 @each $key, $value in $space-scale {
