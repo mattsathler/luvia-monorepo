@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useAuth } from "../../auth/AuthContext";
 import { ApiError, UnauthorizedError } from "../../lib/api";
-import { LuvInput } from "luv-ui";
+import { LuvInput, showSnackbar } from "luv-ui";
 
 export function LoginPage() {
     const { login } = useAuth();
@@ -17,6 +17,7 @@ export function LoginPage() {
 
         try {
             await login(email, password);
+            showSnackbar("Bem vindo ao Luvia!", { variant: "success", duration: 7000 });
         } catch (err) {
             if (err instanceof UnauthorizedError || err instanceof ApiError) {
                 setError("Email ou senha inválidos.");

@@ -9,8 +9,7 @@
 
 .snackbar {
     pointer-events: auto;
-    max-width: 480px;
-    width: max-content;
+    width: 60vw;
     transform: translateY(calc(100% + 24px));
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.3s ease;

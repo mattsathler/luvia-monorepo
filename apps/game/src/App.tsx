@@ -1,3 +1,4 @@
+import { SnackbarProvider } from "luv-ui";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import { LoginPage } from "./pages/login/LoginPage";
 
@@ -30,6 +31,7 @@ function App() {
     return (
         <AuthProvider>
             <AppContent />
+            <SnackbarProvider />
         </AuthProvider>
     );
 }
