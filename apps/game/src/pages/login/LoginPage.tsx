@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useAuth } from "../../auth/AuthContext";
 import { ApiError, UnauthorizedError } from "../../lib/api";
+import { LuvInput } from "luv-ui";
 
 export function LoginPage() {
     const { login } = useAuth();
@@ -33,20 +34,26 @@ export function LoginPage() {
                 <h1 className="text-text">Entrar</h1>
                 <div className="d-flex w-full flex-col gap items-end">
                     <div className="d-flex flex-col gap w-full">
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(event) => setEmail(event.target.value)}
-                            required
-                        />
-                        <input
-                            type="password"
-                            placeholder="Senha"
-                            value={password}
-                            onChange={(event) => setPassword(event.target.value)}
-                            required
-                        />
+                        <div className="d-flex flex-col gap-8">
+                            <LuvInput
+                                type="text"
+                                label="Email"
+                                placeholder="Digite seu email"
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="d-flex flex-col gap-8">
+                            <LuvInput
+                                type="password"
+                                label="Senha"
+                                placeholder="Digite sua senha"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
 
                     {error && (
