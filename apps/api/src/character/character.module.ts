@@ -6,6 +6,7 @@ import { GetCharacterUseCase } from './application/use-cases/get-character.use-c
 import { RecomputeCharacterUseCase } from './application/use-cases/recompute-character.use-case';
 import { ListMyCharactersUseCase } from './application/use-cases/list-my-characters.use-case';
 import { ChangeActivityUseCase } from './application/use-cases/change-activity.use-case';
+import { UpdateAppearanceUseCase } from './application/use-cases/update-appearance.use-case';
 import { CHARACTER_REPOSITORY } from './domain/repositories/character.repository';
 import { CharacterMongoRepository } from './infrastructure/persistence/character.mongo.repository';
 import { CharacterModel, CharacterSchema } from './infrastructure/persistence/character.schema';
@@ -22,6 +23,7 @@ import { CharacterTickScheduler } from './infrastructure/scheduling/character-ti
     RecomputeCharacterUseCase,
     ListMyCharactersUseCase,
     ChangeActivityUseCase,
+    UpdateAppearanceUseCase,
     CharacterTickScheduler,
     { provide: CHARACTER_REPOSITORY, useClass: CharacterMongoRepository },
   ],

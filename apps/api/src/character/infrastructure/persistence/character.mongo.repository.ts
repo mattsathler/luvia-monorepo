@@ -66,6 +66,12 @@ export class CharacterMongoRepository implements CharacterRepository {
       activity: character.activity,
       activityEndsAt: character.activityEndsAt,
       lastUpdatedAt: character.lastUpdatedAt,
+      skinTone: character.appearance.skinTone,
+      face: character.appearance.face,
+      accessory: character.appearance.accessory,
+      top: character.appearance.top,
+      pants: character.appearance.pants,
+      shoes: character.appearance.shoes,
     };
   }
 
@@ -81,6 +87,14 @@ export class CharacterMongoRepository implements CharacterRepository {
       activity: document.activity,
       activityEndsAt: document.activityEndsAt,
       lastUpdatedAt: document.lastUpdatedAt,
+      appearance: {
+        skinTone: document.skinTone,
+        face: document.face,
+        accessory: document.accessory,
+        top: document.top,
+        pants: document.pants,
+        shoes: document.shoes,
+      },
     });
   }
 }

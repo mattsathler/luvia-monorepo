@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CurrentAccount } from '../../shared/auth/decorators/current-account.decorator';
 import { CreateCharacterUseCase } from '../application/use-cases/create-character.use-case';
 import { GetCharacterUseCase } from '../application/use-cases/get-character.use-case';
 import { ListMyCharactersUseCase } from '../application/use-cases/list-my-characters.use-case';
 import { ChangeActivityUseCase } from '../application/use-cases/change-activity.use-case';
+import { UpdateAppearanceUseCase } from '../application/use-cases/update-appearance.use-case';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { ChangeActivityDto } from './dto/change-activity.dto';
+import { UpdateAppearanceDto } from './dto/update-appearance.dto';
 
 @Controller('characters')
 export class CharacterController {
@@ -14,6 +16,7 @@ export class CharacterController {
     private readonly getCharacterUseCase: GetCharacterUseCase,
     private readonly listMyCharactersUseCase: ListMyCharactersUseCase,
     private readonly changeActivityUseCase: ChangeActivityUseCase,
+    private readonly updateAppearanceUseCase: UpdateAppearanceUseCase,
   ) {}
 
   @Post()
@@ -40,5 +43,10 @@ export class CharacterController {
       activity: dto.activity,
       activityEndsAt: dto.activityEndsAt ? new Date(dto.activityEndsAt) : null,
     });
+  }
+
+  @Patch(':id/appearance')
+  updateAppearance(@CurrentAccount() accountId: string, @Param('id') id: string, @Body() dto: UpdateAppearanceDto) {
+    return this.updateAppearanceUseCase.execute({ characterId: id, accountId, appearance: dto });
   }
 }

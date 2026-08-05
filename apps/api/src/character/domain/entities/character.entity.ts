@@ -1,4 +1,5 @@
 import { Activity, CharacterStats, DEFAULT_ACTIVITY, applyActivityEffect } from './activity';
+import { Appearance, DEFAULT_APPEARANCE } from './appearance';
 
 export type CharacterProps = {
   id: string;
@@ -11,6 +12,7 @@ export type CharacterProps = {
   activity: Activity;
   activityEndsAt: Date | null;
   lastUpdatedAt: Date;
+  appearance?: Appearance;
 };
 
 /**
@@ -28,6 +30,7 @@ export class Character {
   readonly activity: Activity;
   readonly activityEndsAt: Date | null;
   readonly lastUpdatedAt: Date;
+  readonly appearance: Appearance;
 
   constructor(props: CharacterProps) {
     this.id = props.id;
@@ -40,11 +43,12 @@ export class Character {
     this.activity = props.activity;
     this.activityEndsAt = props.activityEndsAt;
     this.lastUpdatedAt = props.lastUpdatedAt;
+    this.appearance = props.appearance ?? DEFAULT_APPEARANCE;
   }
 
   static create(
     props: { name: string; accountId: string } & Partial<
-      Pick<CharacterProps, 'happiness' | 'energy' | 'money' | 'fame'>
+      Pick<CharacterProps, 'happiness' | 'energy' | 'money' | 'fame' | 'appearance'>
     >,
     id: string,
     now: Date = new Date(),
@@ -60,6 +64,7 @@ export class Character {
       activity: DEFAULT_ACTIVITY,
       activityEndsAt: null,
       lastUpdatedAt: now,
+      appearance: props.appearance ?? DEFAULT_APPEARANCE,
     });
   }
 
@@ -116,6 +121,15 @@ export class Character {
     return new Character({ ...this.withStats(this.stats()), activity, activityEndsAt, lastUpdatedAt: now });
   }
 
+  /**
+   * Troca peças do guarda-roupa. Aceita um patch parcial — só as chaves
+   * informadas são substituídas, o restante do visual atual é preservado.
+   * Não afeta atributos nem `lastUpdatedAt` (visual não decai com o tempo).
+   */
+  updateAppearance(patch: Partial<Appearance>): Character {
+    return new Character({ ...this.withStats(this.stats()), appearance: { ...this.appearance, ...patch } });
+  }
+
   private stats(): CharacterStats {
     return { happiness: this.happiness, energy: this.energy, money: this.money, fame: this.fame };
   }
@@ -129,6 +143,7 @@ export class Character {
       activity: this.activity,
       activityEndsAt: this.activityEndsAt,
       lastUpdatedAt: this.lastUpdatedAt,
+      appearance: this.appearance,
     };
   }
 }

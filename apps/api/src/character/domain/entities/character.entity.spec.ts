@@ -110,3 +110,42 @@ describe('Character.changeActivity', () => {
     expect(updated.lastUpdatedAt).toEqual(now);
   });
 });
+
+describe('Character.updateAppearance', () => {
+  it('defaults to a base appearance when none is provided at creation', () => {
+    const character = characterAt();
+
+    expect(character.appearance).toEqual({
+      skinTone: 3,
+      face: 'default',
+      accessory: null,
+      top: 'default',
+      pants: 'default',
+      shoes: 'default',
+    });
+  });
+
+  it('merges a partial patch, preserving the rest of the current appearance', () => {
+    const character = characterAt();
+
+    const updated = character.updateAppearance({ skinTone: 5, top: 'blusa-listrada' });
+
+    expect(updated.appearance).toEqual({
+      skinTone: 5,
+      face: 'default',
+      accessory: null,
+      top: 'blusa-listrada',
+      pants: 'default',
+      shoes: 'default',
+    });
+  });
+
+  it('does not change stats or lastUpdatedAt', () => {
+    const character = characterAt();
+
+    const updated = character.updateAppearance({ accessory: 'chapeu-1' });
+
+    expect(updated.happiness).toBe(character.happiness);
+    expect(updated.lastUpdatedAt).toEqual(character.lastUpdatedAt);
+  });
+});

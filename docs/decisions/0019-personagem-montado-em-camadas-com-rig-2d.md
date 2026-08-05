@@ -1,36 +1,33 @@
-# 0019 — Personagem montado em camadas, com rig 2D por rotação de membros
+# 0019 — Personagem montado em camadas, restrito à aba de detalhes, com animação de idle
 
 ## Contexto
 
-A home do jogo será a cidade isométrica (ver [[../game-design/city-and-world]]), renderizada em DOM (`IsoGrid`/`Block` da luv-ui, tiles como `div` posicionadas por `--x/--y/--z`). Além do personagem customizável do jogador, queríamos NPCs genéricos andando pela cidade só para dar vida ao mundo, sem precisar de arte própria para eles. Era necessário decidir: em que formato as peças do personagem (cabelo, roupa, etc.) chegam como asset, e como a animação de andar/correr é produzida — sem contar com um time de arte dedicado (o desenvolvimento é de uma pessoa só).
+A ideia original era ter o personagem customizável do jogador e NPCs genéricos andando pela cidade isométrica (ver [[../game-design/city-and-world]]), usando um rig 2D de rotação de membros (braços/pernas girando por CSS, inspirado em Scribblenauts) para simular caminhada/corrida sem depender de spritesheets de frames. Ao detalhar essa implementação, ficou claro que o custo de arte necessário — pivots consistentes por peça, corte preciso tronco/braço, ajuste fino de amplitude e sincronização de profundidade entre braços — era desproporcional ao retorno, considerando que o desenvolvimento é de uma pessoa só e que essa animação serviria apenas para ambientação (NPCs andando), não para uma mecânica central do jogo.
 
 ## Decisão
 
-1. **Personagem montado em camadas por peça**, cada peça referenciada por um id (`{ hair: 18, hoodie: 42, pants: 7, shoes: 3, accessory: 12 }`), salvos no backend e "encaixados" em ordem no client — sem mudança em relação ao que já estava desenhado para a customização.
-2. **Peças como PNG** (não SVG), por causa do estilo de arte pintado/ilustrado (sombra, luz), incompatível com vetores flat.
-3. **Catálogo de peças fixado**:
-   - Cabelo — estática, fixa à cabeça.
-   - Rosto/cabeça — estática.
-   - Acessório — estática, **só cabeça** (sem acessórios de corpo).
-   - Tronco + braços — desenhados como uma única arte de referência (para manter proporção), depois exportados como **peças separadas** (tronco, braço esquerdo, braço direito) só para permitir animar os braços independentemente do tronco.
-   - Pernas + calçado — **peça única** por perna (não se separa em coxa/perna/pé), uma para cada lado.
-4. **Animação é um rig 2D de rotação, não spritesheet de frames**: o tronco é a âncora fixa do personagem; braços giram em torno do ombro (`transform-origin` no ombro) e pernas em torno do quadril, via CSS `@keyframes rotate(...)`. Cabelo e roupas do tronco não têm animação própria — seguem o tronco, que é estático.
-5. **Inspiração Scribblenauts**: o ciclo de animação usa amplitude de rotação de corrida (maior que um walk cycle comum), mas tocado em velocidade reduzida — dá a leitura de "correndo devagar" sem desenhar frame nenhum, só ajustando amplitude/duração do keyframe. Braço e perna do mesmo lado giram em fase oposta entre si (braço esquerdo synced com perna direita).
-6. **Profundidade do braço sincronizada com a rotação**: o `z-index` do braço alterna dentro do mesmo `@keyframes` da rotação (ex.: `z-index: 2` quando à frente, `z-index: -2` quando atrás do tronco), para que o braço que está na fase "de trás" do ciclo realmente fique atrás do tronco, e não sempre na mesma camada.
-7. **NPCs de ambiente reaproveitam o mesmo catálogo de peças e o mesmo rig** do personagem do jogador — só que com combinações de ids fixas ou sorteadas no client, sem persistir nada no backend. A montagem (que peças, em que ordem) fica isolada numa função pura (`assembleAvatar(ids) -> layers[]`), consumida tanto pelo personagem do jogador quanto pelos NPCs, para não duplicar a lógica entre os dois usos.
-8. **Renderização continua em DOM** (divs), reaproveitando o mesmo esquema de posicionamento isométrico (`--x/--y/--z` → `z-index`) que o `Block` da cidade já usa. Migrar para Canvas/PixiJS fica como otimização futura, só se a contagem de NPCs simultâneos exigir — não é feito preventivamente.
+1. **O personagem não anda pela cidade.** Fica restrito à **aba de detalhes do personagem**, fora da `IsoGrid` — sem posicionamento isométrico, sem coordenadas `--x/--y/--z`, sem depth-sorting com prédios.
+2. **NPCs ambiente andando pela cidade são descartados.** Não haverá população ambiente reaproveitando o personagem por ora; se a cidade precisar de "vida" no futuro, será resolvido por outro meio, não pelo rig do personagem.
+3. **Pathfinding é descartado** — não há mais necessidade de mover personagem ou NPC pela malha de ruas (`road`/`road-l`/`road-r`/`road-i`).
+4. **Todo o rig de caminhada/corrida é substituído por uma animação de idle simples de respiração**: tronco e braços (esquerdo/direito) se movem **juntos, como um grupo único** (ex.: `translateY`/`scale` sutil aplicado a um wrapper que contém as três peças), em vez de cada braço girar de forma independente. Isso evita o gap visual que apareceria no ombro se o tronco "respirasse" e o braço ficasse parado, sem reintroduzir a complexidade da corrida. Isso elimina a necessidade de:
+   - girar pernas em torno do quadril — pernas ficam totalmente estáticas;
+   - amplitude/fase invertida entre braço e perna (referência Scribblenauts);
+   - alternar `z-index` do braço entre frente/trás do tronco (não há mais cruzamento entre braço e tronco no idle, então essa sincronização deixa de ser necessária).
+5. **Tronco e braços continuam como peças separadas** (reaproveitando o corte já definido: tronco, braço esquerdo, braço direito, a partir da mesma arte de referência) — não por precisarem de rotação independente, mas para permitir esse movimento leve de respiração sem exigir uma peça só. Pernas + calçado, sem rotação nenhuma no idle, podem voltar a ser tratadas como totalmente estáticas.
+6. **O restante da decisão de composição em camadas se mantém**: personagem montado por peça via ids, PNG por peça com âncora fixa por categoria, acessório restrito à cabeça.
+7. **Campos de aparência persistidos por personagem**: `skinTone` (tom de pele, escala fixa de `0`, mais claro, a `6`, mais escuro), `face` (rosto), `accessory` (acessório de cabeça, opcional — `null` = nenhum equipado), `top` (blusa), `pants` (calça), `shoes` (sapatos). Cada campo guarda o id da peça equipada (ou o índice, no caso de `skinTone`); a resolução do id para o asset/PNG fica na composição (`assembleAvatar`), não no banco. O jogador edita qualquer um desses campos independentemente pelo guarda-roupa, sem afetar os demais.
 
 ## Justificativa
 
-Sem time de arte, o critério dominante era minimizar o volume de arte necessário: um rig de rotação (em vez de spritesheet de frames por direção) permite animar caminhada/corrida desenhando cada peça **uma única vez**, com o movimento inteiro resolvido em CSS. Reaproveitar o catálogo de peças da customização para os NPCs elimina a necessidade de arte própria para eles — são as mesmas peças, só montadas em combinações não escolhidas pelo jogador. Manter a renderização em DOM em vez de migrar preventivamente para Canvas evita construir dois caminhos de render (e duplicar a lógica de composição) para um problema de performance que ainda não existe — o próprio design pede "poucos elementos animados" (ver [[../ui-ux/visual-art-style]]), não uma cidade lotada de avatares.
+Sendo projeto solo, o item mais caro do plano original era puramente de arte e ajuste fino visual (rig de corrida crível, pivots alinhados entre dezenas de combinações de peça) — um investimento que não se paga para um recurso de ambientação que não é core do jogo. Isso está alinhado a [[../vision/principles]] (Idle First: o jogo não é dirigido por tempo real ou fidelidade de movimento). Restringir o personagem à aba de detalhes preserva o que o jogador realmente usa e vê — a customização — e descarta só a parte cara e de menor retorno (o personagem se movimentando pela cidade).
 
 ## Consequências
 
-- Toda peça nova (de qualquer categoria) precisa nascer no mesmo canvas/ponto de âncora das demais peças da categoria — sem isso, trocar de peça ou girar um membro "descola" visualmente. Isso é uma regra de processo a seguir manualmente em toda peça criada, não algo garantido por ferramenta.
-- Braço e tronco precisam ser cortados a partir da mesma arte de referência, preservando o ponto de encaixe no ombro em cada variação de tronco/roupa criada.
-- `assembleAvatar` (ou equivalente) deve ser implementado como função pura de dados (ids → lista de camadas), independente de o consumidor renderizar em DOM ou, futuramente, em Canvas.
-- NPCs não têm accountId nem persistência — são inteiramente client-side, gerados/sorteados na sessão.
-- **Pendente**: se braços terão amplitude/uso de accessory de corpo no futuro, ou se acessórios continuam restritos à cabeça permanentemente.
+- A cidade isométrica (`IsoGrid`/`Block`) não precisa de nenhuma integração com avatar/personagem — renderiza só o mundo (prédios, ruas). Não há mais decisão pendente de DOM vs Canvas para avatares, porque não existem avatares na cidade.
+- A separação de tronco e braços em peças distintas passa a existir só para viabilizar o movimento conjunto de respiração (grupo único), não para rotação independente — o ponto de encaixe no ombro ainda precisa ser consistente entre variações de tronco/roupa, mas não há mais fase/amplitude por lado a calibrar.
+- `assembleAvatar` (função pura de composição de camadas por id) continua útil, mas seu único consumidor passa a ser a aba de detalhes do personagem.
+- Pernas + calçado deixam de precisar de pivot no quadril — sem rotação, essa peça é tratada como estática como as demais.
+- `Character` (backend) ganha um sub-objeto `appearance` com os seis campos do item 7, persistido junto do restante do personagem em `characters`. Troca de aparência é uma operação própria (`PATCH /characters/:id/appearance`), sem relação com o ciclo de recompute de atributos (wryd) — ver `apps/api/src/character`.
 
 ## Referências
 
@@ -38,4 +35,5 @@ Sem time de arte, o critério dominante era minimizar o volume de arte necessár
 - [[../game-design/city-and-world]]
 - [[../game-design/player-control]]
 - [[../ui-ux/visual-art-style]]
+- [[../vision/principles]]
 - [[0008-luv-ui-como-design-system-obrigatorio]]

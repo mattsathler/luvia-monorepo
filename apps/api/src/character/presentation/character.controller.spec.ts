@@ -3,6 +3,7 @@ import { CreateCharacterUseCase } from '../application/use-cases/create-characte
 import { GetCharacterUseCase } from '../application/use-cases/get-character.use-case';
 import { ListMyCharactersUseCase } from '../application/use-cases/list-my-characters.use-case';
 import { ChangeActivityUseCase } from '../application/use-cases/change-activity.use-case';
+import { UpdateAppearanceUseCase } from '../application/use-cases/update-appearance.use-case';
 
 describe('CharacterController', () => {
   function buildController() {
@@ -10,15 +11,24 @@ describe('CharacterController', () => {
     const getCharacterUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCharacterUseCase>;
     const listMyCharactersUseCase = { execute: jest.fn() } as unknown as jest.Mocked<ListMyCharactersUseCase>;
     const changeActivityUseCase = { execute: jest.fn() } as unknown as jest.Mocked<ChangeActivityUseCase>;
+    const updateAppearanceUseCase = { execute: jest.fn() } as unknown as jest.Mocked<UpdateAppearanceUseCase>;
 
     const controller = new CharacterController(
       createCharacterUseCase,
       getCharacterUseCase,
       listMyCharactersUseCase,
       changeActivityUseCase,
+      updateAppearanceUseCase,
     );
 
-    return { controller, createCharacterUseCase, getCharacterUseCase, listMyCharactersUseCase, changeActivityUseCase };
+    return {
+      controller,
+      createCharacterUseCase,
+      getCharacterUseCase,
+      listMyCharactersUseCase,
+      changeActivityUseCase,
+      updateAppearanceUseCase,
+    };
   }
 
   it('create() delegates to CreateCharacterUseCase with the current account', () => {
@@ -74,6 +84,18 @@ describe('CharacterController', () => {
       accountId: 'acc-1',
       activity: 'idle',
       activityEndsAt: null,
+    });
+  });
+
+  it('updateAppearance() delegates to UpdateAppearanceUseCase with the current account', () => {
+    const { controller, updateAppearanceUseCase } = buildController();
+
+    controller.updateAppearance('acc-1', 'char-1', { skinTone: 5, top: 'blusa-1' });
+
+    expect(updateAppearanceUseCase.execute).toHaveBeenCalledWith({
+      characterId: 'char-1',
+      accountId: 'acc-1',
+      appearance: { skinTone: 5, top: 'blusa-1' },
     });
   });
 });
