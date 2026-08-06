@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { login as loginRequest, authFetch, UnauthorizedError } from "../lib/api";
+import { login as loginRequest, authFetch, setUnauthorizedHandler, UnauthorizedError } from "../lib/api";
 import { getStoredToken, setStoredToken, clearStoredToken } from "./token-storage";
 
 export type AuthState = {
@@ -15,6 +15,19 @@ const AuthContext = createContext<AuthState | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [accessToken, setAccessToken] = useState<string | null>(() => getStoredToken());
     const [isValidating, setIsValidating] = useState<boolean>(() => getStoredToken() !== null);
+
+    // Qualquer chamada autenticada (não só a validação inicial) pode receber
+    // um 401 se o token expirar durante a sessão — isso derruba a sessão
+    // imediatamente, não importa qual página disparou a chamada.
+    useEffect(() => {
+        function handleUnauthorized() {
+            clearStoredToken();
+            setAccessToken(null);
+        }
+
+        setUnauthorizedHandler(handleUnauthorized);
+        return () => setUnauthorizedHandler(null);
+    }, []);
 
     // Se já existe um token guardado, confirma que ele ainda é válido antes de
     // deixar o jogador entrar direto — token expirado deve cair no login.

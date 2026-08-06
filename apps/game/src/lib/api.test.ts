@@ -1,5 +1,16 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ApiError, UnauthorizedError, authFetch, login, register } from "./api";
+import {
+    ApiError,
+    UnauthorizedError,
+    authFetch,
+    createCharacter,
+    listMyCharacters,
+    listSkills,
+    login,
+    register,
+    setUnauthorizedHandler,
+    type CreateCharacterInput,
+} from "./api";
 
 function jsonResponse(status: number, body: unknown): Response {
     return {
@@ -111,5 +122,105 @@ describe("authFetch", () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(401, {})));
 
         await expect(authFetch("/characters/mine", "expired-token")).rejects.toBeInstanceOf(UnauthorizedError);
+    });
+
+    it("notifies the registered unauthorized handler on 401, no matter which call triggered it", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(401, {})));
+        const handler = vi.fn();
+        setUnauthorizedHandler(handler);
+
+        await expect(authFetch("/characters/mine", "expired-token")).rejects.toBeInstanceOf(UnauthorizedError);
+        expect(handler).toHaveBeenCalledTimes(1);
+
+        setUnauthorizedHandler(null);
+    });
+
+    it("does not notify any handler on a successful response", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(200, {})));
+        const handler = vi.fn();
+        setUnauthorizedHandler(handler);
+
+        await authFetch("/characters/mine", "token-123");
+        expect(handler).not.toHaveBeenCalled();
+
+        setUnauthorizedHandler(null);
+    });
+});
+
+describe("listMyCharacters", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("returns the parsed character list on success", async () => {
+        const body = [{ id: "char-1", name: "Ana" }];
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(200, body)));
+
+        const result = await listMyCharacters("token-123");
+
+        expect(result).toEqual(body);
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(500, { message: "Erro ao listar" })));
+
+        await expect(listMyCharacters("token-123")).rejects.toThrow("Erro ao listar");
+    });
+});
+
+describe("createCharacter", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    const input: CreateCharacterInput = {
+        firstName: "Ana",
+        lastName: "Silva",
+        gender: "female",
+        skinTone: 3,
+        hairType: "liso-1",
+        eyeType: "redondo-1",
+        skills: { intelligence: 2, charisma: 2 },
+    };
+
+    it("returns the created character on success", async () => {
+        const body = { id: "char-1", firstName: "Ana" };
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(201, body));
+        vi.stubGlobal("fetch", fetchMock);
+
+        const result = await createCharacter("token-123", input);
+
+        expect(result).toEqual(body);
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining("/characters"),
+            expect.objectContaining({ method: "POST", body: JSON.stringify(input) }),
+        );
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(400, { message: "Alocação de skills inválida" })));
+
+        await expect(createCharacter("token-123", input)).rejects.toThrow("Alocação de skills inválida");
+    });
+});
+
+describe("listSkills", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("returns the parsed skill catalog on success", async () => {
+        const body = [{ id: "intelligence", label: "Inteligência" }];
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(200, body)));
+
+        const result = await listSkills("token-123");
+
+        expect(result).toEqual(body);
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(500, { message: "Erro ao listar skills" })));
+
+        await expect(listSkills("token-123")).rejects.toThrow("Erro ao listar skills");
     });
 });

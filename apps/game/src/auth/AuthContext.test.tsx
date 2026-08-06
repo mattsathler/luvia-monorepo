@@ -74,6 +74,38 @@ describe("AuthProvider", () => {
         expect(getStoredToken()).toBeNull();
     });
 
+    it("clears the session when a later authenticated call receives a 401 (token expired mid-session)", async () => {
+        setStoredToken("stored-token");
+        (api.authFetch as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true } as Response);
+
+        render(
+            <AuthProvider>
+                <TestConsumer />
+            </AuthProvider>,
+        );
+
+        await waitFor(() => expect(screen.getByTestId("authenticated").textContent).toBe("true"));
+
+        // Simula uma chamada autenticada feita bem depois do login inicial
+        // (ex.: outra página buscando dados), usando o authFetch real — não o
+        // mock acima — para confirmar que o handler global de 401 registrado
+        // pelo AuthProvider é quem derruba a sessão, não a validação inicial.
+        const actualApi = await vi.importActual<typeof api>("../lib/api");
+        vi.stubGlobal(
+            "fetch",
+            vi.fn().mockResolvedValue({ status: 401, ok: false, json: async () => ({}) } as Response),
+        );
+
+        await expect(actualApi.authFetch("/characters/mine", "stored-token")).rejects.toBeInstanceOf(
+            api.UnauthorizedError,
+        );
+
+        await waitFor(() => expect(screen.getByTestId("authenticated").textContent).toBe("false"));
+        expect(getStoredToken()).toBeNull();
+
+        vi.unstubAllGlobals();
+    });
+
     it("ignores non-401 errors while validating the stored token", async () => {
         setStoredToken("stored-token");
         (api.authFetch as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network down"));

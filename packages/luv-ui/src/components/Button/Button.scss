@@ -6,7 +6,7 @@
 
 @mixin button-base {
     box-sizing: border-box;
-    border: none;
+    border: 2px solid transparent;
     border-radius: 8px;
     padding: 8px 24px;
     font-weight: 600;

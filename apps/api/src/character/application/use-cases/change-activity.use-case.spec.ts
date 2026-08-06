@@ -10,7 +10,8 @@ function characterOwnedBy(accountId: string) {
   return new Character({
     id: 'char-1',
     accountId,
-    name: 'Ana',
+    firstName: 'Ana',
+    lastName: 'Silva',
     happiness: 55,
     energy: 70,
     money: 0,

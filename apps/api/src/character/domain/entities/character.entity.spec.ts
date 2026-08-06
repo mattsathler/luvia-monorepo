@@ -3,7 +3,7 @@ import { Character } from './character.entity';
 const T0 = new Date('2026-01-01T00:00:00.000Z');
 
 function characterAt(overrides: Partial<Parameters<typeof Character.create>[0]> = {}) {
-  return Character.create({ name: 'Ana', accountId: 'acc-1', ...overrides }, 'char-1', T0);
+  return Character.create({ firstName: 'Ana', lastName: 'Silva', accountId: 'acc-1', ...overrides }, 'char-1', T0);
 }
 
 describe('Character.recomputeUntil', () => {
@@ -20,7 +20,8 @@ describe('Character.recomputeUntil', () => {
     const character = new Character({
       id: 'char-1',
       accountId: 'acc-1',
-      name: 'Ana',
+      firstName: 'Ana',
+      lastName: 'Silva',
       happiness: 50,
       energy: 50,
       money: 0,
@@ -43,7 +44,8 @@ describe('Character.recomputeUntil', () => {
     const character = new Character({
       id: 'char-1',
       accountId: 'acc-1',
-      name: 'Ana',
+      firstName: 'Ana',
+      lastName: 'Silva',
       happiness: 50,
       energy: 50,
       money: 0,
@@ -76,7 +78,8 @@ describe('Character.recomputeUntil', () => {
     const character = new Character({
       id: 'char-1',
       accountId: 'acc-1',
-      name: 'Ana',
+      firstName: 'Ana',
+      lastName: 'Silva',
       happiness: 50,
       energy: 50,
       money: 0,
@@ -117,6 +120,8 @@ describe('Character.updateAppearance', () => {
 
     expect(character.appearance).toEqual({
       skinTone: 3,
+      hairType: 'default',
+      eyeType: 'default',
       face: 'default',
       accessory: null,
       top: 'default',
@@ -132,6 +137,8 @@ describe('Character.updateAppearance', () => {
 
     expect(updated.appearance).toEqual({
       skinTone: 5,
+      hairType: 'default',
+      eyeType: 'default',
       face: 'default',
       accessory: null,
       top: 'blusa-listrada',

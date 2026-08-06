@@ -6,7 +6,7 @@ import { Character } from '../../domain/entities/character.entity';
 const T0 = new Date('2026-01-01T00:00:00.000Z');
 
 function characterOwnedBy(accountId: string) {
-  return Character.create({ name: 'Ana', accountId }, 'char-1', T0);
+  return Character.create({ firstName: 'Ana', lastName: 'Silva', accountId }, 'char-1', T0);
 }
 
 function repositoryWith(character: Character | null): jest.Mocked<CharacterRepository> {
@@ -33,6 +33,8 @@ describe('UpdateAppearanceUseCase', () => {
 
     expect(result.appearance).toEqual({
       skinTone: 5,
+      hairType: 'default',
+      eyeType: 'default',
       face: 'default',
       accessory: 'chapeu-1',
       top: 'default',

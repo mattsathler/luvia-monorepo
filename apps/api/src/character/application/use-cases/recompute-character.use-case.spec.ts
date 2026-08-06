@@ -9,7 +9,8 @@ function restingCharacterAt(now: Date) {
   return new Character({
     id: 'char-1',
     accountId: 'acc-1',
-    name: 'Ana',
+    firstName: 'Ana',
+    lastName: 'Silva',
     happiness: 50,
     energy: 50,
     money: 0,

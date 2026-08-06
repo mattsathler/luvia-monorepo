@@ -9,7 +9,8 @@ function characterAt(id: string) {
   return new Character({
     id,
     accountId: 'acc-1',
-    name: `Character ${id}`,
+    firstName: `Character`,
+    lastName: id,
     happiness: 100,
     energy: 100,
     money: 0,

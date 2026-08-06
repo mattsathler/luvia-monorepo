@@ -4,6 +4,7 @@ import { GetCharacterUseCase } from '../application/use-cases/get-character.use-
 import { ListMyCharactersUseCase } from '../application/use-cases/list-my-characters.use-case';
 import { ChangeActivityUseCase } from '../application/use-cases/change-activity.use-case';
 import { UpdateAppearanceUseCase } from '../application/use-cases/update-appearance.use-case';
+import { SKILL_DEFINITIONS } from '../domain/entities/skill';
 
 describe('CharacterController', () => {
   function buildController() {
@@ -35,10 +36,33 @@ describe('CharacterController', () => {
     const { controller, createCharacterUseCase } = buildController();
     createCharacterUseCase.execute.mockResolvedValue('created' as never);
 
-    const result = controller.create('acc-1', { name: 'Ana' });
+    const result = controller.create('acc-1', {
+      firstName: 'Ana',
+      lastName: 'Silva',
+      gender: 'female',
+      skinTone: 3,
+      hairType: 'curly-1',
+      eyeType: 'round-1',
+      skills: { intelligence: 2, charisma: 2 },
+    });
 
-    expect(createCharacterUseCase.execute).toHaveBeenCalledWith({ name: 'Ana', accountId: 'acc-1' });
+    expect(createCharacterUseCase.execute).toHaveBeenCalledWith({
+      accountId: 'acc-1',
+      firstName: 'Ana',
+      lastName: 'Silva',
+      gender: 'female',
+      skinTone: 3,
+      hairType: 'curly-1',
+      eyeType: 'round-1',
+      skills: { intelligence: 2, charisma: 2 },
+    });
     expect(result).resolves.toBe('created');
+  });
+
+  it('listSkills() returns the skill catalog', () => {
+    const { controller } = buildController();
+
+    expect(controller.listSkills()).toBe(SKILL_DEFINITIONS);
   });
 
   it('findMine() delegates to ListMyCharactersUseCase with the current account', () => {

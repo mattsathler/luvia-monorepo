@@ -9,6 +9,10 @@ export type SkinTone = (typeof SKIN_TONES)[number];
 
 export type Appearance = {
   skinTone: SkinTone;
+  /** Escolhido na criação do personagem; id de asset livre (catálogo de estilos de cabelo). */
+  hairType: string;
+  /** Escolhido na criação do personagem; id de asset livre (catálogo de tipos de olho). */
+  eyeType: string;
   face: string;
   /** Restrito à cabeça (chapéu, óculos, etc). `null` = nenhum acessório equipado. */
   accessory: string | null;
@@ -19,6 +23,8 @@ export type Appearance = {
 
 export const DEFAULT_APPEARANCE: Appearance = {
   skinTone: 3,
+  hairType: 'default',
+  eyeType: 'default',
   face: 'default',
   accessory: null,
   top: 'default',

@@ -58,7 +58,10 @@ export class CharacterMongoRepository implements CharacterRepository {
   private toFields(character: Character) {
     return {
       accountId: character.accountId,
-      name: character.name,
+      firstName: character.firstName,
+      lastName: character.lastName,
+      gender: character.gender,
+      skills: character.skills,
       happiness: character.happiness,
       energy: character.energy,
       money: character.money,
@@ -67,6 +70,8 @@ export class CharacterMongoRepository implements CharacterRepository {
       activityEndsAt: character.activityEndsAt,
       lastUpdatedAt: character.lastUpdatedAt,
       skinTone: character.appearance.skinTone,
+      hairType: character.appearance.hairType,
+      eyeType: character.appearance.eyeType,
       face: character.appearance.face,
       accessory: character.appearance.accessory,
       top: character.appearance.top,
@@ -79,7 +84,10 @@ export class CharacterMongoRepository implements CharacterRepository {
     return new Character({
       id: document.characterId,
       accountId: document.accountId,
-      name: document.name,
+      firstName: document.firstName,
+      lastName: document.lastName,
+      gender: document.gender,
+      skills: document.skills,
       happiness: document.happiness,
       energy: document.energy,
       money: document.money,
@@ -89,6 +97,8 @@ export class CharacterMongoRepository implements CharacterRepository {
       lastUpdatedAt: document.lastUpdatedAt,
       appearance: {
         skinTone: document.skinTone,
+        hairType: document.hairType,
+        eyeType: document.eyeType,
         face: document.face,
         accessory: document.accessory,
         top: document.top,

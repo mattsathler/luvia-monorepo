@@ -6,7 +6,7 @@ import { RecomputeCharacterUseCase } from '../../application/use-cases/recompute
 import { Character } from '../../domain/entities/character.entity';
 
 function characterWithId(id: string): Character {
-  return Character.create({ name: 'Ana', accountId: 'acc-1' }, id);
+  return Character.create({ firstName: 'Ana', lastName: 'Silva', accountId: 'acc-1' }, id);
 }
 
 function buildScheduler(configValues: Record<string, unknown> = {}) {

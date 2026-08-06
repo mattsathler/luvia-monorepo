@@ -2,6 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { Activity } from '../../domain/entities/activity';
 import { SkinTone } from '../../domain/entities/appearance';
+import { Gender } from '../../domain/entities/gender';
+import { SkillPoints } from '../../domain/entities/skill';
 
 export type CharacterDocument = HydratedDocument<CharacterModel>;
 
@@ -14,7 +16,16 @@ export class CharacterModel {
   accountId!: string;
 
   @Prop({ required: true })
-  name!: string;
+  firstName!: string;
+
+  @Prop({ required: true })
+  lastName!: string;
+
+  @Prop({ required: true, default: 'other' })
+  gender!: Gender;
+
+  @Prop({ type: Object, required: true, default: {} })
+  skills!: SkillPoints;
 
   @Prop({ required: true, default: 100 })
   happiness!: number;
@@ -39,6 +50,12 @@ export class CharacterModel {
 
   @Prop({ required: true, default: 3 })
   skinTone!: SkinTone;
+
+  @Prop({ required: true, default: 'default' })
+  hairType!: string;
+
+  @Prop({ required: true, default: 'default' })
+  eyeType!: string;
 
   @Prop({ required: true, default: 'default' })
   face!: string;

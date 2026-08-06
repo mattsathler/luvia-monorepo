@@ -1,10 +1,13 @@
 import { Activity, CharacterStats, DEFAULT_ACTIVITY, applyActivityEffect } from './activity';
 import { Appearance, DEFAULT_APPEARANCE } from './appearance';
+import { DEFAULT_GENDER, Gender } from './gender';
+import { SkillPoints } from './skill';
 
 export type CharacterProps = {
   id: string;
   accountId: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   happiness: number;
   energy: number;
   money: number;
@@ -13,6 +16,8 @@ export type CharacterProps = {
   activityEndsAt: Date | null;
   lastUpdatedAt: Date;
   appearance?: Appearance;
+  gender?: Gender;
+  skills?: SkillPoints;
 };
 
 /**
@@ -22,7 +27,10 @@ export type CharacterProps = {
 export class Character {
   readonly id: string;
   readonly accountId: string;
-  readonly name: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly gender: Gender;
+  readonly skills: SkillPoints;
   readonly happiness: number;
   readonly energy: number;
   readonly money: number;
@@ -35,7 +43,10 @@ export class Character {
   constructor(props: CharacterProps) {
     this.id = props.id;
     this.accountId = props.accountId;
-    this.name = props.name;
+    this.firstName = props.firstName;
+    this.lastName = props.lastName;
+    this.gender = props.gender ?? DEFAULT_GENDER;
+    this.skills = props.skills ?? {};
     this.happiness = props.happiness;
     this.energy = props.energy;
     this.money = props.money;
@@ -47,8 +58,8 @@ export class Character {
   }
 
   static create(
-    props: { name: string; accountId: string } & Partial<
-      Pick<CharacterProps, 'happiness' | 'energy' | 'money' | 'fame' | 'appearance'>
+    props: { firstName: string; lastName: string; accountId: string } & Partial<
+      Pick<CharacterProps, 'happiness' | 'energy' | 'money' | 'fame' | 'appearance' | 'gender' | 'skills'>
     >,
     id: string,
     now: Date = new Date(),
@@ -56,7 +67,10 @@ export class Character {
     return new Character({
       id,
       accountId: props.accountId,
-      name: props.name,
+      firstName: props.firstName,
+      lastName: props.lastName,
+      gender: props.gender ?? DEFAULT_GENDER,
+      skills: props.skills ?? {},
       happiness: props.happiness ?? 100,
       energy: props.energy ?? 100,
       money: props.money ?? 0,
@@ -138,7 +152,10 @@ export class Character {
     return {
       id: this.id,
       accountId: this.accountId,
-      name: this.name,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      gender: this.gender,
+      skills: this.skills,
       ...stats,
       activity: this.activity,
       activityEndsAt: this.activityEndsAt,

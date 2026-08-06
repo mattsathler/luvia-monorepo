@@ -4,7 +4,7 @@ import { Character } from '../../domain/entities/character.entity';
 
 describe('GetCharacterUseCase', () => {
   it('delegates to RecomputeCharacterUseCase so every read is up to date', async () => {
-    const character = Character.create({ name: 'Ana', accountId: 'acc-1' }, 'char-1');
+    const character = Character.create({ firstName: 'Ana', lastName: 'Silva', accountId: 'acc-1' }, 'char-1');
     const recomputeCharacterUseCase = {
       execute: jest.fn(async () => character),
     } as unknown as RecomputeCharacterUseCase;

@@ -1,27 +1,69 @@
-import { CreateCharacterUseCase } from './create-character.use-case';
+import { BadRequestException } from '@nestjs/common';
+import { CreateCharacterUseCase, CreateCharacterInput } from './create-character.use-case';
 import { CharacterRepository } from '../../domain/repositories/character.repository';
 import { Character } from '../../domain/entities/character.entity';
 
-describe('CreateCharacterUseCase', () => {
-  it('creates a character with default needs and saves it via the repository', async () => {
-    const characterRepository: jest.Mocked<CharacterRepository> = {
-      save: jest.fn(async (character: Character) => character),
-      findById: jest.fn(),
-      findByAccountId: jest.fn(),
-      trySave: jest.fn(),
-      findStaleBatch: jest.fn(),
-    };
+function validInput(overrides: Partial<CreateCharacterInput> = {}): CreateCharacterInput {
+  return {
+    accountId: 'acc-1',
+    firstName: 'Ana',
+    lastName: 'Silva',
+    gender: 'female',
+    skinTone: 3,
+    hairType: 'curly-1',
+    eyeType: 'round-1',
+    skills: { intelligence: 2, charisma: 2 },
+    ...overrides,
+  };
+}
 
+function buildRepository(): jest.Mocked<CharacterRepository> {
+  return {
+    save: jest.fn(async (character: Character) => character),
+    findById: jest.fn(),
+    findByAccountId: jest.fn(),
+    trySave: jest.fn(),
+    findStaleBatch: jest.fn(),
+  };
+}
+
+describe('CreateCharacterUseCase', () => {
+  it('creates a character with default needs and the chosen identity/appearance, saving it via the repository', async () => {
+    const characterRepository = buildRepository();
     const useCase = new CreateCharacterUseCase(characterRepository);
 
-    const character = await useCase.execute({ name: 'Ana', accountId: 'acc-1' });
+    const character = await useCase.execute(validInput());
 
-    expect(character.name).toBe('Ana');
+    expect(character.firstName).toBe('Ana');
+    expect(character.lastName).toBe('Silva');
+    expect(character.gender).toBe('female');
+    expect(character.skills).toEqual({ intelligence: 2, charisma: 2 });
+    expect(character.appearance).toMatchObject({ skinTone: 3, hairType: 'curly-1', eyeType: 'round-1' });
     expect(character.accountId).toBe('acc-1');
     expect(character.happiness).toBe(100);
     expect(character.energy).toBe(100);
     expect(character.money).toBe(0);
     expect(character.fame).toBe(0);
     expect(characterRepository.save).toHaveBeenCalledWith(character);
+  });
+
+  it('rejects an allocation that uses an unknown skill id', async () => {
+    const characterRepository = buildRepository();
+    const useCase = new CreateCharacterUseCase(characterRepository);
+
+    await expect(useCase.execute(validInput({ skills: { flying: 4 } }))).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+    expect(characterRepository.save).not.toHaveBeenCalled();
+  });
+
+  it('rejects an allocation that does not sum to the initial points budget', async () => {
+    const characterRepository = buildRepository();
+    const useCase = new CreateCharacterUseCase(characterRepository);
+
+    await expect(useCase.execute(validInput({ skills: { intelligence: 1 } }))).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+    expect(characterRepository.save).not.toHaveBeenCalled();
   });
 });

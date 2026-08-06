@@ -9,7 +9,10 @@ function characterDocument(overrides: Partial<CharacterDocument> = {}): Characte
   return {
     characterId: 'char-1',
     accountId: 'acc-1',
-    name: 'Ana',
+    firstName: 'Ana',
+    lastName: 'Silva',
+    gender: 'other',
+    skills: {},
     happiness: 100,
     energy: 100,
     money: 0,
@@ -17,12 +20,20 @@ function characterDocument(overrides: Partial<CharacterDocument> = {}): Characte
     activity: 'idle',
     activityEndsAt: null,
     lastUpdatedAt: T0,
+    skinTone: 3,
+    hairType: 'default',
+    eyeType: 'default',
+    face: 'default',
+    accessory: null,
+    top: 'default',
+    pants: 'default',
+    shoes: 'default',
     ...overrides,
   } as CharacterDocument;
 }
 
 function character(overrides: Partial<Parameters<typeof Character.create>[0]> = {}): Character {
-  return Character.create({ name: 'Ana', accountId: 'acc-1', ...overrides }, 'char-1', T0);
+  return Character.create({ firstName: 'Ana', lastName: 'Silva', accountId: 'acc-1', ...overrides }, 'char-1', T0);
 }
 
 function queryMock(result: unknown) {
@@ -59,7 +70,7 @@ describe('CharacterMongoRepository', () => {
 
     expect(model.findOneAndUpdate).toHaveBeenCalledWith(
       { characterId: 'char-1' },
-      expect.objectContaining({ characterId: 'char-1', accountId: 'acc-1', name: 'Ana' }),
+      expect.objectContaining({ characterId: 'char-1', accountId: 'acc-1', firstName: 'Ana' }),
       { upsert: true, returnDocument: 'after' },
     );
     expect(result).toBe(input);
@@ -91,13 +102,13 @@ describe('CharacterMongoRepository', () => {
 
   it('findById() maps the document to a domain Character', async () => {
     const { repository, model } = buildRepository();
-    (model.findOne as jest.Mock).mockReturnValue(queryMock(characterDocument({ name: 'Bia' })));
+    (model.findOne as jest.Mock).mockReturnValue(queryMock(characterDocument({ firstName: 'Bia' })));
 
     const result = await repository.findById('char-1');
 
     expect(model.findOne).toHaveBeenCalledWith({ characterId: 'char-1' });
     expect(result).toBeInstanceOf(Character);
-    expect(result?.name).toBe('Bia');
+    expect(result?.firstName).toBe('Bia');
   });
 
   it('findById() returns null when no document is found', async () => {

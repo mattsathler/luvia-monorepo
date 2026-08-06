@@ -8,6 +8,7 @@ import { UpdateAppearanceUseCase } from '../application/use-cases/update-appeara
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { ChangeActivityDto } from './dto/change-activity.dto';
 import { UpdateAppearanceDto } from './dto/update-appearance.dto';
+import { SKILL_DEFINITIONS } from '../domain/entities/skill';
 
 @Controller('characters')
 export class CharacterController {
@@ -21,13 +22,28 @@ export class CharacterController {
 
   @Post()
   create(@CurrentAccount() accountId: string, @Body() dto: CreateCharacterDto) {
-    return this.createCharacterUseCase.execute({ name: dto.name, accountId });
+    return this.createCharacterUseCase.execute({
+      accountId,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      gender: dto.gender,
+      skinTone: dto.skinTone,
+      hairType: dto.hairType,
+      eyeType: dto.eyeType,
+      skills: dto.skills,
+    });
   }
 
-  // Precisa vir antes de `:id`, senão "mine" é interpretado como um id.
+  // Precisa vir antes de `:id`, senão "mine"/"skills" são interpretados como um id.
   @Get('mine')
   findMine(@CurrentAccount() accountId: string) {
     return this.listMyCharactersUseCase.execute(accountId);
+  }
+
+  /** Catálogo de skills disponíveis para distribuir na criação — ver domain/entities/skill.ts. */
+  @Get('skills')
+  listSkills() {
+    return SKILL_DEFINITIONS;
   }
 
   @Get(':id')
