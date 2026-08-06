@@ -179,7 +179,8 @@ describe("App", () => {
         await user.type(screen.getByLabelText("Nome"), "Ana");
         await user.type(screen.getByLabelText("Sobrenome"), "Silva");
         await user.click(screen.getByRole("button", { name: "Feminino" }));
-        await user.click(screen.getByRole("button", { name: "3" }));
+
+        await user.click(screen.getByRole("button", { name: "Skills" }));
         await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
         await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
         await user.click(screen.getByRole("button", { name: "Aumentar Carisma" }));

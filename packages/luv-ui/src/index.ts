@@ -9,6 +9,7 @@ import './components/Input/Input.scss';
 import './components/Input/DatePicker.scss';
 import './components/Dialog/Dialog.scss';
 import './components/Card/Card.scss';
+import './components/Stepper/Stepper.scss';
 
 
 import './components/Tabs/Tabs';
@@ -23,6 +24,10 @@ export type { LuvInputProps } from './components/Input/LuvInput';
 export { default as luviaLogo } from './assets/luvia-logo-big.png?inline';
 export { LuvModal } from './components/Dialog/LuvModal';
 export type { LuvModalProps, LuvModalVariant } from './components/Dialog/LuvModal';
+export { LuvStepper, useLuvStepper } from './components/Stepper/LuvStepper';
+export type { LuvStep, LuvStepperProps, LuvStepperContextValue } from './components/Stepper/LuvStepper';
+export { LuvStepperStep } from './components/Stepper/LuvStepperStep';
+export type { LuvStepperStepProps } from './components/Stepper/LuvStepperStep';
 export { SnackbarProvider } from './components/Snackbar/SnackbarProvider';
 export { showSnackbar } from './components/Snackbar/snackbar';
 export type { SnackbarOptions, SnackbarVariant } from './components/Snackbar/snackbar';

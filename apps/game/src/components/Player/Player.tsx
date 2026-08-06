@@ -35,7 +35,7 @@ export function Player({ layers }: PlayerProps) {
     const composed = useComposedCharacterPreview(sources);
 
     return composed ? (
-        <img src={composed} alt="Personagem" className="w-72 h-auto" />
+        <img src={composed} alt="Personagem" className="w-72 h-auto contour" />
     ) : (
         <p className="text-text">Montando personagem...</p>
     );

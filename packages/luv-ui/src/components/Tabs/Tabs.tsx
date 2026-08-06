@@ -21,7 +21,7 @@ export function Tabs({ children }: TabsProps) {
   };
 
   return (
-    <div>
+    <>
       <div className="tabs" >
         {
           childrenArray.map((child) => (
@@ -45,6 +45,6 @@ export function Tabs({ children }: TabsProps) {
           )
         }
       </div>
-    </div>
+    </>
   );
 }

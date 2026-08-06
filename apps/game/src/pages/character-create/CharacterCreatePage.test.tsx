@@ -61,7 +61,13 @@ async function fillIdentity(user: ReturnType<typeof userEvent.setup>) {
     await user.type(screen.getByLabelText("Nome"), "Ana");
     await user.type(screen.getByLabelText("Sobrenome"), "Silva");
     await user.click(screen.getByRole("button", { name: "Feminino" }));
-    await user.click(screen.getByRole("button", { name: "3" }));
+}
+
+// Cada passo do Stepper só renderiza seu conteúdo quando está ativo — os
+// dados preenchidos em outros passos continuam guardados no estado do
+// formulário, então é seguro trocar de passo livremente durante os testes.
+async function goToStep(user: ReturnType<typeof userEvent.setup>, label: string) {
+    await user.click(screen.getByRole("button", { name: label }));
 }
 
 describe("CharacterCreatePage", () => {
@@ -86,8 +92,10 @@ describe("CharacterCreatePage", () => {
 
     it("shows an error when the skill catalog fails to load", async () => {
         (listSkills as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network down"));
+        const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
+        await goToStep(user, "Skills");
 
         expect(
             await screen.findByText("Não foi possível carregar as skills. Tente novamente."),
@@ -99,14 +107,17 @@ describe("CharacterCreatePage", () => {
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
+        await goToStep(user, "Skills");
         await screen.findByText("Inteligência");
 
         const submit = screen.getByRole("button", { name: "Criar personagem" });
         expect(submit).toBeDisabled();
 
+        await goToStep(user, "Informações");
         await fillIdentity(user);
         expect(submit).toBeDisabled(); // no skill points allocated yet
 
+        await goToStep(user, "Skills");
         await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
         await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
         await user.click(screen.getByRole("button", { name: "Aumentar Carisma" }));
@@ -121,6 +132,7 @@ describe("CharacterCreatePage", () => {
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
+        await goToStep(user, "Skills");
         await screen.findByText("Inteligência");
 
         const increment = screen.getByRole("button", { name: "Aumentar Inteligência" });
@@ -138,6 +150,7 @@ describe("CharacterCreatePage", () => {
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
+        await goToStep(user, "Skills");
         await screen.findByText("Inteligência");
 
         const decrement = screen.getByRole("button", { name: "Diminuir Inteligência" });
@@ -156,8 +169,10 @@ describe("CharacterCreatePage", () => {
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
-        await screen.findByText("Inteligência");
         await fillIdentity(user);
+
+        await goToStep(user, "Skills");
+        await screen.findByText("Inteligência");
 
         const increment = screen.getByRole("button", { name: "Aumentar Inteligência" });
         await user.click(increment);
@@ -185,8 +200,10 @@ describe("CharacterCreatePage", () => {
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
-        await screen.findByText("Inteligência");
         await fillIdentity(user);
+
+        await goToStep(user, "Skills");
+        await screen.findByText("Inteligência");
 
         const increment = screen.getByRole("button", { name: "Aumentar Inteligência" });
         await user.click(increment);
@@ -205,8 +222,10 @@ describe("CharacterCreatePage", () => {
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
-        await screen.findByText("Inteligência");
         await fillIdentity(user);
+
+        await goToStep(user, "Skills");
+        await screen.findByText("Inteligência");
 
         const increment = screen.getByRole("button", { name: "Aumentar Inteligência" });
         await user.click(increment);
