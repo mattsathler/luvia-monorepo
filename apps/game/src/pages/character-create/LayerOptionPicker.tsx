@@ -18,7 +18,7 @@ export function LayerOptionPicker({ category, label, selectedId, onSelect }: Lay
 
     return (
         <div className="d-flex flex-col gap-8 w-full">
-            <span className="text-size-16 text-text text-bold">{label}</span>
+            <span className="text-size-16 text-text  ">{label}</span>
             <div className="d-flex flex-wrap gap-8">
                 {options.map((asset) => (
                     <ThumbnailOption

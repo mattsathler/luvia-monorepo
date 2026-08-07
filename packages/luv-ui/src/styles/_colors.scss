@@ -2,6 +2,25 @@
 // COLORS.SCSS
 // ==========================
 
+@use "sass:map";
+
+$game-theme: (
+    red: #E96B6B,
+    orange: #F4A261,
+    yellow: #F6D365,
+    green: #7BC96F,
+    teal: #5FC3B0,
+    cyan: #6EC9E8,
+    blue: #6D9FE8,
+    purple: #A58BD4,
+    pink: #E78AB5,
+    brown: #A9795B,
+    beige: #E8D3A8,
+    cream: #FFF1C7,
+    gray: #8D8D98,
+    white: #FFFFFF,
+);
+
 // ========== LIGHT THEME ==========
 $theme-light: (
     theme: #ff8fc1,
@@ -61,6 +80,14 @@ $theme: $theme-light !default;
     }
 }
 
+// Game-theme accent colors: fixed across light/dark, used to break up
+// the monochromatic palette (tags, badges, avatars, category accents).
+:root {
+    @each $key, $value in $game-theme {
+        --game-#{"" + $key}: #{$value};
+    }
+}
+
 // ==========================
 // Funções de acesso
 // ==========================
@@ -95,3 +122,15 @@ $color-keys: (
     warn-alpha: var-color(warn-alpha),
     error-alpha: var-color(error-alpha),
 );
+
+// ==========================
+// Cores do game-theme (paleta de destaque)
+// ==========================
+
+$game-color-keys: ();
+
+@each $key, $value in $game-theme {
+    $game-color-keys: map.merge($game-color-keys, (game-#{"" + $key}: var-color(game-#{"" + $key})));
+}
+
+$color-keys: map.merge($color-keys, $game-color-keys);

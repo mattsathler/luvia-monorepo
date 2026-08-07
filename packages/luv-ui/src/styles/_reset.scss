@@ -1,5 +1,13 @@
 @use './colors' as *;
 
+@font-face {
+    font-family: 'Chubby';
+    src: url('../assets/fonts/Chubby.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -15,7 +23,9 @@ body {
     background-color: var-color(background);
     overflow-x: hidden;
     user-select: none;
-    font-family: Nunito;
+    font-family: 'Chubby', Nunito, sans-serif;
+    font-weight: normal;
+    letter-spacing: 0.04em;
     color: var-color(text);
 }
 
@@ -68,6 +78,7 @@ h3,
 h4,
 h5,
 h6 {
+    font-weight: normal;
     color: var-color(placeholder);
 }
 

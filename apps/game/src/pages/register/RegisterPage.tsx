@@ -110,7 +110,7 @@ export function RegisterPage({ onNavigateToLogin }: RegisterPageProps) {
                             <span
                                 role="button"
                                 tabIndex={0}
-                                className="text-secondary-text text-bold cursor-pointer"
+                                className="text-secondary-text   cursor-pointer"
                                 onClick={openTerms}
                                 onKeyDown={handleTermsKeyDown}
                             >

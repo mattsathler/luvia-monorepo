@@ -18,7 +18,7 @@ export const LuvInput = forwardRef<HTMLInputElement, LuvInputProps>(function Luv
     return (
         <div className="d-flex flex-col gap-8 w-full">
             {label && (
-                <label htmlFor={inputId} className="text-size-16 text-text text-bold">
+                <label htmlFor={inputId} className="text-size-16 text-text  ">
                     {label}
                 </label>
             )}

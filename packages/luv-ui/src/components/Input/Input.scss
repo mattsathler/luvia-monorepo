@@ -28,8 +28,11 @@ input {
 
 }
 
-input:invalid:not(:focus),
-select:invalid:not(:focus),
-textarea:invalid:not(:focus) {
+// :user-invalid só passa a valer depois que o usuário interage com o campo
+// (edita e sai, ou tenta submeter o form) — evita que campos obrigatórios
+// vazios já nasçam com a borda de erro antes de serem tocados.
+input:user-invalid:not(:focus),
+select:user-invalid:not(:focus),
+textarea:user-invalid:not(:focus) {
     border: 2px solid var(--error);
 }

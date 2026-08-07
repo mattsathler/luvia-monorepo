@@ -23,7 +23,7 @@ export { Tabs } from './components/Tabs/Tabs';
 export { Tab } from './components/Tabs/Tab';
 export { LuvInput } from './components/Input/LuvInput';
 export type { LuvInputProps } from './components/Input/LuvInput';
-export { default as luviaLogo } from './assets/luvia-logo-big.png?inline';
+export { default as luviaLogo } from './assets/img/luvia-logo-big.png?inline';
 export { LuvModal } from './components/Dialog/LuvModal';
 export type { LuvModalProps, LuvModalVariant } from './components/Dialog/LuvModal';
 export { LuvIcon } from './components/Icon/LuvIcon';

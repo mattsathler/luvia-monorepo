@@ -20,10 +20,10 @@ type CharacterCreatePageProps = {
 
 // "male"/"female" têm ícone dedicado no Material Icons; "other" não tem um
 // símbolo universal equivalente, então continua mostrando o rótulo em texto.
-const GENDER_OPTIONS: { value: Gender; label: string; icon?: string }[] = [
-    { value: "male", label: "Masculino", icon: "male" },
-    { value: "female", label: "Feminino", icon: "female" },
-    { value: "other", label: "Outro" },
+const GENDER_OPTIONS: { value: Gender; label: string; icon?: string; color: string }[] = [
+    { value: "male", label: "Masculino", icon: "male", color: "blue" },
+    { value: "female", label: "Feminino", icon: "female", color: "pink" },
+    { value: "other", label: "Outro", color: "gray" },
 ];
 
 const SKILL_POINTS_BUDGET = 4;
@@ -181,7 +181,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                                 <button
                                                     key={option.value}
                                                     type="button"
-                                                    className={gender === option.value ? "blue" : "outline blue"}
+                                                    className={gender === option.value ? `game-${option.color}` : `outline game-${option.color}`}
                                                     aria-pressed={gender === option.value}
                                                     aria-label={option.icon ? option.label : undefined}
                                                     onClick={() => setGender(option.value)}
@@ -290,7 +290,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                         <button type="button" className="outline primary" onClick={onCancel}>
                             Voltar
                         </button>
-                        <button type="submit" className="primary" disabled={!isValid || isSubmitting}>
+                        <button type="submit" className="game-green" disabled={!isValid || isSubmitting}>
                             {isSubmitting ? "Criando..." : "Criar personagem"}
                         </button>
                     </div>
