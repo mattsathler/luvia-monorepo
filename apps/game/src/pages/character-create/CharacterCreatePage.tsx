@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { LuvInput, LuvStepper, LuvStepperStep, luviaLogo, type LuvStep } from "luv-ui";
+import { LuvIcon, LuvInput, LuvStepper, LuvStepperStep, luviaLogo, type LuvStep } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
 import {
     ApiError,
@@ -18,9 +18,11 @@ type CharacterCreatePageProps = {
     onCancel: () => void;
 };
 
-const GENDER_OPTIONS: { value: Gender; label: string }[] = [
-    { value: "male", label: "Masculino" },
-    { value: "female", label: "Feminino" },
+// "male"/"female" têm ícone dedicado no Material Icons; "other" não tem um
+// símbolo universal equivalente, então continua mostrando o rótulo em texto.
+const GENDER_OPTIONS: { value: Gender; label: string; icon?: string }[] = [
+    { value: "male", label: "Masculino", icon: "male" },
+    { value: "female", label: "Feminino", icon: "female" },
     { value: "other", label: "Outro" },
 ];
 
@@ -135,7 +137,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">
-            <img src={luviaLogo} alt="Luvia" className="w-50-p max-w-640" />
+            {/* <img src={luviaLogo} alt="Luvia" className="w-50-p max-w-640" /> */}
 
             <form onSubmit={handleSubmit} className="d-flex flex-col gap items-center w-100-p">
                 <div className="w-100-p d-flex flex-col gap">
@@ -161,7 +163,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                                 placeholder="Digite o nome do personagem"
                                                 value={firstName}
                                                 onChange={(event) => setFirstName(event.target.value)}
-                                                className="w-100-p"
+                                                className="luv-blue w-100-p"
                                                 required
                                             />
                                             <LuvInput
@@ -179,11 +181,12 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                                 <button
                                                     key={option.value}
                                                     type="button"
-                                                    className={gender === option.value ? "primary" : "outline primary"}
+                                                    className={gender === option.value ? "blue" : "outline blue"}
                                                     aria-pressed={gender === option.value}
+                                                    aria-label={option.icon ? option.label : undefined}
                                                     onClick={() => setGender(option.value)}
                                                 >
-                                                    {option.label}
+                                                    {option.icon ? <LuvIcon name={option.icon} /> : option.label}
                                                 </button>
                                             ))}
                                         </div>

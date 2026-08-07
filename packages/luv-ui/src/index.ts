@@ -1,7 +1,9 @@
+import 'material-icons/iconfont/filled.css';
 import './components/components.scss';
 import './styles/_helpers.scss';
 import './styles/_reset.scss';
 
+import './components/Icon/Icon.scss';
 import './components/Button/Button.scss';
 import './components/Checkbox/Checkbox.scss';
 import './components/SlideToggle/SlideToggle.scss';
@@ -24,6 +26,8 @@ export type { LuvInputProps } from './components/Input/LuvInput';
 export { default as luviaLogo } from './assets/luvia-logo-big.png?inline';
 export { LuvModal } from './components/Dialog/LuvModal';
 export type { LuvModalProps, LuvModalVariant } from './components/Dialog/LuvModal';
+export { LuvIcon } from './components/Icon/LuvIcon';
+export type { LuvIconProps } from './components/Icon/LuvIcon';
 export { LuvStepper, useLuvStepper } from './components/Stepper/LuvStepper';
 export type { LuvStep, LuvStepperProps, LuvStepperContextValue } from './components/Stepper/LuvStepper';
 export { LuvStepperStep } from './components/Stepper/LuvStepperStep';
