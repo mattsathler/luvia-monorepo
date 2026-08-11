@@ -244,7 +244,7 @@ describe("CharacterCreatePage", () => {
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
-        await user.click(screen.getByRole("button", { name: "Voltar" }));
+        await user.click(screen.getByRole("button", { name: "Voltar para seleção de personagens" }));
 
         expect(onCancel).toHaveBeenCalledTimes(1);
     });

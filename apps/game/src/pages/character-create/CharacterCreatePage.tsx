@@ -1,38 +1,20 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { LuvIcon, LuvInput, LuvStepper, LuvStepperStep, luviaLogo, type LuvStep } from "luv-ui";
+import { LuvIcon, LuvInput, LuvStepper, LuvStepperStep, luviaLogo } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
-import {
-    ApiError,
-    createCharacter,
-    listSkills,
-    type Character,
-    type Gender,
-    type SkillDefinition,
-    type SkinTone,
-} from "../../lib/api";
+import type { Character } from "../../lib/api";
 import { Player } from "../../components/Player/Player";
 import { LayerOptionPicker } from "./LayerOptionPicker";
+import {
+    DEFAULT_CLOTHES_ID,
+    DEFAULT_FACE_ID,
+    GENDER_OPTIONS,
+    STEPS,
+    useCharacterCreatePageController,
+} from "./CharacterCreatePage.controller";
 
 type CharacterCreatePageProps = {
     onCharacterCreated: (character: Character) => void;
     onCancel: () => void;
 };
-
-// "male"/"female" têm ícone dedicado no Material Icons; "other" não tem um
-// símbolo universal equivalente, então continua mostrando o rótulo em texto.
-const GENDER_OPTIONS: { value: Gender; label: string; icon?: string; color: string }[] = [
-    { value: "male", label: "Masculino", icon: "male", color: "blue" },
-    { value: "female", label: "Feminino", icon: "female", color: "pink" },
-    { value: "other", label: "Outro", color: "gray" },
-];
-
-const SKILL_POINTS_BUDGET = 4;
-
-const STEPS: LuvStep[] = [
-    { id: "info", label: "Informações" },
-    { id: "appearance", label: "Personalização" },
-    { id: "skills", label: "Skills" },
-];
 
 export function CharacterCreatePage({ onCharacterCreated, onCancel }: CharacterCreatePageProps) {
     const { accessToken } = useAuth();
@@ -57,83 +39,33 @@ type CharacterCreatePageContentProps = CharacterCreatePageProps & {
     accessToken: string;
 };
 
-// Os campos abaixo ainda não são escolhidos pelo jogador na criação — nascem
-// no primeiro item disponível em cada categoria (ver docs/decisions/0020-...).
-const DEFAULT_FACE_ID = "0";
-const DEFAULT_CLOTHES_ID = "0";
-const DEFAULT_HAIR_TYPE_ID = "0";
-const DEFAULT_EYE_TYPE_ID = "0";
-
 function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel }: CharacterCreatePageContentProps) {
-    // Cada passo guarda dados persistentes e editáveis, então o jogador pode
-    // ir e voltar livremente — nenhum passo fica bloqueado atrás do outro.
-    const [activeStep, setActiveStep] = useState<string>(STEPS[0].id);
-
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [gender, setGender] = useState<Gender>(GENDER_OPTIONS[0].value);
-    const [skinToneId, setSkinToneId] = useState("3");
-    const [hairType, setHairType] = useState(DEFAULT_HAIR_TYPE_ID);
-    const [eyeType, setEyeType] = useState(DEFAULT_EYE_TYPE_ID);
-
-    const [skillDefinitions, setSkillDefinitions] = useState<SkillDefinition[] | null>(null);
-    const [skillsError, setSkillsError] = useState<string | null>(null);
-    const [skills, setSkills] = useState<Record<string, number>>({});
-
-    const [submitError, setSubmitError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    useEffect(() => {
-        listSkills(accessToken)
-            .then((definitions) => {
-                setSkillDefinitions(definitions);
-                setSkills(Object.fromEntries(definitions.map((skill) => [skill.id, 0])));
-            })
-            .catch(() => setSkillsError("Não foi possível carregar as skills. Tente novamente."));
-    }, [accessToken]);
-
-    const allocatedPoints = Object.values(skills).reduce((sum, points) => sum + points, 0);
-    const remainingPoints = SKILL_POINTS_BUDGET - allocatedPoints;
-
-    // Só chamadas pelos botões +/- abaixo, que já ficam `disabled` fora desses
-    // limites — não há caminho de UI para invocar isto fora do intervalo.
-    function incrementSkill(skillId: string) {
-        setSkills((current) => ({ ...current, [skillId]: current[skillId] + 1 }));
-    }
-
-    function decrementSkill(skillId: string) {
-        setSkills((current) => ({ ...current, [skillId]: current[skillId] - 1 }));
-    }
-
-    const isValid = firstName.trim() !== "" && lastName.trim() !== "" && remainingPoints === 0;
-
-    async function handleSubmit(event: FormEvent) {
-        event.preventDefault();
-
-        setSubmitError(null);
-        setIsSubmitting(true);
-
-        try {
-            const character = await createCharacter(accessToken, {
-                firstName,
-                lastName,
-                gender,
-                skinTone: Number(skinToneId) as SkinTone,
-                hairType,
-                eyeType,
-                skills,
-            });
-            onCharacterCreated(character);
-        } catch (err) {
-            if (err instanceof ApiError) {
-                setSubmitError(err.message);
-            } else {
-                setSubmitError("Não foi possível criar seu personagem. Tente novamente.");
-            }
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
+    const {
+        activeStep,
+        setActiveStep,
+        firstName,
+        setFirstName,
+        lastName,
+        setLastName,
+        gender,
+        setGender,
+        skinToneId,
+        setSkinToneId,
+        hairType,
+        setHairType,
+        eyeType,
+        setEyeType,
+        skillDefinitions,
+        skillsError,
+        skills,
+        incrementSkill,
+        decrementSkill,
+        remainingPoints,
+        submitError,
+        isSubmitting,
+        isValid,
+        handleSubmit,
+    } = useCharacterCreatePageController({ accessToken, onCharacterCreated });
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">
@@ -141,7 +73,17 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
 
             <form onSubmit={handleSubmit} className="d-flex flex-col gap items-center w-100-p">
                 <div className="w-100-p d-flex flex-col gap">
-                    <h1 className="text-text">Crie seu personagem</h1>
+                    <div className="d-flex items-center gap-8">
+                        <button
+                            type="button"
+                            className="outline primary circle w-40 h-40"
+                            aria-label="Voltar para seleção de personagens"
+                            onClick={onCancel}
+                        >
+                            <LuvIcon name="arrow_back" />
+                        </button>
+                        <h1 className="text-text">Crie seu personagem</h1>
+                    </div>
 
                     {/* Cada passo é dono só do seu conteúdo — o preview do
                         personagem fica fora do fluxo do Stepper e não precisa
@@ -287,9 +229,6 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                         </div>
                     )}
                     <div className="d-flex w-100-p gap justify-end">
-                        <button type="button" className="outline primary" onClick={onCancel}>
-                            Voltar
-                        </button>
                         <button type="submit" className="game-green" disabled={!isValid || isSubmitting}>
                             {isSubmitting ? "Criando..." : "Criar personagem"}
                         </button>

@@ -1,37 +1,12 @@
-import { useState, type FormEvent } from "react";
-import { useAuth } from "../../auth/AuthContext";
-import { ApiError, UnauthorizedError } from "../../lib/api";
-import { LuvInput, luviaLogo, showSnackbar } from "luv-ui";
+import { LuvInput, luviaLogo } from "luv-ui";
+import { useLoginPageController } from "./LoginPage.controller";
 
 type LoginPageProps = {
     onNavigateToRegister?: () => void;
 };
 
 export function LoginPage({ onNavigateToRegister }: LoginPageProps = {}) {
-    const { login } = useAuth();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    async function handleSubmit(event: FormEvent) {
-        event.preventDefault();
-        setError(null);
-        setIsSubmitting(true);
-
-        try {
-            await login(email, password);
-            showSnackbar("Bem vindo ao Luvia!", { variant: "success", duration: 7000 });
-        } catch (err) {
-            if (err instanceof UnauthorizedError || err instanceof ApiError) {
-                setError("Email ou senha inválidos.");
-            } else {
-                setError("Não foi possível conectar. Tente novamente.");
-            }
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
+    const { email, setEmail, password, setPassword, error, isSubmitting, handleSubmit } = useLoginPageController();
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">

@@ -1,66 +1,47 @@
-import { useState, type FormEvent, type KeyboardEvent } from "react";
-import { LuvInput, LuvModal, luviaLogo, showSnackbar } from "luv-ui";
-import { ApiError, register } from "../../lib/api";
+import { LuvIcon, LuvInput, LuvModal, luviaLogo } from "luv-ui";
 import { termsOfUseText } from "./terms";
+import { useRegisterPageController } from "./RegisterPage.controller";
 
 type RegisterPageProps = {
     onNavigateToLogin?: () => void;
 };
 
 export function RegisterPage({ onNavigateToLogin }: RegisterPageProps) {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [acceptedTerms, setAcceptedTerms] = useState(false);
-    const [isTermsOpen, setIsTermsOpen] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    function openTerms() {
-        setIsTermsOpen(true);
-    }
-
-    function handleTermsKeyDown(event: KeyboardEvent) {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            openTerms();
-        }
-    }
-
-    async function handleSubmit(event: FormEvent) {
-        event.preventDefault();
-        setError(null);
-
-        if (password !== confirmPassword) {
-            setError("As senhas não coincidem.");
-            return;
-        }
-
-        setIsSubmitting(true);
-
-        try {
-            await register(email, password);
-            showSnackbar("Conta criada com sucesso! Faça login usando suas credenciais.", {
-                variant: "success",
-                duration: 7000,
-            });
-            onNavigateToLogin?.();
-        } catch (err) {
-            if (err instanceof ApiError && err.message === "Email already in use") {
-                setError("Este email já está cadastrado.");
-            } else {
-                setError("Não foi possível criar sua conta. Tente novamente.");
-            }
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
+    const {
+        email,
+        setEmail,
+        password,
+        setPassword,
+        confirmPassword,
+        setConfirmPassword,
+        acceptedTerms,
+        setAcceptedTerms,
+        isTermsOpen,
+        openTerms,
+        closeTerms,
+        handleTermsKeyDown,
+        error,
+        isSubmitting,
+        handleSubmit,
+    } = useRegisterPageController({ onNavigateToLogin });
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">
             <img src={luviaLogo} alt="Luvia" className="w-50-p max-w-640" />
             <form onSubmit={handleSubmit} className="card d-flex flex-col gap w-50-p items-center">
-                <h1 className="text-text">Criar conta</h1>
+                <div className="d-flex items-center gap-8 w-full">
+                    {onNavigateToLogin && (
+                        <button
+                            type="button"
+                            className="outline primary circle w-40 h-40"
+                            aria-label="Voltar para login"
+                            onClick={onNavigateToLogin}
+                        >
+                            <LuvIcon name="arrow_back" />
+                        </button>
+                    )}
+                    <h1 className="text-text">Criar conta</h1>
+                </div>
                 <div className="d-flex w-full flex-col gap items-end">
                     <div className="d-flex flex-col gap w-full">
                         <div className="d-flex flex-col gap-8">
@@ -151,7 +132,7 @@ export function RegisterPage({ onNavigateToLogin }: RegisterPageProps) {
 
             <LuvModal
                 isOpen={isTermsOpen}
-                onClose={() => setIsTermsOpen(false)}
+                onClose={closeTerms}
                 title="Termo de Responsabilidade e Uso"
                 size="large"
             >

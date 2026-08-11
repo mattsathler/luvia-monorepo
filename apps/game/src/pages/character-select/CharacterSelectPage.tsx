@@ -1,9 +1,9 @@
-import { useEffect, useState, type KeyboardEvent } from "react";
-import { luviaLogo } from "luv-ui";
+import { LuvIcon, luviaLogo } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
-import { listMyCharacters, type Character } from "../../lib/api";
+import type { Character } from "../../lib/api";
 import { Player } from "../../components/Player/Player";
 import { characterToPlayerLayers } from "../../components/Player/characterToPlayerLayers";
+import { useCharacterSelectPageController } from "./CharacterSelectPage.controller";
 
 type CharacterSelectPageProps = {
     onCharacterSelected: (character: Character) => void;
@@ -34,25 +34,10 @@ type CharacterSelectPageContentProps = CharacterSelectPageProps & {
 };
 
 function CharacterSelectPageContent({ accessToken, onCharacterSelected, onCreateNew }: CharacterSelectPageContentProps) {
-    const [characters, setCharacters] = useState<Character[] | null>(null);
-    const [loadError, setLoadError] = useState<string | null>(null);
-
-    useEffect(() => {
-        listMyCharacters(accessToken)
-            .then(setCharacters)
-            .catch(() => setLoadError("Não foi possível carregar seus personagens. Tente novamente."));
-    }, [accessToken]);
-
-    function handleSelect(character: Character) {
-        onCharacterSelected(character);
-    }
-
-    function handleSelectKeyDown(event: KeyboardEvent, character: Character) {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            handleSelect(character);
-        }
-    }
+    const { characters, loadError, handleSelect, handleSelectKeyDown } = useCharacterSelectPageController({
+        accessToken,
+        onCharacterSelected,
+    });
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">
@@ -95,8 +80,13 @@ function CharacterSelectPageContent({ accessToken, onCharacterSelected, onCreate
                 )}
 
                 {characters !== null && (
-                    <button type="button" className="primary" onClick={onCreateNew}>
-                        Criar novo personagem
+                    <button
+                        type="button"
+                        className="primary circle w-40 h-40"
+                        aria-label="Criar novo personagem"
+                        onClick={onCreateNew}
+                    >
+                        <LuvIcon name="add" />
                     </button>
                 )}
             </div>

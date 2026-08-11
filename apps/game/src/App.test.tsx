@@ -127,7 +127,7 @@ describe("App", () => {
         await user.click(await screen.findByRole("button", { name: "Ana Silva" }));
         await screen.findByText("Você está logado como Ana Silva.");
 
-        await user.click(screen.getByRole("button", { name: "Trocar personagem" }));
+        await user.click(screen.getByRole("button", { name: "Voltar para seleção de personagens" }));
 
         expect(await screen.findByRole("heading", { name: "Selecione seu personagem" })).toBeInTheDocument();
     });
@@ -159,7 +159,7 @@ describe("App", () => {
 
         expect(await screen.findByRole("heading", { name: "Crie seu personagem" })).toBeInTheDocument();
 
-        await user.click(screen.getByRole("button", { name: "Voltar" }));
+        await user.click(screen.getByRole("button", { name: "Voltar para seleção de personagens" }));
 
         expect(await screen.findByRole("heading", { name: "Selecione seu personagem" })).toBeInTheDocument();
     });

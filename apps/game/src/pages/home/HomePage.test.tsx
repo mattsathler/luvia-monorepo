@@ -59,11 +59,11 @@ describe("HomePage", () => {
         expect(logoutMock).toHaveBeenCalledTimes(1);
     });
 
-    it("requests a character change when Trocar personagem is clicked", async () => {
+    it("requests a character change when the back button is clicked", async () => {
         const user = userEvent.setup();
 
         render(<HomePage character={CHARACTER} onChangeCharacter={onChangeCharacter} />);
-        await user.click(screen.getByRole("button", { name: "Trocar personagem" }));
+        await user.click(screen.getByRole("button", { name: "Voltar para seleção de personagens" }));
 
         expect(onChangeCharacter).toHaveBeenCalledTimes(1);
     });
