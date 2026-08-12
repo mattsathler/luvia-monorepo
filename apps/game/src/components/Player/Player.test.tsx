@@ -29,15 +29,17 @@ describe("Player", () => {
         expect(screen.getByAltText("Personagem")).toHaveAttribute("src", "data:image/png;base64,composed");
     });
 
-    it("resolves each provided layer id to its asset src, in body -> face -> clothes order", () => {
+    it("resolves each provided layer id to its asset src, in body -> face -> pants -> shoes -> top order", () => {
         (useComposedCharacterPreview as ReturnType<typeof vi.fn>).mockReturnValue(null);
 
-        render(<Player layers={{ clothes: "0", body_types: "2", faces: "0" }} />);
+        render(<Player layers={{ tops: "0", shoes: "0", pants: "0", body_types: "2", faces: "0" }} />);
 
         expect(useComposedCharacterPreview).toHaveBeenCalledWith([
             getLayerSrc("body_types", "2"),
             getLayerSrc("faces", "0"),
-            getLayerSrc("clothes", "0"),
+            getLayerSrc("pants", "0"),
+            getLayerSrc("shoes", "0"),
+            getLayerSrc("tops", "0"),
         ]);
     });
 

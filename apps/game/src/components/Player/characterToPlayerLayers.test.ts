@@ -35,10 +35,12 @@ describe("characterToPlayerLayers", () => {
         expect(characterToPlayerLayers(characterWithSkinTone(4)).body_types).toBe("4");
     });
 
-    it("defaults faces and clothes to the only option available today", () => {
+    it("defaults faces, pants, shoes and tops to the only option available today", () => {
         const layers = characterToPlayerLayers(characterWithSkinTone(0));
 
         expect(layers.faces).toBe("0");
-        expect(layers.clothes).toBe("0");
+        expect(layers.pants).toBe("0");
+        expect(layers.shoes).toBe("0");
+        expect(layers.tops).toBe("0");
     });
 });

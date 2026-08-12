@@ -6,7 +6,7 @@ export type LayerAsset = {
 /**
  * Catálogo de peças de personagem, montado a partir de assets/character —
  * ver docs/decisions/0020-assets-de-personagem-em-canvas-fixo-com-blank-area.md.
- * Cada pasta (`body_types`, `clothes`, `faces`, ...) é uma categoria; cada
+ * Cada pasta (`body_types`, `faces`, `pants`, `shoes`, `tops`, ...) é uma categoria; cada
  * arquivo `<id>.png` dentro dela é uma opção. O id é só o número do arquivo
  * — não tem nome, não é mostrado ao jogador (ver `ThumbnailOption`). Soltar
  * um PNG novo na pasta certa já disponibiliza a opção, sem editar código.

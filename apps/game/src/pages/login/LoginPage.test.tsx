@@ -39,19 +39,6 @@ describe("LoginPage", () => {
         expect(loginMock).toHaveBeenCalledWith("ana@example.com", "correct-horse");
     });
 
-    it("shows a welcome snackbar on successful login", async () => {
-        loginMock.mockResolvedValue(undefined);
-        const user = userEvent.setup();
-
-        render(<LoginPage />);
-
-        await user.type(screen.getByLabelText("Email"), "ana@example.com");
-        await user.type(screen.getByLabelText("Senha"), "correct-horse");
-        await user.click(screen.getByRole("button", { name: "Entrar" }));
-
-        expect(showSnackbar).toHaveBeenCalledWith("Bem vindo ao Luvia!", { variant: "success", duration: 7000 });
-    });
-
     it("does not show the welcome snackbar when login fails", async () => {
         loginMock.mockRejectedValue(new UnauthorizedError());
         const user = userEvent.setup();

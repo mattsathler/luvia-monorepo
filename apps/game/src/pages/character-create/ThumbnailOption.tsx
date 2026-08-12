@@ -17,12 +17,12 @@ export function ThumbnailOption({ id, imageSrc, isSelected, onSelect, trim = tru
     return (
         <button
             type="button"
-            className={isSelected ? "primary hidden" : "outline primary hidden h-auto"}
+            className={isSelected ? "outline primary hidden shadow max-h-none w-100-p" : "outline hidden border-transparent shadow max-h-none w-100-p"}
             aria-pressed={isSelected}
             aria-label={id}
             onClick={onSelect}
         >
-            <div className="d-flex w-48 justify-center">
+            <div className="d-flex h-100-p justify-center">
                 <img src={displaySrc} alt="" className="w-100-p" />
             </div>
         </button>

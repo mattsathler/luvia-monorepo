@@ -77,7 +77,9 @@ describe("CharacterSelectPage", () => {
         expect(useComposedCharacterPreview).toHaveBeenCalledWith([
             getLayerSrc("body_types", "3"),
             getLayerSrc("faces", "0"),
-            getLayerSrc("clothes", "0"),
+            getLayerSrc("pants", "0"),
+            getLayerSrc("shoes", "0"),
+            getLayerSrc("tops", "0"),
         ]);
     });
 

@@ -138,6 +138,14 @@ $vh-scale: (
     }
 }
 
+.max-h-none {
+    max-height: none !important;
+}
+
+.max-w-none {
+    max-width: none !important;
+}
+
 .max-h-50-p {
     max-height: 50%;
 }
@@ -174,6 +182,10 @@ $vh-scale: (
     .border-#{$name} {
         border: 2px solid $value
     }
+}
+
+.border-transparent {
+    border: 2px solid transparent !important;
 }
 
 // ==========================
@@ -445,6 +457,13 @@ $vh-scale: (
 
 .h-full {
     height: 100% !important;
+}
+
+// Mantém a altura proporcional à largura calculada (ex.: painéis que
+// crescem/encolhem com a tela), em vez de uma altura fixa que distorce em
+// larguras diferentes.
+.aspect-4-3 {
+    aspect-ratio: 4 / 3 !important;
 }
 
 .no-round {

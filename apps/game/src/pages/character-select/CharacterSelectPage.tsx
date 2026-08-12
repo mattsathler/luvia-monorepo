@@ -59,12 +59,12 @@ function CharacterSelectPageContent({ accessToken, onCharacterSelected, onCreate
                 {characters !== null && characters.length > 0 && (
                     <>
                         <h1 className="text-text">Selecione seu personagem</h1>
-                        <div className="d-grid grid-wrap gap-16 w-full">
+                        <div className="d-grid grid-cols-3 gap-16 w-full">
                             {characters.map((character) => (
                                 <button
                                     key={character.id}
                                     type="button"
-                                    className="card outline d-flex flex-col items-center gap-8 max-h-480"
+                                    className="card outline d-flex flex-col items-center gap-8 max-h-none"
                                     aria-label={`${character.firstName} ${character.lastName}`}
                                     onClick={() => handleSelect(character)}
                                     onKeyDown={(event) => handleSelectKeyDown(event, character)}

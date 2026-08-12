@@ -9,9 +9,11 @@ describe("character-assets", () => {
         expect(assets.every((asset) => typeof asset.src === "string" && asset.src.length > 0)).toBe(true);
     });
 
-    it("lists a single option for clothes and faces", () => {
-        expect(getLayerAssets("clothes").map((asset) => asset.id)).toEqual(["0"]);
+    it("lists a single option for faces, pants, shoes and tops", () => {
         expect(getLayerAssets("faces").map((asset) => asset.id)).toEqual(["0"]);
+        expect(getLayerAssets("pants").map((asset) => asset.id)).toEqual(["0"]);
+        expect(getLayerAssets("shoes").map((asset) => asset.id)).toEqual(["0"]);
+        expect(getLayerAssets("tops").map((asset) => asset.id)).toEqual(["0"]);
     });
 
     it("returns an empty list for a category with no assets yet", () => {

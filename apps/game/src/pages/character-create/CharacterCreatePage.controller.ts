@@ -29,7 +29,9 @@ export const STEPS: LuvStep[] = [
 // Os campos abaixo ainda não são escolhidos pelo jogador na criação — nascem
 // no primeiro item disponível em cada categoria (ver docs/decisions/0020-...).
 export const DEFAULT_FACE_ID = "0";
-export const DEFAULT_CLOTHES_ID = "0";
+export const DEFAULT_PANTS_ID = "0";
+export const DEFAULT_SHOES_ID = "0";
+export const DEFAULT_TOP_ID = "0";
 const DEFAULT_HAIR_TYPE_ID = "0";
 const DEFAULT_EYE_TYPE_ID = "0";
 

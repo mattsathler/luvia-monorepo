@@ -4,8 +4,10 @@ import type { Character } from "../../lib/api";
 import { Player } from "../../components/Player/Player";
 import { LayerOptionPicker } from "./LayerOptionPicker";
 import {
-    DEFAULT_CLOTHES_ID,
     DEFAULT_FACE_ID,
+    DEFAULT_PANTS_ID,
+    DEFAULT_SHOES_ID,
+    DEFAULT_TOP_ID,
     GENDER_OPTIONS,
     STEPS,
     useCharacterCreatePageController,
@@ -72,15 +74,15 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
             {/* <img src={luviaLogo} alt="Luvia" className="w-50-p max-w-640" /> */}
 
             <form onSubmit={handleSubmit} className="d-flex flex-col gap items-center w-100-p">
-                <div className="w-100-p d-flex flex-col gap">
+                <div className="w-100-p d-flex flex-col gap max-w-screen-2xl">
                     <div className="d-flex items-center gap-8">
                         <button
                             type="button"
-                            className="outline primary circle w-40 h-40"
+                            className="outline primary circle w-32 h-32"
                             aria-label="Voltar para seleção de personagens"
                             onClick={onCancel}
                         >
-                            <LuvIcon name="arrow_back" />
+                            <LuvIcon name="arrow_back_ios_new" size={16} />
                         </button>
                         <h1 className="text-text">Crie seu personagem</h1>
                     </div>
@@ -95,7 +97,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                         completedSteps={STEPS.map((step) => step.id)}
                     >
                         <div className="d-flex flex-row w-100-p gap">
-                            <div className="d-flex w-full flex-col gap w-100-p card max-h-480 scroll-y">
+                            <div className="d-flex w-full flex-col gap w-50-p card min-h-0">
                                 <LuvStepperStep step="info">
                                     <div className="d-flex flex-col gap">
                                         <div className="d-flex flex-row gap">
@@ -136,7 +138,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                 </LuvStepperStep>
 
                                 <LuvStepperStep step="appearance">
-                                    <div className="">
+                                    <div className="d-flex flex-col gap flex-1-1 min-h-0">
                                         <LayerOptionPicker
                                             category="body_types"
                                             label="Tom de pele"
@@ -211,12 +213,14 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                 </LuvStepperStep>
                             </div>
 
-                            <div className="d-flex items-center justify-center w-100-p w-640 card h-480 hidden">
+                            <div className="d-flex items-center justify-center w-50-p card aspect-4-3 hidden">
                                 <Player
                                     layers={{
                                         body_types: skinToneId,
                                         faces: DEFAULT_FACE_ID,
-                                        clothes: DEFAULT_CLOTHES_ID,
+                                        pants: DEFAULT_PANTS_ID,
+                                        shoes: DEFAULT_SHOES_ID,
+                                        tops: DEFAULT_TOP_ID,
                                     }}
                                 />
                             </div>
