@@ -297,6 +297,10 @@ $vh-scale: (
     grid-template-columns: repeat(4, 1fr) !important;
 }
 
+.grid-cols-6 {
+    grid-template-columns: repeat(6, 1fr) !important;
+}
+
 .d-none {
     display: none !important;
 }
@@ -541,6 +545,14 @@ $vh-scale: (
 
 .contour {
     filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
+}
+
+.object-contain {
+    object-fit: contain;
+}
+
+.margin-center {
+    margin: 0 auto;
 }
 
 @each $key, $value in $space-scale {

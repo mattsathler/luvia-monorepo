@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { characterToPlayerLayers } from "./characterToPlayerLayers";
 import type { Character } from "../../lib/api";
 
-function characterWithSkinTone(skinTone: Character["appearance"]["skinTone"]): Character {
+function characterWithAppearance(appearance: Character["appearance"]): Character {
     return {
         id: "char-1",
         accountId: "acc-1",
@@ -17,30 +17,65 @@ function characterWithSkinTone(skinTone: Character["appearance"]["skinTone"]): C
         activity: "idle",
         activityEndsAt: null,
         lastUpdatedAt: "2026-01-01T00:00:00.000Z",
-        appearance: {
-            skinTone,
-            hairType: "0",
-            eyeType: "0",
-            face: "default",
-            accessory: null,
-            top: "default",
-            pants: "default",
-            shoes: "default",
-        },
+        appearance,
     };
 }
 
 describe("characterToPlayerLayers", () => {
     it("maps the character's skin tone to the body_types layer id", () => {
-        expect(characterToPlayerLayers(characterWithSkinTone(4)).body_types).toBe("4");
+        const layers = characterToPlayerLayers(
+            characterWithAppearance({
+                skinTone: 4,
+                hairType: "0",
+                eyeType: "0",
+                face: "0",
+                accessory: null,
+                top: "0",
+                pants: "0",
+                shoes: "0",
+            }),
+        );
+
+        expect(layers.body_types).toBe("4");
     });
 
-    it("defaults faces, pants, shoes and tops to the only option available today", () => {
-        const layers = characterToPlayerLayers(characterWithSkinTone(0));
+    it("falls back to the default id when the appearance still has the pre-wardrobe placeholder", () => {
+        const layers = characterToPlayerLayers(
+            characterWithAppearance({
+                skinTone: 3,
+                hairType: "0",
+                eyeType: "0",
+                face: "default",
+                accessory: null,
+                top: "default",
+                pants: "default",
+                shoes: "default",
+            }),
+        );
 
         expect(layers.faces).toBe("0");
+        expect(layers.tops).toBe("0");
         expect(layers.pants).toBe("0");
         expect(layers.shoes).toBe("0");
-        expect(layers.tops).toBe("0");
+    });
+
+    it("maps face, pants, shoes and tops to the ids chosen for the character", () => {
+        const layers = characterToPlayerLayers(
+            characterWithAppearance({
+                skinTone: 0,
+                hairType: "0",
+                eyeType: "0",
+                face: "1",
+                accessory: null,
+                top: "2",
+                pants: "3",
+                shoes: "4",
+            }),
+        );
+
+        expect(layers.faces).toBe("1");
+        expect(layers.tops).toBe("2");
+        expect(layers.pants).toBe("3");
+        expect(layers.shoes).toBe("4");
     });
 });

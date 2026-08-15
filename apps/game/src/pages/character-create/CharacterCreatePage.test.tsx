@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CharacterCreatePage } from "./CharacterCreatePage";
 import { useAuth } from "../../auth/AuthContext";
-import { ApiError, createCharacter, listSkills, type Character, type SkillDefinition } from "../../lib/api";
+import { ApiError, createCharacter, listSkills, updateAppearance, type Character, type SkillDefinition } from "../../lib/api";
 
 vi.mock("../../auth/AuthContext", () => ({
     useAuth: vi.fn(),
@@ -15,6 +15,7 @@ vi.mock("../../lib/api", async (importOriginal) => {
         ...actual,
         listSkills: vi.fn(),
         createCharacter: vi.fn(),
+        updateAppearance: vi.fn(),
     };
 });
 
@@ -166,6 +167,7 @@ describe("CharacterCreatePage", () => {
     it("submits the full payload and reports the created character", async () => {
         (listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
         (createCharacter as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
+        (updateAppearance as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
@@ -190,6 +192,12 @@ describe("CharacterCreatePage", () => {
             hairType: "0",
             eyeType: "0",
             skills: { intelligence: 4, charisma: 0 },
+        });
+        expect(updateAppearance).toHaveBeenCalledWith("token", CHARACTER.id, {
+            face: "0",
+            top: "0",
+            pants: "0",
+            shoes: "0",
         });
         expect(onCharacterCreated).toHaveBeenCalledWith(CHARACTER);
     });

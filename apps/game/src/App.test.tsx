@@ -40,6 +40,7 @@ vi.mock("./lib/api", async (importOriginal) => {
         listMyCharacters: vi.fn(),
         listSkills: vi.fn(),
         createCharacter: vi.fn(),
+        updateAppearance: vi.fn(),
     };
 });
 
@@ -170,6 +171,7 @@ describe("App", () => {
         (api.listMyCharacters as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         (api.listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
         (api.createCharacter as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
+        (api.updateAppearance as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
         const user = userEvent.setup();
 
         render(<App />);

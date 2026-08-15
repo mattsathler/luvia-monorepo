@@ -21,7 +21,7 @@ describe("ThumbnailOption", () => {
 
         const button = screen.getByRole("button", { name: "3" });
         expect(button).toHaveAttribute("aria-pressed", "true");
-        expect(button.className).toBe("primary hidden");
+        expect(button.className).toBe("outline primary hidden shadow max-h-none w-full");
         expect(screen.getByAltText("")).toHaveAttribute("src", "tone-3.png");
     });
 
@@ -30,7 +30,7 @@ describe("ThumbnailOption", () => {
 
         const button = screen.getByRole("button", { name: "0" });
         expect(button).toHaveAttribute("aria-pressed", "false");
-        expect(button.className).toBe("outline primary hidden");
+        expect(button.className).toBe("outline hidden border-transparent shadow max-h-none w-full");
     });
 
     it("calls onSelect when clicked", async () => {

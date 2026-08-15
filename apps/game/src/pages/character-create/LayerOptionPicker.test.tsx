@@ -23,21 +23,20 @@ describe("LayerOptionPicker", () => {
         (getLayerAssets as ReturnType<typeof vi.fn>).mockReturnValue([]);
 
         const { container } = render(
-            <LayerOptionPicker category="hair_types" label="Tipo de cabelo" selectedId="0" onSelect={onSelect} />,
+            <LayerOptionPicker category="hair_types" selectedId="0" onSelect={onSelect} />,
         );
 
         expect(container).toBeEmptyDOMElement();
     });
 
-    it("renders one thumbnail per available option, under the given label", () => {
+    it("renders one thumbnail per available option", () => {
         (getLayerAssets as ReturnType<typeof vi.fn>).mockReturnValue([
             { id: "0", src: "hair-0.png" },
             { id: "1", src: "hair-1.png" },
         ]);
 
-        render(<LayerOptionPicker category="hair_types" label="Tipo de cabelo" selectedId="0" onSelect={onSelect} />);
+        render(<LayerOptionPicker category="hair_types" selectedId="0" onSelect={onSelect} />);
 
-        expect(screen.getByText("Tipo de cabelo")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "0" })).toHaveAttribute("aria-pressed", "true");
         expect(screen.getByRole("button", { name: "1" })).toHaveAttribute("aria-pressed", "false");
     });
@@ -49,7 +48,7 @@ describe("LayerOptionPicker", () => {
         ]);
         const user = userEvent.setup();
 
-        render(<LayerOptionPicker category="hair_types" label="Tipo de cabelo" selectedId="0" onSelect={onSelect} />);
+        render(<LayerOptionPicker category="hair_types" selectedId="0" onSelect={onSelect} />);
         await user.click(screen.getByRole("button", { name: "1" }));
 
         expect(onSelect).toHaveBeenCalledWith("1");

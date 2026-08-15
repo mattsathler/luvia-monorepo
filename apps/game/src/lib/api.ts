@@ -154,6 +154,22 @@ export async function createCharacter(accessToken: string, input: CreateCharacte
     return response.json();
 }
 
+export type AppearanceUpdate = Partial<Pick<Appearance, "skinTone" | "face" | "accessory" | "top" | "pants" | "shoes">>;
+
+export async function updateAppearance(accessToken: string, characterId: string, appearance: AppearanceUpdate): Promise<Character> {
+    const response = await authFetch(`/characters/${characterId}/appearance`, accessToken, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(appearance),
+    });
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
 export async function authFetch(path: string, accessToken: string, init: RequestInit = {}): Promise<Response> {
     const response = await fetch(`${API_URL}${path}`, {
         ...init,

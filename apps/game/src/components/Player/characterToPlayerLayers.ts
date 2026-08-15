@@ -1,23 +1,25 @@
 import type { Character } from "../../lib/api";
 import type { PlayerLayers } from "./Player";
 
-// `faces`/`pants`/`shoes`/`tops` ainda só têm uma opção (id "0") — sem
-// seleção real ainda (guarda-roupa, ver Pendências em
-// docs/decisions/0020-assets-de-personagem-em-canvas-fixo-com-blank-area.md).
-// Ignora os valores placeholder ("default"/`null`) persistidos no
-// personagem até existir escolha de verdade pra essas camadas.
-const DEFAULT_FACE_ID = "0";
-const DEFAULT_PANTS_ID = "0";
-const DEFAULT_SHOES_ID = "0";
-const DEFAULT_TOP_ID = "0";
+// Personagens criados antes do seletor de guarda-roupa existir carregam o
+// placeholder `DEFAULT_APPEARANCE` (`'default'`, ver
+// apps/api/src/character/domain/entities/appearance.ts) em
+// `face`/`top`/`pants`/`shoes` — não é um id de asset válido, então cai pro
+// mesmo id `"0"` usado como ponto de partida na criação.
+const PLACEHOLDER_APPEARANCE_ID = "default";
+const FALLBACK_LAYER_ID = "0";
+
+function resolveLayerId(id: string): string {
+    return id === PLACEHOLDER_APPEARANCE_ID ? FALLBACK_LAYER_ID : id;
+}
 
 /** Traduz a aparência persistida de um personagem pros ids que `Player` entende. */
 export function characterToPlayerLayers(character: Character): PlayerLayers {
     return {
         body_types: String(character.appearance.skinTone),
-        faces: DEFAULT_FACE_ID,
-        pants: DEFAULT_PANTS_ID,
-        shoes: DEFAULT_SHOES_ID,
-        tops: DEFAULT_TOP_ID,
+        faces: resolveLayerId(character.appearance.face),
+        pants: resolveLayerId(character.appearance.pants),
+        shoes: resolveLayerId(character.appearance.shoes),
+        tops: resolveLayerId(character.appearance.top),
     };
 }

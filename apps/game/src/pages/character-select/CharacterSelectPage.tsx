@@ -41,7 +41,7 @@ function CharacterSelectPageContent({ accessToken, onCharacterSelected, onCreate
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">
-            <img src={luviaLogo} alt="Luvia" className="w-50-p max-w-640" />
+            {/* <img src={luviaLogo} alt="Luvia" className="w-50-p max-w-640" /> */}
 
             <div className="card d-flex flex-col gap w-50-p items-center">
                 {loadError && (
@@ -52,19 +52,22 @@ function CharacterSelectPageContent({ accessToken, onCharacterSelected, onCreate
 
                 {characters === null && !loadError && <p className="text-text">Carregando personagens...</p>}
 
-                {characters !== null && characters.length === 0 && (
-                    <p className="text-text">Você ainda não tem nenhum personagem.</p>
-                )}
-
-                {characters !== null && characters.length > 0 && (
+                {characters !== null && (
                     <>
-                        <h1 className="text-text">Selecione seu personagem</h1>
-                        <div className="d-grid grid-cols-3 gap-16 w-full">
+                        <div className="d-flex w-full justify-between gap flex-row">
+                            <h1 className="text-text">Selecione seu personagem</h1>
+                        </div>
+
+                        {characters.length === 0 && (
+                            <p className="text-text">Você ainda não tem nenhum personagem.</p>
+                        )}
+
+                        <div className="d-flex gap-16 w-full">
                             {characters.map((character) => (
                                 <button
                                     key={character.id}
                                     type="button"
-                                    className="card outline d-flex flex-col items-center gap-8 max-h-none"
+                                    className="card outline d-flex flex-col items-center gap-8 max-h-none w-240"
                                     aria-label={`${character.firstName} ${character.lastName}`}
                                     onClick={() => handleSelect(character)}
                                     onKeyDown={(event) => handleSelectKeyDown(event, character)}
@@ -75,19 +78,16 @@ function CharacterSelectPageContent({ accessToken, onCharacterSelected, onCreate
                                     </strong>
                                 </button>
                             ))}
+                            <button
+                                type="button"
+                                className="card outline d-flex flex-col items-center justify-center gap-8 max-h-none w-240"
+                                aria-label="Criar novo personagem"
+                                onClick={onCreateNew}
+                            >
+                                <LuvIcon name="add" size={40} />
+                            </button>
                         </div>
                     </>
-                )}
-
-                {characters !== null && (
-                    <button
-                        type="button"
-                        className="primary circle w-40 h-40"
-                        aria-label="Criar novo personagem"
-                        onClick={onCreateNew}
-                    >
-                        <LuvIcon name="add" />
-                    </button>
                 )}
             </div>
         </div>

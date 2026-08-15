@@ -4,6 +4,7 @@ import {
     ApiError,
     createCharacter,
     listSkills,
+    updateAppearance,
     type Character,
     type Gender,
     type SkillDefinition,
@@ -26,12 +27,13 @@ export const STEPS: LuvStep[] = [
     { id: "skills", label: "Skills" },
 ];
 
-// Os campos abaixo ainda não são escolhidos pelo jogador na criação — nascem
-// no primeiro item disponível em cada categoria (ver docs/decisions/0020-...).
-export const DEFAULT_FACE_ID = "0";
-export const DEFAULT_PANTS_ID = "0";
-export const DEFAULT_SHOES_ID = "0";
-export const DEFAULT_TOP_ID = "0";
+// Ponto de partida de cada seletor — o primeiro item disponível em cada
+// categoria (ver docs/decisions/0020-...). `hairType`/`eyeType` ainda não têm
+// PNG real (ver Pendências no doc), então continuam sem seletor na UI.
+const DEFAULT_FACE_ID = "0";
+const DEFAULT_PANTS_ID = "0";
+const DEFAULT_SHOES_ID = "0";
+const DEFAULT_TOP_ID = "0";
 const DEFAULT_HAIR_TYPE_ID = "0";
 const DEFAULT_EYE_TYPE_ID = "0";
 
@@ -54,6 +56,10 @@ export function useCharacterCreatePageController({
     const [skinToneId, setSkinToneId] = useState("3");
     const [hairType, setHairType] = useState(DEFAULT_HAIR_TYPE_ID);
     const [eyeType, setEyeType] = useState(DEFAULT_EYE_TYPE_ID);
+    const [faceId, setFaceId] = useState(DEFAULT_FACE_ID);
+    const [topId, setTopId] = useState(DEFAULT_TOP_ID);
+    const [pantsId, setPantsId] = useState(DEFAULT_PANTS_ID);
+    const [shoesId, setShoesId] = useState(DEFAULT_SHOES_ID);
 
     const [skillDefinitions, setSkillDefinitions] = useState<SkillDefinition[] | null>(null);
     const [skillsError, setSkillsError] = useState<string | null>(null);
@@ -102,7 +108,15 @@ export function useCharacterCreatePageController({
                 eyeType,
                 skills,
             });
-            onCharacterCreated(character);
+            // Roupa/rosto ainda não são aceitos na criação (só via `PATCH .../appearance`,
+            // ver docs/decisions/0020-...) — aplicamos as escolhas do jogador logo em seguida.
+            const withAppearance = await updateAppearance(accessToken, character.id, {
+                face: faceId,
+                top: topId,
+                pants: pantsId,
+                shoes: shoesId,
+            });
+            onCharacterCreated(withAppearance);
         } catch (err) {
             if (err instanceof ApiError) {
                 setSubmitError(err.message);
@@ -127,8 +141,14 @@ export function useCharacterCreatePageController({
         setSkinToneId,
         hairType,
         setHairType,
-        eyeType,
-        setEyeType,
+        faceId,
+        setFaceId,
+        topId,
+        setTopId,
+        pantsId,
+        setPantsId,
+        shoesId,
+        setShoesId,
         skillDefinitions,
         skillsError,
         skills,

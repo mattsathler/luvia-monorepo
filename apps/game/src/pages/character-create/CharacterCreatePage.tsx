@@ -1,13 +1,9 @@
-import { LuvIcon, LuvInput, LuvStepper, LuvStepperStep, luviaLogo } from "luv-ui";
+import { LuvIcon, LuvInput, LuvStepper, LuvStepperStep, Tab, Tabs, luviaLogo } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
 import type { Character } from "../../lib/api";
 import { Player } from "../../components/Player/Player";
 import { LayerOptionPicker } from "./LayerOptionPicker";
 import {
-    DEFAULT_FACE_ID,
-    DEFAULT_PANTS_ID,
-    DEFAULT_SHOES_ID,
-    DEFAULT_TOP_ID,
     GENDER_OPTIONS,
     STEPS,
     useCharacterCreatePageController,
@@ -55,8 +51,14 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
         setSkinToneId,
         hairType,
         setHairType,
-        eyeType,
-        setEyeType,
+        faceId,
+        setFaceId,
+        topId,
+        setTopId,
+        pantsId,
+        setPantsId,
+        shoesId,
+        setShoesId,
         skillDefinitions,
         skillsError,
         skills,
@@ -71,8 +73,6 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
 
     return (
         <div className="d-flex flex-col items-center justify-center w-full h-full p-24">
-            {/* <img src={luviaLogo} alt="Luvia" className="w-50-p max-w-640" /> */}
-
             <form onSubmit={handleSubmit} className="d-flex flex-col gap items-center w-100-p">
                 <div className="w-100-p d-flex flex-col gap max-w-screen-2xl">
                     <div className="d-flex items-center gap-8">
@@ -87,9 +87,6 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                         <h1 className="text-text">Crie seu personagem</h1>
                     </div>
 
-                    {/* Cada passo é dono só do seu conteúdo — o preview do
-                        personagem fica fora do fluxo do Stepper e não precisa
-                        ser filho direto de nenhum passo específico. */}
                     <LuvStepper
                         steps={STEPS}
                         activeStep={activeStep}
@@ -97,9 +94,9 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                         completedSteps={STEPS.map((step) => step.id)}
                     >
                         <div className="d-flex flex-row w-100-p gap">
-                            <div className="d-flex w-full flex-col gap w-50-p card min-h-0">
+                            <div className="d-flex w-full flex-col gap w-50-p card h-480 hidden">
                                 <LuvStepperStep step="info">
-                                    <div className="d-flex flex-col gap">
+                                    <div className="d-flex flex-col gap h-240">
                                         <div className="d-flex flex-row gap">
                                             <LuvInput
                                                 type="text"
@@ -138,27 +135,51 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                 </LuvStepperStep>
 
                                 <LuvStepperStep step="appearance">
-                                    <div className="d-flex flex-col gap flex-1-1 min-h-0">
-                                        <LayerOptionPicker
-                                            category="body_types"
-                                            label="Tom de pele"
-                                            selectedId={skinToneId}
-                                            onSelect={setSkinToneId}
-                                        />
-
-                                        <LayerOptionPicker
-                                            category="hair_types"
-                                            label="Tipo de cabelo"
-                                            selectedId={hairType}
-                                            onSelect={setHairType}
-                                        />
-
-                                        <LayerOptionPicker
-                                            category="eye_types"
-                                            label="Tipo de olho"
-                                            selectedId={eyeType}
-                                            onSelect={setEyeType}
-                                        />
+                                    <div className="d-flex flex-col gap flex-1-1 h-full">
+                                        <Tabs>
+                                            <Tab title="Corpo" color="game-teal">
+                                                <LayerOptionPicker
+                                                    category="body_types"
+                                                    selectedId={skinToneId}
+                                                    onSelect={setSkinToneId}
+                                                />
+                                            </Tab>
+                                            <Tab title="Cabelo" color="game-teal">
+                                                <LayerOptionPicker
+                                                    category="hair_types"
+                                                    selectedId={hairType}
+                                                    onSelect={setHairType}
+                                                />
+                                            </Tab>
+                                            <Tab title="Rosto" color="game-teal">
+                                                <LayerOptionPicker
+                                                    category="faces"
+                                                    selectedId={faceId}
+                                                    onSelect={setFaceId}
+                                                />
+                                            </Tab>
+                                            <Tab title="Roupa" color="game-teal">
+                                                <LayerOptionPicker
+                                                    category="tops"
+                                                    selectedId={topId}
+                                                    onSelect={setTopId}
+                                                />
+                                            </Tab>
+                                            <Tab title="Calça" color="game-teal">
+                                                <LayerOptionPicker
+                                                    category="pants"
+                                                    selectedId={pantsId}
+                                                    onSelect={setPantsId}
+                                                />
+                                            </Tab>
+                                            <Tab title="Sapato" color="game-teal">
+                                                <LayerOptionPicker
+                                                    category="shoes"
+                                                    selectedId={shoesId}
+                                                    onSelect={setShoesId}
+                                                />
+                                            </Tab>
+                                        </Tabs>
                                     </div>
                                 </LuvStepperStep>
 
@@ -214,15 +235,17 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                             </div>
 
                             <div className="d-flex items-center justify-center w-50-p card aspect-4-3 hidden">
-                                <Player
-                                    layers={{
-                                        body_types: skinToneId,
-                                        faces: DEFAULT_FACE_ID,
-                                        pants: DEFAULT_PANTS_ID,
-                                        shoes: DEFAULT_SHOES_ID,
-                                        tops: DEFAULT_TOP_ID,
-                                    }}
-                                />
+                                <div className="w-full h-164 object-contain">
+                                    <Player
+                                        layers={{
+                                            body_types: skinToneId,
+                                            faces: faceId,
+                                            pants: pantsId,
+                                            shoes: shoesId,
+                                            tops: topId,
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </LuvStepper>
