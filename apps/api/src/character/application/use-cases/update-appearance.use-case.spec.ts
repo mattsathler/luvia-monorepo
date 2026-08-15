@@ -40,6 +40,7 @@ describe('UpdateAppearanceUseCase', () => {
       top: 'default',
       pants: 'default',
       shoes: 'default',
+      overlay: 'default',
     });
     expect(characterRepository.save).toHaveBeenCalled();
   });

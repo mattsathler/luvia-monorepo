@@ -29,17 +29,20 @@ describe("Player", () => {
         expect(screen.getByAltText("Personagem")).toHaveAttribute("src", "data:image/png;base64,composed");
     });
 
-    it("resolves each provided layer id to its asset src, in body -> face -> pants -> shoes -> top order", () => {
+    // `hair_types`/`overlays` ficam de fora deste caso — sem PNG real ainda
+    // (ver Pendências em docs/decisions/0020-...), então `getLayerSrc` nunca
+    // resolve pra eles independente da posição no LAYER_ORDER.
+    it("resolves each provided layer id to its asset src, in body -> face -> top -> pants -> shoes order", () => {
         (useComposedCharacterPreview as ReturnType<typeof vi.fn>).mockReturnValue(null);
 
-        render(<Player layers={{ tops: "0", shoes: "0", pants: "0", body_types: "2", faces: "0" }} />);
+        render(<Player layers={{ shoes: "0", pants: "0", tops: "0", body_types: "2", faces: "0" }} />);
 
         expect(useComposedCharacterPreview).toHaveBeenCalledWith([
             getLayerSrc("body_types", "2"),
             getLayerSrc("faces", "0"),
+            getLayerSrc("tops", "0"),
             getLayerSrc("pants", "0"),
             getLayerSrc("shoes", "0"),
-            getLayerSrc("tops", "0"),
         ]);
     });
 

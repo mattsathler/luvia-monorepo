@@ -25,4 +25,8 @@ export class UpdateAppearanceDto {
   @IsOptional()
   @IsString()
   shoes?: string;
+
+  @IsOptional()
+  @IsString()
+  overlay?: string;
 }

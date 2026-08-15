@@ -19,6 +19,8 @@ export type Appearance = {
   top: string;
   pants: string;
   shoes: string;
+  /** Jaqueta/casaco — camada de sobreposição, sempre desenhada por cima das demais (ver LAYER_ORDER em Player.tsx). */
+  overlay: string;
 };
 
 export const DEFAULT_APPEARANCE: Appearance = {
@@ -30,4 +32,5 @@ export const DEFAULT_APPEARANCE: Appearance = {
   top: 'default',
   pants: 'default',
   shoes: 'default',
+  overlay: 'default',
 };

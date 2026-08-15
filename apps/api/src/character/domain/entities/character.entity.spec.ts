@@ -127,6 +127,7 @@ describe('Character.updateAppearance', () => {
       top: 'default',
       pants: 'default',
       shoes: 'default',
+      overlay: 'default',
     });
   });
 
@@ -144,6 +145,7 @@ describe('Character.updateAppearance', () => {
       top: 'blusa-listrada',
       pants: 'default',
       shoes: 'default',
+      overlay: 'default',
     });
   });
 

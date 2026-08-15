@@ -33,6 +33,7 @@ describe("characterToPlayerLayers", () => {
                 top: "0",
                 pants: "0",
                 shoes: "0",
+                overlay: "0",
             }),
         );
 
@@ -50,6 +51,7 @@ describe("characterToPlayerLayers", () => {
                 top: "default",
                 pants: "default",
                 shoes: "default",
+                overlay: "default",
             }),
         );
 
@@ -57,25 +59,29 @@ describe("characterToPlayerLayers", () => {
         expect(layers.tops).toBe("0");
         expect(layers.pants).toBe("0");
         expect(layers.shoes).toBe("0");
+        expect(layers.overlays).toBe("0");
     });
 
-    it("maps face, pants, shoes and tops to the ids chosen for the character", () => {
+    it("maps face, hair, tops, pants, shoes and overlay to the ids chosen for the character", () => {
         const layers = characterToPlayerLayers(
             characterWithAppearance({
                 skinTone: 0,
-                hairType: "0",
+                hairType: "5",
                 eyeType: "0",
                 face: "1",
                 accessory: null,
                 top: "2",
                 pants: "3",
                 shoes: "4",
+                overlay: "6",
             }),
         );
 
         expect(layers.faces).toBe("1");
+        expect(layers.hair_types).toBe("5");
         expect(layers.tops).toBe("2");
         expect(layers.pants).toBe("3");
         expect(layers.shoes).toBe("4");
+        expect(layers.overlays).toBe("6");
     });
 });

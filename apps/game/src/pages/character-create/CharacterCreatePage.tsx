@@ -59,6 +59,8 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
         setPantsId,
         shoesId,
         setShoesId,
+        overlayId,
+        setOverlayId,
         skillDefinitions,
         skillsError,
         skills,
@@ -144,13 +146,6 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                                     onSelect={setSkinToneId}
                                                 />
                                             </Tab>
-                                            <Tab title="Cabelo" color="game-teal">
-                                                <LayerOptionPicker
-                                                    category="hair_types"
-                                                    selectedId={hairType}
-                                                    onSelect={setHairType}
-                                                />
-                                            </Tab>
                                             <Tab title="Rosto" color="game-teal">
                                                 <LayerOptionPicker
                                                     category="faces"
@@ -158,11 +153,11 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                                     onSelect={setFaceId}
                                                 />
                                             </Tab>
-                                            <Tab title="Roupa" color="game-teal">
+                                            <Tab title="Cabelo" color="game-teal">
                                                 <LayerOptionPicker
-                                                    category="tops"
-                                                    selectedId={topId}
-                                                    onSelect={setTopId}
+                                                    category="hair_types"
+                                                    selectedId={hairType}
+                                                    onSelect={setHairType}
                                                 />
                                             </Tab>
                                             <Tab title="Calça" color="game-teal">
@@ -170,6 +165,20 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                                     category="pants"
                                                     selectedId={pantsId}
                                                     onSelect={setPantsId}
+                                                />
+                                            </Tab>
+                                            <Tab title="Blusa" color="game-teal">
+                                                <LayerOptionPicker
+                                                    category="tops"
+                                                    selectedId={topId}
+                                                    onSelect={setTopId}
+                                                />
+                                            </Tab>
+                                            <Tab title="Sobreposição" color="game-teal">
+                                                <LayerOptionPicker
+                                                    category="overlays"
+                                                    selectedId={overlayId}
+                                                    onSelect={setOverlayId}
                                                 />
                                             </Tab>
                                             <Tab title="Sapato" color="game-teal">
@@ -240,9 +249,11 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                         layers={{
                                             body_types: skinToneId,
                                             faces: faceId,
+                                            hair_types: hairType,
                                             pants: pantsId,
                                             shoes: shoesId,
                                             tops: topId,
+                                            overlays: overlayId,
                                         }}
                                     />
                                 </div>

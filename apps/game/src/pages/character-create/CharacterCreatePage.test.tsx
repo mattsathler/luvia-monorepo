@@ -55,6 +55,7 @@ const CHARACTER: Character = {
         top: "default",
         pants: "default",
         shoes: "default",
+        overlay: "default",
     },
 };
 
@@ -198,6 +199,7 @@ describe("CharacterCreatePage", () => {
             top: "0",
             pants: "0",
             shoes: "0",
+            overlay: "0",
         });
         expect(onCharacterCreated).toHaveBeenCalledWith(CHARACTER);
     });

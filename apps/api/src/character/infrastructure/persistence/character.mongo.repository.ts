@@ -77,6 +77,7 @@ export class CharacterMongoRepository implements CharacterRepository {
       top: character.appearance.top,
       pants: character.appearance.pants,
       shoes: character.appearance.shoes,
+      overlay: character.appearance.overlay,
     };
   }
 
@@ -104,6 +105,7 @@ export class CharacterMongoRepository implements CharacterRepository {
         top: document.top,
         pants: document.pants,
         shoes: document.shoes,
+        overlay: document.overlay,
       },
     });
   }

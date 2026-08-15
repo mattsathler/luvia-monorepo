@@ -28,6 +28,7 @@ function characterDocument(overrides: Partial<CharacterDocument> = {}): Characte
     top: 'default',
     pants: 'default',
     shoes: 'default',
+    overlay: 'default',
     ...overrides,
   } as CharacterDocument;
 }

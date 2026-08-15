@@ -28,6 +28,7 @@ const CHARACTER: api.Character = {
         top: "default",
         pants: "default",
         shoes: "default",
+        overlay: "default",
     },
 };
 

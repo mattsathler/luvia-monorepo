@@ -34,6 +34,7 @@ const DEFAULT_FACE_ID = "0";
 const DEFAULT_PANTS_ID = "0";
 const DEFAULT_SHOES_ID = "0";
 const DEFAULT_TOP_ID = "0";
+const DEFAULT_OVERLAY_ID = "0";
 const DEFAULT_HAIR_TYPE_ID = "0";
 const DEFAULT_EYE_TYPE_ID = "0";
 
@@ -60,6 +61,7 @@ export function useCharacterCreatePageController({
     const [topId, setTopId] = useState(DEFAULT_TOP_ID);
     const [pantsId, setPantsId] = useState(DEFAULT_PANTS_ID);
     const [shoesId, setShoesId] = useState(DEFAULT_SHOES_ID);
+    const [overlayId, setOverlayId] = useState(DEFAULT_OVERLAY_ID);
 
     const [skillDefinitions, setSkillDefinitions] = useState<SkillDefinition[] | null>(null);
     const [skillsError, setSkillsError] = useState<string | null>(null);
@@ -115,6 +117,7 @@ export function useCharacterCreatePageController({
                 top: topId,
                 pants: pantsId,
                 shoes: shoesId,
+                overlay: overlayId,
             });
             onCharacterCreated(withAppearance);
         } catch (err) {
@@ -149,6 +152,8 @@ export function useCharacterCreatePageController({
         setPantsId,
         shoesId,
         setShoesId,
+        overlayId,
+        setOverlayId,
         skillDefinitions,
         skillsError,
         skills,

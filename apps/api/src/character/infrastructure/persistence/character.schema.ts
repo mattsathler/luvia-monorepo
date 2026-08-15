@@ -71,6 +71,9 @@ export class CharacterModel {
 
   @Prop({ required: true, default: 'default' })
   shoes!: string;
+
+  @Prop({ required: true, default: 'default' })
+  overlay!: string;
 }
 
 export const CharacterSchema = SchemaFactory.createForClass(CharacterModel);

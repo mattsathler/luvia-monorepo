@@ -86,6 +86,7 @@ export type Appearance = {
     top: string;
     pants: string;
     shoes: string;
+    overlay: string;
 };
 
 export type Character = {
@@ -154,7 +155,7 @@ export async function createCharacter(accessToken: string, input: CreateCharacte
     return response.json();
 }
 
-export type AppearanceUpdate = Partial<Pick<Appearance, "skinTone" | "face" | "accessory" | "top" | "pants" | "shoes">>;
+export type AppearanceUpdate = Partial<Pick<Appearance, "skinTone" | "face" | "accessory" | "top" | "pants" | "shoes" | "overlay">>;
 
 export async function updateAppearance(accessToken: string, characterId: string, appearance: AppearanceUpdate): Promise<Character> {
     const response = await authFetch(`/characters/${characterId}/appearance`, accessToken, {

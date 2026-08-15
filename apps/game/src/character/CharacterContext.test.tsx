@@ -32,6 +32,7 @@ const CHARACTER: Character = {
         top: "default",
         pants: "default",
         shoes: "default",
+        overlay: "default",
     },
 };
 
