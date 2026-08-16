@@ -29,6 +29,8 @@
 
     &:hover:not(.outline, :disabled) {
         background-color: color-mix(in srgb, var(--#{$color}) 90%, gray);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
     }
 
     &:active:not(:disabled, .outline) {
@@ -82,8 +84,15 @@ button.outline {
         color: inherit;
     }
 
-    &:hover:not(.outline) {
+    &:hover:not(:disabled) {
         background-color: color-mix(in srgb, currentColor 15%, white);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.97);
+        box-shadow: none;
     }
 }
 

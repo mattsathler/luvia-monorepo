@@ -29,6 +29,15 @@ input[type="checkbox"].checkbox {
         border-color: var(--primary);
     }
 
+    &:hover:not(:disabled):not(:checked) {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 20%, transparent);
+    }
+
+    &:hover:not(:disabled):checked {
+        box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 20%, transparent);
+    }
+
     &:checked::after {
         content: "";
         position: absolute;

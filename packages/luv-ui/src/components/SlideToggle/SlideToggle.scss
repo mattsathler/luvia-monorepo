@@ -20,7 +20,7 @@
         width: 42px;
         height: 22px;
         border-radius: 12px;
-        transition: background-color 0.2s;
+        transition: background-color 0.2s, box-shadow 0.2s;
         position: relative;
         background-color: var(--error);
 
@@ -49,5 +49,13 @@
     input:disabled+.slide-toggle {
         opacity: 0.6;
         cursor: default;
+    }
+
+    input:not(:disabled):checked:hover+.slide-toggle {
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 20%, transparent);
+    }
+
+    input:not(:disabled):not(:checked):hover+.slide-toggle {
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--error) 20%, transparent);
     }
 }

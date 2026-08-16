@@ -96,7 +96,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                         completedSteps={STEPS.map((step) => step.id)}
                     >
                         <div className="d-flex flex-row w-100-p gap">
-                            <div className="d-flex w-full flex-col gap w-50-p card h-480 hidden">
+                            <div className="d-flex w-full flex-col gap w-50-p card flat h-480 hidden">
                                 <LuvStepperStep step="info">
                                     <div className="d-flex flex-col gap h-240">
                                         <div className="d-flex flex-row gap">
@@ -119,19 +119,22 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                                 required
                                             />
                                         </div>
-                                        <div className="d-flex flex-wrap w-100-p gap">
-                                            {GENDER_OPTIONS.map((option) => (
-                                                <button
-                                                    key={option.value}
-                                                    type="button"
-                                                    className={gender === option.value ? `game-${option.color}` : `outline game-${option.color}`}
-                                                    aria-pressed={gender === option.value}
-                                                    aria-label={option.icon ? option.label : undefined}
-                                                    onClick={() => setGender(option.value)}
-                                                >
-                                                    {option.icon ? <LuvIcon name={option.icon} /> : option.label}
-                                                </button>
-                                            ))}
+                                        <div className="d-flex flex-col gap-8">
+                                            <h4 className="text-text">Gênero</h4>
+                                            <div className="d-flex flex-wrap w-100-p gap">
+                                                {GENDER_OPTIONS.map((option) => (
+                                                    <button
+                                                        key={option.value}
+                                                        type="button"
+                                                        className={gender === option.value ? `game-${option.color}` : `outline game-${option.color}`}
+                                                        aria-pressed={gender === option.value}
+                                                        aria-label={option.icon ? option.label : undefined}
+                                                        onClick={() => setGender(option.value)}
+                                                    >
+                                                        {option.icon ? <LuvIcon name={option.icon} /> : option.label}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </LuvStepperStep>
@@ -243,7 +246,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                 </LuvStepperStep>
                             </div>
 
-                            <div className="d-flex items-center justify-center w-50-p card aspect-4-3 hidden">
+                            <div className="d-flex items-center justify-center w-50-p card flat aspect-4-3 hidden">
                                 <div className="w-full h-164 object-contain">
                                     <Player
                                         layers={{

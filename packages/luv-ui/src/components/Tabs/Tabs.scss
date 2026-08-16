@@ -16,6 +16,15 @@ div.tabs {
         &.active {
             overflow: hidden;
         }
+
+        &:not(.active):not(:disabled):hover {
+            background-color: color-mix(in srgb, var(--text) 8%, transparent);
+            transform: translateY(-1px);
+        }
+
+        &:not(.active):not(:disabled):active {
+            transform: scale(0.97);
+        }
     }
 
 }
