@@ -81,6 +81,7 @@ describe("CharacterSelectPage", () => {
             getLayerSrc("tops", "0"),
             getLayerSrc("pants", "0"),
             getLayerSrc("shoes", "0"),
+            getLayerSrc("overlays", "0"),
         ]);
     });
 

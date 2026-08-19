@@ -66,6 +66,36 @@ describe("LuvModal", () => {
         expect(screen.getByRole("dialog")).toHaveClass("error");
     });
 
+    it("defaults to the medium size class", () => {
+        render(
+            <LuvModal isOpen onClose={vi.fn()}>
+                Conteúdo
+            </LuvModal>
+        );
+
+        expect(screen.getByRole("dialog")).toHaveClass("w-50-vw");
+    });
+
+    it("applies the small size class", () => {
+        render(
+            <LuvModal isOpen onClose={vi.fn()} size="small">
+                Conteúdo
+            </LuvModal>
+        );
+
+        expect(screen.getByRole("dialog")).toHaveClass("w-20-vw");
+    });
+
+    it("applies the large size class", () => {
+        render(
+            <LuvModal isOpen onClose={vi.fn()} size="large">
+                Conteúdo
+            </LuvModal>
+        );
+
+        expect(screen.getByRole("dialog")).toHaveClass("w-80-vw");
+    });
+
     it("closes when clicking the backdrop by default", async () => {
         const onClose = vi.fn();
         const user = userEvent.setup();

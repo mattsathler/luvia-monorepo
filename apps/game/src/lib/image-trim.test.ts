@@ -69,12 +69,26 @@ describe("composeAndTrimLayers", () => {
         await expect(composeAndTrimLayers([])).rejects.toThrow("composeAndTrimLayers requires at least one layer");
     });
 
+    it("rejects when a layer image fails to load", async () => {
+        stubImages([new FakeImage(2, 2, true)]);
+
+        await expect(composeAndTrimLayers(["missing.png"])).rejects.toThrow("Failed to load image: missing.png");
+    });
+
     it("draws every layer at the origin and crops to their combined bounding box", async () => {
+        // Pontos escolhidos para exercitar os quatro ramos de comparação do
+        // bounding box (x/y menor que o mínimo, x/y maior que o máximo) tanto
+        // no caminho verdadeiro quanto no falso, na ordem de varredura
+        // (linha a linha, esquerda pra direita): (2,1) então (3,1) então (1,2).
         const width = 4;
         const height = 4;
         const data = new Uint8ClampedArray(width * height * 4);
-        data[((1 * width + 1) * 4) + 3] = 255;
-        data[((2 * width + 2) * 4) + 3] = 255;
+        const setAlpha = (x: number, y: number, alpha: number) => {
+            data[(y * width + x) * 4 + 3] = alpha;
+        };
+        setAlpha(2, 1, 255);
+        setAlpha(3, 1, 255);
+        setAlpha(1, 2, 255);
 
         stubImages([new FakeImage(width, height), new FakeImage(width, height)]);
 

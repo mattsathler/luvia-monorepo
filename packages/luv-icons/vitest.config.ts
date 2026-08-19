@@ -6,6 +6,18 @@ export default mergeConfig(
     defineConfig({
         test: {
             globals: true,
+            coverage: {
+                provider: "v8",
+                all: true,
+                include: ["src/**/*.ts"],
+                exclude: ["src/**/*.d.ts", "src/**/*.test.ts"],
+                thresholds: {
+                    statements: 100,
+                    branches: 100,
+                    functions: 100,
+                    lines: 100,
+                },
+            },
         },
     })
 );

@@ -140,4 +140,40 @@ describe("LuvStepper", () => {
         await user.click(screen.getByText("back"));
         expect(screen.getByTestId("active").textContent).toBe("appearance");
     });
+
+    it("ignores goNext past the last step and goBack past the first step", async () => {
+        function Consumer() {
+            const { activeStep, goNext, goBack } = useLuvStepper();
+
+            return (
+                <div>
+                    <span data-testid="active">{activeStep}</span>
+                    <button onClick={goNext}>next</button>
+                    <button onClick={goBack}>back</button>
+                </div>
+            );
+        }
+
+        function Wrapper() {
+            const [step, setStep] = useState("info");
+            return (
+                <LuvStepper steps={STEPS} activeStep={step} onStepChange={setStep} completedSteps={STEPS.map((s) => s.id)}>
+                    <Consumer />
+                </LuvStepper>
+            );
+        }
+
+        const user = userEvent.setup();
+        render(<Wrapper />);
+
+        await user.click(screen.getByText("back"));
+        expect(screen.getByTestId("active").textContent).toBe("info");
+
+        await user.click(screen.getByText("next"));
+        await user.click(screen.getByText("next"));
+        expect(screen.getByTestId("active").textContent).toBe("skills");
+
+        await user.click(screen.getByText("next"));
+        expect(screen.getByTestId("active").textContent).toBe("skills");
+    });
 });

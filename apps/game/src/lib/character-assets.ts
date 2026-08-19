@@ -21,49 +21,58 @@ export type LayerAsset = {
  * mostrado ao jogador. Soltar uma pasta `<id>/` nova com os dois PNGs na
  * categoria certa já disponibiliza a opção, sem editar código.
  */
-const modules = import.meta.glob<{ default: string }>("../assets/character/*/*/*.png", { eager: true });
-
 type CatalogEntry = { id: string; src?: string; previewSrc?: string };
-
-const byCategory: Record<string, Record<string, CatalogEntry>> = {};
 
 // Assume que todo arquivo em assets/character/<categoria>/<id>/ segue a
 // convenção de nome (`<id>_model.png` ou `<id>_preview.png`, só dígitos no
 // id) — um arquivo fora da convenção quebra o build aqui, o que é
-// preferível a ignorá-lo silenciosamente.
-for (const path in modules) {
-    const match = path.match(/character\/([^/]+)\/(\d+)\/(\d+)_(model|preview)\.png$/)!;
-    const [, category, folderId, fileId, kind] = match;
+// preferível a ignorá-lo silenciosamente. Extraído numa função pura (em vez
+// de rodar direto no topo do módulo) pra dar pra testar os dois `throw`
+// sem precisar de assets malformados de verdade em disco.
+export function buildCatalog(modules: Record<string, { default: string }>): Record<string, LayerAsset[]> {
+    const byCategory: Record<string, Record<string, CatalogEntry>> = {};
 
-    if (folderId !== fileId) {
-        throw new Error(`Character asset id mismatch: ${path} (pasta "${folderId}" vs arquivo "${fileId}")`);
+    for (const path in modules) {
+        const match = path.match(/character\/([^/]+)\/(\d+)\/(\d+)_(model|preview)\.png$/)!;
+        const [, category, folderId, fileId, kind] = match;
+
+        if (folderId !== fileId) {
+            throw new Error(`Character asset id mismatch: ${path} (pasta "${folderId}" vs arquivo "${fileId}")`);
+        }
+
+        const entries = (byCategory[category] ??= {});
+        const entry = (entries[folderId] ??= { id: folderId });
+
+        if (kind === "preview") {
+            entry.previewSrc = modules[path].default;
+        } else {
+            entry.src = modules[path].default;
+        }
     }
 
-    const entries = (byCategory[category] ??= {});
-    const entry = (entries[folderId] ??= { id: folderId });
+    const catalog: Record<string, LayerAsset[]> = {};
 
-    if (kind === "preview") {
-        entry.previewSrc = modules[path].default;
-    } else {
-        entry.src = modules[path].default;
+    for (const [category, entries] of Object.entries(byCategory)) {
+        catalog[category] = Object.values(entries)
+            .map((entry) => {
+                if (!entry.src) {
+                    throw new Error(`Character asset sem <id>_model.png: ${category}/${entry.id}`);
+                }
+
+                // Sem preview dedicado, cai pra própria peça — coerente com o
+                // que já é sempre verdade pras categorias que não têm slot
+                // "remover".
+                return { id: entry.id, src: entry.src, previewSrc: entry.previewSrc ?? entry.src };
+            })
+            .sort((a, b) => Number(a.id) - Number(b.id));
     }
+
+    return catalog;
 }
 
-const CATALOG: Record<string, LayerAsset[]> = {};
+const modules = import.meta.glob<{ default: string }>("../assets/character/*/*/*.png", { eager: true });
 
-for (const [category, entries] of Object.entries(byCategory)) {
-    CATALOG[category] = Object.values(entries)
-        .map((entry) => {
-            if (!entry.src) {
-                throw new Error(`Character asset sem <id>_model.png: ${category}/${entry.id}`);
-            }
-
-            // Sem preview dedicado, cai pra própria peça — coerente com o que
-            // já é sempre verdade pras categorias que não têm slot "remover".
-            return { id: entry.id, src: entry.src, previewSrc: entry.previewSrc ?? entry.src };
-        })
-        .sort((a, b) => Number(a.id) - Number(b.id));
-}
+const CATALOG = buildCatalog(modules);
 
 /** Opções disponíveis para uma categoria — lista vazia se a pasta ainda não existir. */
 export function getLayerAssets(category: string): LayerAsset[] {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getLayerAssets, getLayerSrc } from "./character-assets";
+import { buildCatalog, getLayerAssets, getLayerSrc } from "./character-assets";
 
 describe("character-assets", () => {
     it("lists body_types ids 0 through 5, sorted numerically", () => {
@@ -54,5 +54,35 @@ describe("character-assets", () => {
         expect(noHair.previewSrc).not.toBe(noHair.src);
         expect(noShoes.previewSrc).not.toBe(noShoes.src);
         expect(noOverlay.previewSrc).not.toBe(noOverlay.src);
+    });
+});
+
+describe("buildCatalog", () => {
+    it("throws when a file's id doesn't match its folder's id", () => {
+        const modules = {
+            "../assets/character/tops/0/1_model.png": { default: "tops-1.png" },
+        };
+
+        expect(() => buildCatalog(modules)).toThrow(
+            'Character asset id mismatch: ../assets/character/tops/0/1_model.png (pasta "0" vs arquivo "1")',
+        );
+    });
+
+    it("throws when an id has a preview but no model", () => {
+        const modules = {
+            "../assets/character/tops/0/0_preview.png": { default: "tops-0-preview.png" },
+        };
+
+        expect(() => buildCatalog(modules)).toThrow("Character asset sem <id>_model.png: tops/0");
+    });
+
+    it("falls back to the model src when there's no dedicated preview", () => {
+        const modules = {
+            "../assets/character/tops/0/0_model.png": { default: "tops-0-model.png" },
+        };
+
+        const catalog = buildCatalog(modules);
+
+        expect(catalog.tops).toEqual([{ id: "0", src: "tops-0-model.png", previewSrc: "tops-0-model.png" }]);
     });
 });

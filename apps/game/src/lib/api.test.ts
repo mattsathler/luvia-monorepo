@@ -9,6 +9,8 @@ import {
     login,
     register,
     setUnauthorizedHandler,
+    updateAppearance,
+    type AppearanceUpdate,
     type CreateCharacterInput,
 } from "./api";
 
@@ -201,6 +203,34 @@ describe("createCharacter", () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(400, { message: "Alocação de skills inválida" })));
 
         await expect(createCharacter("token-123", input)).rejects.toThrow("Alocação de skills inválida");
+    });
+});
+
+describe("updateAppearance", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    const appearance: AppearanceUpdate = { top: "1", pants: "1" };
+
+    it("returns the updated character on success", async () => {
+        const body = { id: "char-1", appearance };
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
+        vi.stubGlobal("fetch", fetchMock);
+
+        const result = await updateAppearance("token-123", "char-1", appearance);
+
+        expect(result).toEqual(body);
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining("/characters/char-1/appearance"),
+            expect.objectContaining({ method: "PATCH", body: JSON.stringify(appearance) }),
+        );
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(400, { message: "Peça inválida" })));
+
+        await expect(updateAppearance("token-123", "char-1", appearance)).rejects.toThrow("Peça inválida");
     });
 });
 
