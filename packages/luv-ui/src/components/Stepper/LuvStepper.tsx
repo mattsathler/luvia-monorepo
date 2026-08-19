@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, type ReactNode } from "react";
+import { createContext, useContext, useMemo, type CSSProperties, type ReactNode } from "react";
 import "./Stepper.scss";
 
 export type LuvStep = {
@@ -39,10 +39,15 @@ export type LuvStepperProps = {
     // Passos que já têm dados salvos — controlam o que é clicável no
     // indicador, já que voltar não deve implicar perder o que foi persistido.
     completedSteps?: string[];
+    // Cor de destaque do passo ativo/concluído (ex.: "primary", "game-teal") —
+    // uma chave de $color-keys em _colors.scss. Sem isso, usa o padrão
+    // (--theme para o ativo, --primary para os concluídos).
+    color?: string;
     children?: ReactNode;
 };
 
-export function LuvStepper({ steps, activeStep, onStepChange, completedSteps = [], children }: LuvStepperProps) {
+export function LuvStepper({ steps, activeStep, onStepChange, completedSteps = [], color, children }: LuvStepperProps) {
+    const style = color ? ({ "--luv-stepper-color": `var(--${color})` } as CSSProperties) : undefined;
     const activeIndex = steps.findIndex((step) => step.id === activeStep);
 
     function goToStep(stepId: string) {
@@ -81,7 +86,7 @@ export function LuvStepper({ steps, activeStep, onStepChange, completedSteps = [
 
     return (
         <LuvStepperContext.Provider value={value}>
-            <div className="luv-stepper">
+            <div className="luv-stepper" style={style}>
                 <ol className="luv-stepper-track">
                     {steps.map((step, index) => {
                         const isActive = step.id === activeStep;

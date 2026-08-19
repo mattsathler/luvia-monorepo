@@ -38,7 +38,7 @@
     }
 
     &.completed:not(:last-child)::after {
-        background-color: var(--primary);
+        background-color: var(--luv-stepper-color, var(--primary));
         opacity: 1;
     }
 }
@@ -68,7 +68,7 @@
 
     &:not(:disabled):hover {
         transform: scale(1.1);
-        box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme) 20%, transparent);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--luv-stepper-color, var(--theme)) 20%, transparent);
     }
 
     &:not(:disabled):active {
@@ -77,16 +77,16 @@
 }
 
 .luv-stepper-item.active .luv-stepper-marker {
-    border-color: var(--theme);
-    background-color: var(--theme);
-    color: var(--primary-text);
+    border-color: var(--luv-stepper-color, var(--theme));
+    background-color: var(--luv-stepper-color, var(--theme));
+    color: var(--text);
     opacity: 1;
 }
 
 .luv-stepper-item.completed .luv-stepper-marker {
-    border-color: var(--primary);
-    background-color: var(--primary);
-    color: var(--primary-text);
+    border-color: var(--luv-stepper-color, var(--primary));
+    background-color: var(--luv-stepper-color, var(--primary));
+    color: var(--text);
     opacity: 1;
 }
 

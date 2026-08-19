@@ -77,6 +77,20 @@ describe("LuvStepper", () => {
         expect(screen.queryByText("Formulário de habilidades")).not.toBeInTheDocument();
     });
 
+    it("applies the color prop as a CSS custom property on the root", () => {
+        const { container } = render(
+            <LuvStepper steps={STEPS} activeStep="info" onStepChange={vi.fn()} color="game-teal" />,
+        );
+
+        expect(container.querySelector(".luv-stepper")).toHaveStyle({ "--luv-stepper-color": "var(--game-teal)" });
+    });
+
+    it("does not set the custom color property when color isn't provided", () => {
+        const { container } = render(<LuvStepper steps={STEPS} activeStep="info" onStepChange={vi.fn()} />);
+
+        expect(container.querySelector(".luv-stepper")).not.toHaveAttribute("style");
+    });
+
     it("useLuvStepper throws when used outside of a LuvStepper", () => {
         function Broken() {
             useLuvStepper();

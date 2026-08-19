@@ -80,7 +80,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                     <div className="d-flex items-center gap-8">
                         <button
                             type="button"
-                            className="outline primary circle w-32 h-32"
+                            className="circle w-32 h-32"
                             aria-label="Voltar para seleção de personagens"
                             onClick={onCancel}
                         >
@@ -94,6 +94,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                         activeStep={activeStep}
                         onStepChange={setActiveStep}
                         completedSteps={STEPS.map((step) => step.id)}
+                        color="game-cyan"
                     >
                         <div className="d-flex flex-row w-100-p gap">
                             <div className="d-flex w-full flex-col gap w-50-p card flat border-border border-16">
@@ -142,49 +143,49 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                 <LuvStepperStep step="appearance">
                                     <div className="d-flex flex-col flex-1-1 h-full">
                                         <Tabs>
-                                            <Tab title="Corpo" color="game-teal">
+                                            <Tab title="Corpo" color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="body_types"
                                                     selectedId={skinToneId}
                                                     onSelect={setSkinToneId}
                                                 />
                                             </Tab>
-                                            <Tab title="Rosto" color="game-teal">
+                                            <Tab title="Rosto" color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="faces"
                                                     selectedId={faceId}
                                                     onSelect={setFaceId}
                                                 />
                                             </Tab>
-                                            <Tab title="Cabelo" color="game-teal">
+                                            <Tab title="Cabelo" color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="hair_types"
                                                     selectedId={hairType}
                                                     onSelect={setHairType}
                                                 />
                                             </Tab>
-                                            <Tab title="Calça" color="game-teal">
+                                            <Tab title="Calça" color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="pants"
                                                     selectedId={pantsId}
                                                     onSelect={setPantsId}
                                                 />
                                             </Tab>
-                                            <Tab title="Blusa" color="game-teal">
+                                            <Tab title="Blusa" color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="tops"
                                                     selectedId={topId}
                                                     onSelect={setTopId}
                                                 />
                                             </Tab>
-                                            <Tab title="Sobreposição" color="game-teal">
+                                            <Tab title="Sobreposição" color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="overlays"
                                                     selectedId={overlayId}
                                                     onSelect={setOverlayId}
                                                 />
                                             </Tab>
-                                            <Tab title="Sapato" color="game-teal">
+                                            <Tab title="Sapato" color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="shoes"
                                                     selectedId={shoesId}
