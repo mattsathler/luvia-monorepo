@@ -608,3 +608,31 @@ $vh-scale: (
         flex-direction: column;
     }
 }
+
+// ==========================
+// ANIMAÇÕES
+// ==========================
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(1.020);
+    }
+}
+
+// Idle "respiro" sutil para sprites parados (ex.: Player). scaleY em vez de
+// scale geral pra não engordar o personagem, e transform-origin: bottom pra
+// manter os pés fixos no chão enquanto o topo sobe/desce.
+.animate-breathe {
+    transform-origin: bottom;
+    animation: breathe 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-breathe {
+        animation: none;
+    }
+}
