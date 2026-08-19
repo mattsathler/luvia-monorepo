@@ -184,6 +184,12 @@ $vh-scale: (
     }
 }
 
+@each $key, $value in $space-scale {
+    .border-#{$key} {
+        border-radius: $value !important;
+    }
+}
+
 .border-transparent {
     border: 2px solid transparent !important;
 }
@@ -283,6 +289,14 @@ $vh-scale: (
 
 .grid-wrap {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+}
+
+// Como .grid-wrap, mas com no máximo 3 colunas por linha e sem esticar
+// itens quando sobram poucos (usa auto-fill em vez de auto-fit, então
+// colunas vazias ficam em branco em vez de serem preenchidas pelos itens
+// existentes).
+.grid-wrap-3 {
+    grid-template-columns: repeat(auto-fill, minmax(max(200px, calc((100% - 48px) / 3)), 1fr)) !important;
 }
 
 .grid-cols-2 {

@@ -96,7 +96,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                         completedSteps={STEPS.map((step) => step.id)}
                     >
                         <div className="d-flex flex-row w-100-p gap">
-                            <div className="d-flex w-full flex-col gap w-50-p card flat h-480 hidden">
+                            <div className="d-flex w-full flex-col gap w-50-p card flat border-border border-16">
                                 <LuvStepperStep step="info">
                                     <div className="d-flex flex-col gap h-240">
                                         <div className="d-flex flex-row gap">
@@ -140,7 +140,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                 </LuvStepperStep>
 
                                 <LuvStepperStep step="appearance">
-                                    <div className="d-flex flex-col gap flex-1-1 h-full">
+                                    <div className="d-flex flex-col flex-1-1 h-full">
                                         <Tabs>
                                             <Tab title="Corpo" color="game-teal">
                                                 <LayerOptionPicker
@@ -246,7 +246,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                 </LuvStepperStep>
                             </div>
 
-                            <div className="d-flex items-center justify-center w-50-p card flat aspect-4-3 hidden">
+                            <div className="d-flex items-center justify-center w-50-p card flat aspect-4-3 hidden border-border border-16">
                                 <div className="w-full h-164 object-contain">
                                     <Player
                                         layers={{

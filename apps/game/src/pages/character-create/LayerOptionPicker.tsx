@@ -17,9 +17,9 @@ export function LayerOptionPicker({ category, selectedId, onSelect }: LayerOptio
 
     return (
         <div className="d-flex flex-col gap w-full hidden flex-1-1 min-h-0">
-            <div className="d-grid grid-wrap gap scroll-y flex-1-1 py-16">
+            <div className="d-grid grid-wrap-3 gap scroll-y flex-1-1 p-16 border-border border-16 h-320">
                 {options.map((asset) => (
-                    <div className="w-full pr-16">
+                    <div className="w-full">
                         <ThumbnailOption
                             key={asset.id}
                             id={asset.id}
