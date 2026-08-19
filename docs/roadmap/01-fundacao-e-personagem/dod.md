@@ -2,6 +2,8 @@
 
 Todos os itens abaixo já estão marcados — esta milestone está concluída. Fica registrado como referência do que "pronto" significou aqui.
 
+**Nota**: o item de skills abaixo (`distribuição de skills iniciais`) pede o *mecanismo* de distribuição, não o catálogo final — esse catálogo é reconhecidamente provisório e tem plano próprio em aberto (`planos/07-skills-catalogo-e-balanceamento.md`), sem bloquear o fechamento desta milestone.
+
 ## Infraestrutura
 
 - [x] Monorepo com npm workspaces (`apps/*`, `packages/*`) funcionando com um único `npm install`.

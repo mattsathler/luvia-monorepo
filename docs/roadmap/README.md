@@ -6,12 +6,15 @@ Definir o caminho do MVP até o produto final de Luvia, em milestones objetivas,
 
 ## Como usar isto
 
-Cada milestone vive na sua própria pasta (`NN-slug/`), com dois arquivos:
+Cada milestone vive na sua própria pasta (`NN-slug/`), com:
 
-- `descricao.md` — o que a milestone entrega, o que fica fora dela, e a estimativa de prazo com a justificativa.
+- `descricao.md` — o que a milestone entrega, o que fica fora dela, e a estimativa de prazo com a justificativa. Lista os planos (abaixo) que a compõem.
 - `dod.md` — checklist objetivo do que precisa estar verdadeiro pra considerar a milestone concluída. Nada de "está quase pronto" — ou o item está marcado, ou a milestone não fechou.
+- `planos/` — a milestone quebrada em pedaços tecnicamente implementáveis. Cada `planos/NN-slug.md` é uma fatia de trabalho concreta (o que construir, onde no código, do que depende), com seu próprio `Status`. O DoD da milestone só fecha quando todos os planos dela fecham — mas os planos individuais podem (e devem) ser implementados e revisados um de cada vez.
 
-As milestones são sequenciais e cumulativas: a M03 assume que tudo da M02 já está pronto, e assim por diante. Não pular a ordem.
+As milestones são sequenciais e cumulativas: a M03 assume que tudo da M02 já está pronto, e assim por diante. Não pular a ordem entre milestones. Dentro de uma milestone, a ordem dos planos importa quando um depende do outro (ver o campo "Depende de" de cada plano) — nem sempre é a ordem numérica.
+
+Planos não são fixos desde o dia 1: ao detalhar uma milestone, é normal descobrir que o escopo original estava incompleto (ex.: a M03 nasceu sem cobrir personalização de lote nem navegação pela cidade como um todo — os planos 04 e 06 dela foram adicionados depois, com uma nota explicando por quê). Quando isso acontece, atualizar `descricao.md`/`dod.md` da milestone pra refletir o escopo real, não só a pasta `planos/`.
 
 ## Base da estimativa de prazo
 

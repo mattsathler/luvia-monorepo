@@ -6,7 +6,11 @@ Ter o monorepo, o design system e a autenticação prontos, e permitir que um jo
 
 ## Status
 
-✅ **Concluída** — 01 a 19 de agosto (~19 dias corridos, ritmo bursty solo — ver [[../README]]).
+✅ **Concluída** — 01 a 19 de agosto (~19 dias corridos, ritmo bursty solo — ver [[../README]]). Com uma ressalva: o catálogo de skills usado na criação é provisório — ver `planos/07-skills-catalogo-e-balanceamento.md`, único plano desta milestone que continua em aberto.
+
+## Planos
+
+Ver [[planos/01-monorepo-e-design-system]], [[planos/02-autenticacao]], [[planos/03-criacao-de-personagem]], [[planos/04-guarda-roupa]], [[planos/05-selecao-de-personagem]], [[planos/06-motor-de-simulacao-wryd]] (todos ✅) e [[planos/07-skills-catalogo-e-balanceamento]] (⏳, único em aberto).
 
 ## Escopo
 

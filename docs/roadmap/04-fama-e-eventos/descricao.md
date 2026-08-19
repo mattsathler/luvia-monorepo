@@ -8,12 +8,21 @@ Dar à Fama um propósito real como indicador de progresso (ver [[../../game-des
 
 ⏳ Planejada.
 
+## Planos
+
+1. [[planos/01-catalogo-de-eventos]]
+2. [[planos/02-atividade-evento]]
+3. [[planos/03-participacao-em-evento-ui]]
+4. [[planos/04-fama-como-progresso]]
+5. [[planos/05-local-do-evento-na-cidade]]
+
 ## Escopo
 
 - **Eventos como atividade temporária**: pelo menos 1–2 tipos de evento (ex.: festa, feira — ver [[../../game-design/events]]) usando o mecanismo de `activityEndsAt` que já existe desde a M01 (evento é só mais uma `Activity` com prazo).
 - **Efeito de evento**: participar aumenta Fama e/ou skills (relacionamentos ficam pra M05, mesmo que o game design já preveja o efeito — não há sistema de relacionamento ainda pra afetar).
 - **Fama como progresso visível**: ranking simples ou marco de Fama exibido na UI (não existe "Level" — ver [[../../decisions/0003-fama-substitui-level]]).
 - Catálogo de eventos: definição de quando/como um evento fica disponível (ex.: horário fixo, recorrente) — decisão de game design ainda em aberto, fechar aqui.
+- **Local do evento na cidade**: evento tem um lugar físico na cidade (M03), não é um menu solto desconectado do mundo.
 
 ## Fora do escopo
 

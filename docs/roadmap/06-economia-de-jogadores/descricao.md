@@ -8,6 +8,19 @@ Jogadores passam a criar e administrar empresas, gerando uma economia real entre
 
 ⏳ Planejada.
 
+## Planos
+
+1. [[planos/01-lotes-comercial-e-industrial]]
+2. [[planos/02-bounded-context-de-empresa]]
+3. [[planos/03-producao-industrial]]
+4. [[planos/04-comercio-transformacao-e-venda]]
+5. [[planos/05-cidade-reguladora]]
+6. [[planos/06-empregos-privados]]
+7. [[planos/07-contratos-entre-empresas]]
+8. [[planos/08-gestao-de-empresa-ui]]
+
+Ordem sugerida de implementação: 1 → 2 → 3 → 4 → 5 antes de 6/7 (o fluxo de produção precisa existir antes de emprego/contrato terem o que mover), com 8 evoluindo em paralelo assim que houver algo pra mostrar.
+
 ## Escopo
 
 - **Lotes comercial e industrial**: completa o que a M03 deixou pendente (1 de cada tipo por jogador — ver [[../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]).

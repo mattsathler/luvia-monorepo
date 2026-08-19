@@ -8,6 +8,15 @@ Tornar Luvia jogável de ponta a ponta: o jogador loga, escolhe uma atividade pr
 
 ⏳ Planejada.
 
+## Planos
+
+1. [[planos/01-cliente-de-api-para-atividade]]
+2. [[planos/02-dashboard-de-necessidades]]
+3. [[planos/03-seletor-de-atividade]]
+4. [[planos/04-atividade-estudar]]
+5. [[planos/05-polling-de-estado]]
+6. [[planos/06-indicador-de-fama]]
+
 ## Escopo
 
 - **Dashboard funcional** substituindo o placeholder atual de `HomePage`: mostra felicidade, energia, dinheiro e fama do personagem (ver [[../../game-design/character-needs]]).

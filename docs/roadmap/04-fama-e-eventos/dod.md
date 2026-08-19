@@ -9,6 +9,7 @@
 ## Frontend
 
 - [ ] Jogador vê a lista de eventos disponíveis e consegue participar de um.
+- [ ] Evento tem um local visível na tela de cidade (M03), não só num menu solto.
 - [ ] Enquanto o evento está ativo, a UI deixa claro que o personagem está ocupado até `activityEndsAt`.
 - [ ] Fama do personagem é exibida na UI (dashboard da M02), não só existe no banco.
 - [ ] Nenhuma tela usa a palavra "Level" em lugar nenhum — sempre "Fama" (ver [[../../decisions/0003-fama-substitui-level]]).

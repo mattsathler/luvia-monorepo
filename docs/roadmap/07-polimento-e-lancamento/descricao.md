@@ -8,6 +8,15 @@ Levar o jogo funcional (M01–M06) a um estado lançável: conteúdo suficiente 
 
 ⏳ Planejada.
 
+## Planos
+
+1. [[planos/01-expansao-de-conteudo-visual]]
+2. [[planos/02-expansao-de-eventos]]
+3. [[planos/03-balanceamento-de-taxas]]
+4. [[planos/04-teste-de-carga-do-tick]]
+5. [[planos/05-responsividade-e-acessibilidade]]
+6. [[planos/06-operacao-e-backup]]
+
 ## Escopo
 
 - **Conteúdo**: mais variedade de roupas/aparência, mais tipos de evento, mais produtos/empregos — o suficiente pra a cidade não parecer repetitiva nas primeiras semanas de jogador real.

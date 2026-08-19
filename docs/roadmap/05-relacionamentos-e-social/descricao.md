@@ -8,6 +8,15 @@ Entregar o pilar Social First do jogo (ver [[../../vision/principles]]): jogador
 
 ⏳ Planejada.
 
+## Planos
+
+1. [[planos/01-bounded-context-de-relacionamento]]
+2. [[planos/02-acao-visitar]]
+3. [[planos/03-acao-presentear]]
+4. [[planos/04-convite-para-evento]]
+5. [[planos/05-efeito-de-evento-compartilhado]]
+6. [[planos/06-listagem-de-relacionamentos-ui]]
+
 ## Escopo
 
 - **Bounded context de relacionamento**: níveis progressivos — conhecido, amigo, melhor amigo, namoro, casamento (ver [[../../game-design/relationships]]).
