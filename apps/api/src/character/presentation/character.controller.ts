@@ -30,7 +30,6 @@ export class CharacterController {
       skinTone: dto.skinTone,
       hairType: dto.hairType,
       eyeType: dto.eyeType,
-      skills: dto.skills,
     });
   }
 

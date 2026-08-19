@@ -11,7 +11,7 @@ const CHARACTER: api.Character = {
     firstName: "Ana",
     lastName: "Silva",
     gender: "female",
-    skills: { intelligence: 2, charisma: 2 },
+    skills: {},
     happiness: 100,
     energy: 100,
     money: 0,
@@ -39,7 +39,6 @@ vi.mock("./lib/api", async (importOriginal) => {
         login: vi.fn(),
         authFetch: vi.fn(),
         listMyCharacters: vi.fn(),
-        listSkills: vi.fn(),
         createCharacter: vi.fn(),
         updateAppearance: vi.fn(),
     };
@@ -48,13 +47,6 @@ vi.mock("./lib/api", async (importOriginal) => {
 vi.mock("./lib/useComposedCharacterPreview", () => ({
     useComposedCharacterPreview: () => null,
 }));
-
-const SKILLS: api.SkillDefinition[] = [
-    { id: "intelligence", label: "Inteligência" },
-    { id: "charisma", label: "Carisma" },
-    { id: "creativity", label: "Criatividade" },
-    { id: "strength", label: "Força" },
-];
 
 describe("App", () => {
     beforeEach(() => {
@@ -149,7 +141,6 @@ describe("App", () => {
         setStoredToken("stored-token");
         (api.authFetch as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true } as Response);
         (api.listMyCharacters as ReturnType<typeof vi.fn>).mockResolvedValue([CHARACTER]);
-        (api.listSkills as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         const user = userEvent.setup();
 
         render(<App />);
@@ -166,7 +157,6 @@ describe("App", () => {
         setStoredToken("stored-token");
         (api.authFetch as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true } as Response);
         (api.listMyCharacters as ReturnType<typeof vi.fn>).mockResolvedValue([]);
-        (api.listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
         (api.createCharacter as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
         (api.updateAppearance as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
         const user = userEvent.setup();
@@ -179,11 +169,6 @@ describe("App", () => {
         await user.type(screen.getByLabelText("Sobrenome"), "Silva");
         await user.click(screen.getByRole("button", { name: "Feminino" }));
 
-        await user.click(screen.getByRole("button", { name: "Skills" }));
-        await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
-        await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
-        await user.click(screen.getByRole("button", { name: "Aumentar Carisma" }));
-        await user.click(screen.getByRole("button", { name: "Aumentar Carisma" }));
         await user.click(screen.getByRole("button", { name: "Criar personagem" }));
 
         expect(await screen.findByText("Você está logado como Ana Silva.")).toBeInTheDocument();

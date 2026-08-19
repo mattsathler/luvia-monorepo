@@ -61,12 +61,6 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
         setShoesId,
         overlayId,
         setOverlayId,
-        skillDefinitions,
-        skillsError,
-        skills,
-        incrementSkill,
-        decrementSkill,
-        remainingPoints,
         submitError,
         isSubmitting,
         isValid,
@@ -193,56 +187,6 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                                 />
                                             </Tab>
                                         </Tabs>
-                                    </div>
-                                </LuvStepperStep>
-
-                                <LuvStepperStep step="skills">
-                                    <div className="w-100-p">
-
-                                        <span className="text-size-16 text-text text-bold">
-                                            Pontos restantes: {skillsError ? "-" : Math.max(remainingPoints, 0)}
-                                        </span>
-
-                                        {skillsError && (
-                                            <div className="card error w-full p-16">
-                                                <strong className="text-primary">{skillsError}</strong>
-                                            </div>
-                                        )}
-
-                                        {!skillsError && skillDefinitions === null && (
-                                            <p className="text-text">Carregando skills...</p>
-                                        )}
-
-                                        {skillDefinitions !== null && (
-                                            <div className="d-flex flex-col gap-8 w-full">
-                                                {skillDefinitions.map((skill) => (
-                                                    <div key={skill.id} className="d-flex items-center justify-between gap-8 w-full">
-                                                        <span className="text-text">{skill.label}</span>
-                                                        <div className="d-flex items-center gap-8">
-                                                            <button
-                                                                type="button"
-                                                                className="outline primary circle w-24 h-24"
-                                                                aria-label={`Diminuir ${skill.label}`}
-                                                                onClick={() => decrementSkill(skill.id)}
-                                                                disabled={skills[skill.id] <= 0}
-                                                            >
-                                                                −
-                                                            </button>
-                                                            <strong className="text-text">{skills[skill.id]}</strong>
-                                                            <button
-                                                                type="button"
-                                                                className="outline primary circle w-24 h-24"
-                                                                aria-label={`Aumentar ${skill.label}`}
-                                                                onClick={() => incrementSkill(skill.id)}
-                                                                disabled={remainingPoints <= 0}
-                                                            >
-                                                                +
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
                                     </div>
                                 </LuvStepperStep>
                             </div>

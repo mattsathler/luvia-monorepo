@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CharacterCreatePage } from "./CharacterCreatePage";
 import { useAuth } from "../../auth/AuthContext";
-import { ApiError, createCharacter, listSkills, updateAppearance, type Character, type SkillDefinition } from "../../lib/api";
+import { ApiError, createCharacter, updateAppearance, type Character } from "../../lib/api";
 
 vi.mock("../../auth/AuthContext", () => ({
     useAuth: vi.fn(),
@@ -13,7 +13,6 @@ vi.mock("../../lib/api", async (importOriginal) => {
     const actual = await importOriginal<typeof import("../../lib/api")>();
     return {
         ...actual,
-        listSkills: vi.fn(),
         createCharacter: vi.fn(),
         updateAppearance: vi.fn(),
     };
@@ -23,18 +22,15 @@ vi.mock("../../lib/useComposedCharacterPreview", () => ({
     useComposedCharacterPreview: () => null,
 }));
 
-const SKILLS: SkillDefinition[] = [
-    { id: "intelligence", label: "Inteligência" },
-    { id: "charisma", label: "Carisma" },
-];
-
+// Personagem nasce sem nenhuma skill alocada (nível 0 em tudo) — ver
+// docs/decisions/0024-personagem-nasce-sem-skills.md.
 const CHARACTER: Character = {
     id: "char-1",
     accountId: "acc-1",
     firstName: "Ana",
     lastName: "Silva",
     gender: "female",
-    skills: { intelligence: 4, charisma: 0 },
+    skills: {},
     happiness: 100,
     energy: 100,
     money: 0,
@@ -61,13 +57,6 @@ async function fillIdentity(user: ReturnType<typeof userEvent.setup>) {
     await user.click(screen.getByRole("button", { name: "Feminino" }));
 }
 
-// Cada passo do Stepper só renderiza seu conteúdo quando está ativo — os
-// dados preenchidos em outros passos continuam guardados no estado do
-// formulário, então é seguro trocar de passo livremente durante os testes.
-async function goToStep(user: ReturnType<typeof userEvent.setup>, label: string) {
-    await user.click(screen.getByRole("button", { name: label }));
-}
-
 describe("CharacterCreatePage", () => {
     const onCharacterCreated = vi.fn();
     const onCancel = vi.fn();
@@ -85,99 +74,27 @@ describe("CharacterCreatePage", () => {
         );
 
         expect(container).toBeEmptyDOMElement();
-        expect(listSkills).not.toHaveBeenCalled();
     });
 
-    it("shows an error when the skill catalog fails to load", async () => {
-        (listSkills as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network down"));
+    it("keeps the submit button disabled until identity is filled", async () => {
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
-        await goToStep(user, "Skills");
-
-        expect(
-            await screen.findByText("Não foi possível carregar as skills. Tente novamente."),
-        ).toBeInTheDocument();
-    });
-
-    it("keeps the submit button disabled until identity, appearance and all skill points are set", async () => {
-        (listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
-        const user = userEvent.setup();
-
-        render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
-        await goToStep(user, "Skills");
-        await screen.findByText("Inteligência");
 
         const submit = screen.getByRole("button", { name: "Criar personagem" });
         expect(submit).toBeDisabled();
 
-        await goToStep(user, "Informações");
         await fillIdentity(user);
-        expect(submit).toBeDisabled(); // no skill points allocated yet
-
-        await goToStep(user, "Skills");
-        await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
-        await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
-        await user.click(screen.getByRole("button", { name: "Aumentar Carisma" }));
-        expect(submit).toBeDisabled(); // only 3 of 4 points allocated
-
-        await user.click(screen.getByRole("button", { name: "Aumentar Carisma" }));
         expect(submit).toBeEnabled();
     });
 
-    it("does not let the player allocate more than the point budget", async () => {
-        (listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
-        const user = userEvent.setup();
-
-        render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
-        await goToStep(user, "Skills");
-        await screen.findByText("Inteligência");
-
-        const increment = screen.getByRole("button", { name: "Aumentar Inteligência" });
-        await user.click(increment);
-        await user.click(increment);
-        await user.click(increment);
-        await user.click(increment);
-
-        expect(increment).toBeDisabled();
-        expect(screen.getByRole("button", { name: "Aumentar Carisma" })).toBeDisabled();
-    });
-
-    it("lets the player take back an allocated point", async () => {
-        (listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
-        const user = userEvent.setup();
-
-        render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
-        await goToStep(user, "Skills");
-        await screen.findByText("Inteligência");
-
-        const decrement = screen.getByRole("button", { name: "Diminuir Inteligência" });
-        expect(decrement).toBeDisabled();
-
-        await user.click(screen.getByRole("button", { name: "Aumentar Inteligência" }));
-        expect(decrement).toBeEnabled();
-
-        await user.click(decrement);
-        expect(decrement).toBeDisabled();
-    });
-
-    it("submits the full payload and reports the created character", async () => {
-        (listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
+    it("submits the full payload without any skill allocation and reports the created character", async () => {
         (createCharacter as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
         (updateAppearance as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
         await fillIdentity(user);
-
-        await goToStep(user, "Skills");
-        await screen.findByText("Inteligência");
-
-        const increment = screen.getByRole("button", { name: "Aumentar Inteligência" });
-        await user.click(increment);
-        await user.click(increment);
-        await user.click(increment);
-        await user.click(increment);
 
         await user.click(screen.getByRole("button", { name: "Criar personagem" }));
 
@@ -188,7 +105,6 @@ describe("CharacterCreatePage", () => {
             skinTone: 3,
             hairType: "0",
             eyeType: "0",
-            skills: { intelligence: 4, charisma: 0 },
         });
         expect(updateAppearance).toHaveBeenCalledWith("token", CHARACTER.id, {
             face: "0",
@@ -201,43 +117,23 @@ describe("CharacterCreatePage", () => {
     });
 
     it("shows the server error message when creation fails", async () => {
-        (listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
-        (createCharacter as ReturnType<typeof vi.fn>).mockRejectedValue(new ApiError("Invalid initial skill allocation"));
+        (createCharacter as ReturnType<typeof vi.fn>).mockRejectedValue(new ApiError("Nome já usado por outro personagem seu"));
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
         await fillIdentity(user);
-
-        await goToStep(user, "Skills");
-        await screen.findByText("Inteligência");
-
-        const increment = screen.getByRole("button", { name: "Aumentar Inteligência" });
-        await user.click(increment);
-        await user.click(increment);
-        await user.click(increment);
-        await user.click(increment);
         await user.click(screen.getByRole("button", { name: "Criar personagem" }));
 
-        expect(await screen.findByText("Invalid initial skill allocation")).toBeInTheDocument();
+        expect(await screen.findByText("Nome já usado por outro personagem seu")).toBeInTheDocument();
         expect(onCharacterCreated).not.toHaveBeenCalled();
     });
 
     it("shows a generic error message when creation fails for an unexpected reason", async () => {
-        (listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
         (createCharacter as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network down"));
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);
         await fillIdentity(user);
-
-        await goToStep(user, "Skills");
-        await screen.findByText("Inteligência");
-
-        const increment = screen.getByRole("button", { name: "Aumentar Inteligência" });
-        await user.click(increment);
-        await user.click(increment);
-        await user.click(increment);
-        await user.click(increment);
         await user.click(screen.getByRole("button", { name: "Criar personagem" }));
 
         expect(
@@ -246,7 +142,6 @@ describe("CharacterCreatePage", () => {
     });
 
     it("calls onCancel when Voltar is clicked", async () => {
-        (listSkills as ReturnType<typeof vi.fn>).mockResolvedValue(SKILLS);
         const user = userEvent.setup();
 
         render(<CharacterCreatePage onCharacterCreated={onCharacterCreated} onCancel={onCancel} />);

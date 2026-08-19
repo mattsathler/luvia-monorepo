@@ -43,7 +43,6 @@ describe('CharacterController', () => {
       skinTone: 3,
       hairType: 'curly-1',
       eyeType: 'round-1',
-      skills: { intelligence: 2, charisma: 2 },
     });
 
     expect(createCharacterUseCase.execute).toHaveBeenCalledWith({
@@ -54,7 +53,6 @@ describe('CharacterController', () => {
       skinTone: 3,
       hairType: 'curly-1',
       eyeType: 'round-1',
-      skills: { intelligence: 2, charisma: 2 },
     });
     expect(result).resolves.toBe('created');
   });

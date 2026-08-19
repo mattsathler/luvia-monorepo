@@ -18,23 +18,10 @@ export const SKILL_DEFINITIONS: SkillDefinition[] = [
 
 export const SKILL_IDS = SKILL_DEFINITIONS.map((skill) => skill.id);
 
-export type SkillPoints = Record<string, number>;
-
-/** Total de pontos que o jogador distribui entre as skills na criação do personagem. */
-export const INITIAL_SKILL_POINTS_BUDGET = 4;
-
 /**
- * Só aceita ids de skill conhecidos (catálogo acima), valores inteiros não
- * negativos, e a soma exata do orçamento inicial — nem mais, nem menos.
+ * Mapa skillId -> pontos. Todo personagem nasce sem nenhuma entrada aqui
+ * (nível 0 em tudo) — não existe alocação inicial de pontos, ver
+ * docs/decisions/0024-personagem-nasce-sem-skills.md. Skills só crescem
+ * jogando (ex.: atividade "Estudar", ainda não implementada).
  */
-export function isValidInitialSkillAllocation(skills: SkillPoints): boolean {
-  const entries = Object.entries(skills);
-
-  if (!entries.every(([id, points]) => SKILL_IDS.includes(id) && Number.isInteger(points) && points >= 0)) {
-    return false;
-  }
-
-  const total = entries.reduce((sum, [, points]) => sum + points, 0);
-
-  return total === INITIAL_SKILL_POINTS_BUDGET;
-}
+export type SkillPoints = Record<string, number>;

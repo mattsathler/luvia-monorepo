@@ -1,10 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Character } from '../../domain/entities/character.entity';
 import { CHARACTER_REPOSITORY, CharacterRepository } from '../../domain/repositories/character.repository';
 import { DEFAULT_APPEARANCE, SkinTone } from '../../domain/entities/appearance';
 import { Gender } from '../../domain/entities/gender';
-import { SkillPoints, isValidInitialSkillAllocation } from '../../domain/entities/skill';
 
 export type CreateCharacterInput = {
   accountId: string;
@@ -14,9 +13,13 @@ export type CreateCharacterInput = {
   skinTone: SkinTone;
   hairType: string;
   eyeType: string;
-  skills: SkillPoints;
 };
 
+/**
+ * Personagem nasce sem nenhuma skill alocada (nível 0 em tudo) — ver
+ * docs/decisions/0024-personagem-nasce-sem-skills.md. `Character.create`
+ * já assume `skills: {}` quando nada é passado.
+ */
 @Injectable()
 export class CreateCharacterUseCase {
   constructor(
@@ -25,17 +28,12 @@ export class CreateCharacterUseCase {
   ) {}
 
   async execute(input: CreateCharacterInput): Promise<Character> {
-    if (!isValidInitialSkillAllocation(input.skills)) {
-      throw new BadRequestException('Invalid initial skill allocation');
-    }
-
     const character = Character.create(
       {
         accountId: input.accountId,
         firstName: input.firstName,
         lastName: input.lastName,
         gender: input.gender,
-        skills: input.skills,
         appearance: {
           ...DEFAULT_APPEARANCE,
           skinTone: input.skinTone,

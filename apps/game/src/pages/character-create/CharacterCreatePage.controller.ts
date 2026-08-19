@@ -1,13 +1,11 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import type { LuvStep } from "luv-ui";
 import {
     ApiError,
     createCharacter,
-    listSkills,
     updateAppearance,
     type Character,
     type Gender,
-    type SkillDefinition,
     type SkinTone,
 } from "../../lib/api";
 
@@ -25,12 +23,9 @@ export const GENDER_OPTIONS: {
     { value: "other", label: "Outro", color: "gray" },
 ];
 
-export const SKILL_POINTS_BUDGET = 4;
-
 export const STEPS: LuvStep[] = [
     { id: "info", label: "Informações" },
     { id: "appearance", label: "Personalização" },
-    { id: "skills", label: "Skills" },
 ];
 
 // Ponto de partida de cada seletor — o primeiro item disponível em cada
@@ -69,36 +64,10 @@ export function useCharacterCreatePageController({
     const [shoesId, setShoesId] = useState(DEFAULT_SHOES_ID);
     const [overlayId, setOverlayId] = useState(DEFAULT_OVERLAY_ID);
 
-    const [skillDefinitions, setSkillDefinitions] = useState<SkillDefinition[] | null>(null);
-    const [skillsError, setSkillsError] = useState<string | null>(null);
-    const [skills, setSkills] = useState<Record<string, number>>({});
-
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    useEffect(() => {
-        listSkills(accessToken)
-            .then((definitions) => {
-                setSkillDefinitions(definitions);
-                setSkills(Object.fromEntries(definitions.map((skill) => [skill.id, 0])));
-            })
-            .catch(() => setSkillsError("Não foi possível carregar as skills. Tente novamente."));
-    }, [accessToken]);
-
-    const allocatedPoints = Object.values(skills).reduce((sum, points) => sum + points, 0);
-    const remainingPoints = SKILL_POINTS_BUDGET - allocatedPoints;
-
-    // Só chamadas pelos botões +/- abaixo, que já ficam `disabled` fora desses
-    // limites — não há caminho de UI para invocar isto fora do intervalo.
-    function incrementSkill(skillId: string) {
-        setSkills((current) => ({ ...current, [skillId]: current[skillId] + 1 }));
-    }
-
-    function decrementSkill(skillId: string) {
-        setSkills((current) => ({ ...current, [skillId]: current[skillId] - 1 }));
-    }
-
-    const isValid = firstName.trim() !== "" && lastName.trim() !== "" && remainingPoints === 0;
+    const isValid = firstName.trim() !== "" && lastName.trim() !== "";
 
     async function handleSubmit(event: FormEvent) {
         event.preventDefault();
@@ -107,6 +76,8 @@ export function useCharacterCreatePageController({
         setIsSubmitting(true);
 
         try {
+            // Personagem nasce sem nenhuma skill alocada (nível 0 em tudo) —
+            // ver docs/decisions/0024-personagem-nasce-sem-skills.md.
             const character = await createCharacter(accessToken, {
                 firstName,
                 lastName,
@@ -114,7 +85,6 @@ export function useCharacterCreatePageController({
                 skinTone: Number(skinToneId) as SkinTone,
                 hairType,
                 eyeType,
-                skills,
             });
             // Roupa/rosto ainda não são aceitos na criação (só via `PATCH .../appearance`,
             // ver docs/decisions/0020-...) — aplicamos as escolhas do jogador logo em seguida.
@@ -160,12 +130,6 @@ export function useCharacterCreatePageController({
         setShoesId,
         overlayId,
         setOverlayId,
-        skillDefinitions,
-        skillsError,
-        skills,
-        incrementSkill,
-        decrementSkill,
-        remainingPoints,
         submitError,
         isSubmitting,
         isValid,

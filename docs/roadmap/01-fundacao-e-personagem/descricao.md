@@ -6,7 +6,7 @@ Ter o monorepo, o design system e a autenticação prontos, e permitir que um jo
 
 ## Status
 
-✅ **Concluída** — 01 a 19 de agosto (~19 dias corridos, ritmo bursty solo — ver [[../README]]). Com uma ressalva: o catálogo de skills usado na criação é provisório — ver `planos/07-skills-catalogo-e-balanceamento.md`, único plano desta milestone que continua em aberto.
+✅ **Concluída** — 01 a 19 de agosto (~19 dias corridos, ritmo bursty solo — ver [[../README]]). O plano de skills (`planos/07-skills-catalogo-e-balanceamento.md`) mudou de escopo depois de fechado: não existe mais alocação inicial de pontos — personagem nasce com nível 0 em tudo (ver [[../../decisions/0024-personagem-nasce-sem-skills]]). O plano continua em aberto, mas agora é só sobre manter o catálogo (`SKILL_DEFINITIONS`) pronto pra quando skills crescerem jogando.
 
 ## Planos
 
@@ -19,7 +19,7 @@ Ver [[planos/01-monorepo-e-design-system]], [[planos/02-autenticacao]], [[planos
 - Biblioteca de ícones própria (**luv-icons**): SVGs no estilo arredondado/chibi do personagem, carregados via `LuvIcon`.
 - Backend (NestJS + MongoDB + DDD): bounded contexts `account` (registro/login/JWT) e `character` (ver abaixo).
 - **Autenticação**: registro e login por email/senha, sessão via JWT.
-- **Criação de personagem**: nome, gênero, tom de pele, cabelo, olho, distribuição inicial de pontos de skill (catálogo provisório).
+- **Criação de personagem**: nome, gênero, tom de pele, cabelo, olho. Sem skills — personagem nasce com nível 0 em tudo (ver [[../../decisions/0024-personagem-nasce-sem-skills]]).
 - **Guarda-roupa completo**: corpo, rosto, cabelo, blusa, calça, sapato, sobreposição — com prévia ao vivo do personagem montado (composição de camadas em canvas) e seletor com miniaturas.
 - **Seleção de personagem**: lista de personagens da conta, prévia de cada um.
 - **Motor de simulação WRYD no backend** (ver [[../../technical/simulation-tick]] e [[../../decisions/0013-sistema-wryd-tick-em-lotes-e-polling]]): tick em lote, recompute individual sob demanda (lazy), troca de atividade com prorata da atividade anterior, atividades `idle`/`resting`/`working` já com efeito sobre felicidade/energia/dinheiro. **Sem nenhuma UI no frontend ainda** — é infraestrutura pronta, esperando a M02.
@@ -28,7 +28,7 @@ Ver [[planos/01-monorepo-e-design-system]], [[planos/02-autenticacao]], [[planos
 ## Fora do escopo
 
 - Qualquer tela de jogo além de criar/selecionar personagem — `HomePage` hoje é um placeholder (nome do personagem + botão de sair).
-- Atividade "estudar" (skills só são alocadas na criação, não crescem depois).
+- Atividade "estudar" (skills não crescem ainda — nascem em 0 e ficam paradas até a M02).
 - Cidade, lotes, economia, eventos, relacionamentos — nada disso existe ainda, nem como stub.
 
 ## Estimativa
@@ -42,5 +42,6 @@ Não aplicável (concluída). Serve de referência de ritmo pras milestones segu
 - [[../../decisions/0013-sistema-wryd-tick-em-lotes-e-polling]]
 - [[../../decisions/0014-autenticacao-jwt-email-senha]]
 - [[../../decisions/0019-personagem-montado-em-camadas-com-rig-2d]]
+- [[../../decisions/0024-personagem-nasce-sem-skills]]
 - [[../../ui-ux/design-system]]
 - [[../../ui-ux/visual-art-style]]

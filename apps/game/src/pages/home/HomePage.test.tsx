@@ -15,7 +15,7 @@ const CHARACTER: Character = {
     firstName: "Ana",
     lastName: "Silva",
     gender: "female",
-    skills: { intelligence: 2, charisma: 2 },
+    skills: {},
     happiness: 100,
     energy: 100,
     money: 0,

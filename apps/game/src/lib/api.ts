@@ -118,7 +118,6 @@ export type CreateCharacterInput = {
     skinTone: SkinTone;
     hairType: string;
     eyeType: string;
-    skills: Record<string, number>;
 };
 
 export async function listMyCharacters(accessToken: string): Promise<Character[]> {

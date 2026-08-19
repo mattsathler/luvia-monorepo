@@ -182,7 +182,6 @@ describe("createCharacter", () => {
         skinTone: 3,
         hairType: "liso-1",
         eyeType: "redondo-1",
-        skills: { intelligence: 2, charisma: 2 },
     };
 
     it("returns the created character on success", async () => {
@@ -200,9 +199,9 @@ describe("createCharacter", () => {
     });
 
     it("throws ApiError with the server message on failure", async () => {
-        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(400, { message: "Alocação de skills inválida" })));
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(400, { message: "Nome inválido" })));
 
-        await expect(createCharacter("token-123", input)).rejects.toThrow("Alocação de skills inválida");
+        await expect(createCharacter("token-123", input)).rejects.toThrow("Nome inválido");
     });
 });
 

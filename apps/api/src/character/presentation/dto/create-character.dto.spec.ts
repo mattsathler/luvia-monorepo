@@ -10,7 +10,6 @@ function validPayload(overrides: Partial<CreateCharacterDto> = {}) {
     skinTone: 3,
     hairType: 'curly-1',
     eyeType: 'round-1',
-    skills: { intelligence: 2, charisma: 2 },
     ...overrides,
   };
 }
@@ -63,12 +62,5 @@ describe('CreateCharacterDto', () => {
     const errors = await validate(dto);
 
     expect(errors.some((error) => error.property === 'eyeType')).toBe(true);
-  });
-
-  it('rejects a non-object skills value', async () => {
-    const dto = plainToInstance(CreateCharacterDto, validPayload({ skills: 'not-an-object' as never }));
-    const errors = await validate(dto);
-
-    expect(errors.some((error) => error.property === 'skills')).toBe(true);
   });
 });

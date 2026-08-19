@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { CreateCharacterUseCase, CreateCharacterInput } from './create-character.use-case';
 import { CharacterRepository } from '../../domain/repositories/character.repository';
 import { Character } from '../../domain/entities/character.entity';
@@ -12,7 +11,6 @@ function validInput(overrides: Partial<CreateCharacterInput> = {}): CreateCharac
     skinTone: 3,
     hairType: 'curly-1',
     eyeType: 'round-1',
-    skills: { intelligence: 2, charisma: 2 },
     ...overrides,
   };
 }
@@ -28,7 +26,7 @@ function buildRepository(): jest.Mocked<CharacterRepository> {
 }
 
 describe('CreateCharacterUseCase', () => {
-  it('creates a character with default needs and the chosen identity/appearance, saving it via the repository', async () => {
+  it('creates a character with default needs, no skills, and the chosen identity/appearance, saving it via the repository', async () => {
     const characterRepository = buildRepository();
     const useCase = new CreateCharacterUseCase(characterRepository);
 
@@ -37,7 +35,7 @@ describe('CreateCharacterUseCase', () => {
     expect(character.firstName).toBe('Ana');
     expect(character.lastName).toBe('Silva');
     expect(character.gender).toBe('female');
-    expect(character.skills).toEqual({ intelligence: 2, charisma: 2 });
+    expect(character.skills).toEqual({});
     expect(character.appearance).toMatchObject({ skinTone: 3, hairType: 'curly-1', eyeType: 'round-1' });
     expect(character.accountId).toBe('acc-1');
     expect(character.happiness).toBe(100);
@@ -45,25 +43,5 @@ describe('CreateCharacterUseCase', () => {
     expect(character.money).toBe(0);
     expect(character.fame).toBe(0);
     expect(characterRepository.save).toHaveBeenCalledWith(character);
-  });
-
-  it('rejects an allocation that uses an unknown skill id', async () => {
-    const characterRepository = buildRepository();
-    const useCase = new CreateCharacterUseCase(characterRepository);
-
-    await expect(useCase.execute(validInput({ skills: { flying: 4 } }))).rejects.toBeInstanceOf(
-      BadRequestException,
-    );
-    expect(characterRepository.save).not.toHaveBeenCalled();
-  });
-
-  it('rejects an allocation that does not sum to the initial points budget', async () => {
-    const characterRepository = buildRepository();
-    const useCase = new CreateCharacterUseCase(characterRepository);
-
-    await expect(useCase.execute(validInput({ skills: { intelligence: 1 } }))).rejects.toBeInstanceOf(
-      BadRequestException,
-    );
-    expect(characterRepository.save).not.toHaveBeenCalled();
   });
 });
