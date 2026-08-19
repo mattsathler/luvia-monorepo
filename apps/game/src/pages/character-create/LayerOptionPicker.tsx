@@ -16,10 +16,10 @@ export function LayerOptionPicker({ category, selectedId, onSelect }: LayerOptio
     }
 
     return (
-        <div className="d-flex flex-col gap w-full hidden flex-1-1 min-h-0">
-            <div className="d-grid grid-wrap-3 gap scroll-y flex-1-1 p-24 border-border border-24 h-320">
+        <div className="d-flex flex-col gap w-full hidden flex-1-1 h-full">
+            <div className="d-grid grid-wrap-3 gap scroll-y flex-1-1 p-24 border-border border-24">
                 {options.map((asset) => (
-                    <div className="w-full">
+                    <div className="w-full h-full">
                         <ThumbnailOption
                             key={asset.id}
                             id={asset.id}

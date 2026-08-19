@@ -106,6 +106,14 @@ $vh-scale: (
     }
 }
 
+.min-h-full {
+    min-height: 100%;
+}
+
+.min-w-full {
+    min-width: 100%;
+}
+
 .min-h-screen {
     min-height: 100dvh;
 }
@@ -294,9 +302,13 @@ $vh-scale: (
 // Como .grid-wrap, mas com no máximo 3 colunas por linha e sem esticar
 // itens quando sobram poucos (usa auto-fill em vez de auto-fit, então
 // colunas vazias ficam em branco em vez de serem preenchidas pelos itens
-// existentes).
+// existentes). grid-auto-rows usa a mesma fórmula da coluna pra cada
+// célula nascer quadrada — como auto-fill não deixa a coluna esticar além
+// desse valor (fora o caso de poucas colunas cabendo na tela), a largura
+// real bate com essa altura na prática.
 .grid-wrap-3 {
     grid-template-columns: repeat(auto-fill, minmax(max(200px, calc((100% - 48px) / 3)), 1fr)) !important;
+    grid-auto-rows: max(200px, calc((100% - 48px) / 3)) !important;
 }
 
 .grid-cols-2 {

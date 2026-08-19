@@ -1,5 +1,36 @@
 @use '../../styles/colors' as colors;
 
+div.tabs-root {
+    display: flex;
+
+    &.horizontal {
+        flex-direction: column;
+    }
+
+    &.vertical {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 24px;
+
+        div.tabs {
+            flex-direction: column;
+            flex-wrap: nowrap;
+            flex: none;
+            width: fit-content;
+            margin-bottom: 0;
+
+            button {
+                flex: none;
+            }
+        }
+
+        div.tabs-content {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+    }
+}
+
 div.tabs {
     display: flex;
     flex-wrap: wrap;
@@ -30,6 +61,16 @@ div.tabs {
 }
 
 @media screen and (max-width: 768px) {
+    div.tabs-root.vertical {
+        flex-direction: column;
+
+        div.tabs {
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+    }
+
     div.tabs {
         flex-direction: column;
         gap: 16px !important;

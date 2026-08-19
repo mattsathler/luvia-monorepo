@@ -142,7 +142,7 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
 
                                 <LuvStepperStep step="appearance">
                                     <div className="d-flex flex-col flex-1-1 h-full">
-                                        <Tabs>
+                                        <Tabs orientation="vertical">
                                             <Tab title="Corpo" icon={<LuvIcon name="body" />} color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="body_types"

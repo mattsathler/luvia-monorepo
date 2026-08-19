@@ -6,9 +6,11 @@ type TabsProps = {
   children?: ReactElement<TabProps> | ReactElement<TabProps>[];
   /** Cor utilitária padrão (ex.: "primary", "game-teal") para abas que não definem a própria `color`. */
   defaultColor?: string;
+  /** "horizontal" (padrão): abas numa linha, acima do conteúdo. "vertical": abas numa coluna, ao lado do conteúdo. */
+  orientation?: "horizontal" | "vertical";
 };
 
-export function Tabs({ children, defaultColor = "primary" }: TabsProps) {
+export function Tabs({ children, defaultColor = "primary", orientation = "horizontal" }: TabsProps) {
   const [active, setActive] = useState<string>(children && Array.isArray(children) ? children[0].props.title : children?.props.title || "");
 
   const childrenArray = React.Children.toArray(children) as ReactElement<TabProps>[];
@@ -18,7 +20,7 @@ export function Tabs({ children, defaultColor = "primary" }: TabsProps) {
   };
 
   return (
-    <>
+    <div className={`tabs-root ${orientation}`}>
       <div className="tabs" >
         {
           childrenArray.map((child) => (
@@ -44,6 +46,6 @@ export function Tabs({ children, defaultColor = "primary" }: TabsProps) {
           )
         }
       </div>
-    </>
+    </div>
   );
 }

@@ -52,4 +52,28 @@ describe("Tabs", () => {
         expect(button).toContainElement(screen.getByTestId("icon"));
         expect(button).not.toHaveTextContent("Corpo");
     });
+
+    it("defaults to horizontal orientation", () => {
+        const { container } = render(
+            <Tabs>
+                <Tab title="First">First content</Tab>
+            </Tabs>
+        );
+
+        const root = container.querySelector(".tabs-root");
+        expect(root).toHaveClass("horizontal");
+        expect(root).not.toHaveClass("vertical");
+    });
+
+    it("applies the vertical orientation class", () => {
+        const { container } = render(
+            <Tabs orientation="vertical">
+                <Tab title="First">First content</Tab>
+            </Tabs>
+        );
+
+        const root = container.querySelector(".tabs-root");
+        expect(root).toHaveClass("vertical");
+        expect(root).not.toHaveClass("horizontal");
+    });
 });

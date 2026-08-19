@@ -10,5 +10,5 @@ export type TabProps = {
 };
 
 export function Tab({ children }: TabProps) {
-    return <div className="tab">{children}</div>;
+    return <div className="tab h-full">{children}</div>;
 }

@@ -12,7 +12,7 @@ export function ThumbnailOption({ id, previewSrc, isSelected, onSelect }: Thumbn
     return (
         <button
             type="button"
-            className={isSelected ? "game-cyan hidden max-h-none w-full border-16" : "outline hidden border max-h-none w-full border-16"}
+            className={isSelected ? "game-cyan hidden min-h-full min-w-full border-16" : "outline hidden border min-h-full min-w-full border-16"}
             aria-pressed={isSelected}
             aria-label={id}
             onClick={onSelect}
