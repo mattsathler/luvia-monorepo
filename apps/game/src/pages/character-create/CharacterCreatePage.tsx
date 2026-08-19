@@ -143,49 +143,49 @@ function CharacterCreatePageContent({ accessToken, onCharacterCreated, onCancel 
                                 <LuvStepperStep step="appearance">
                                     <div className="d-flex flex-col flex-1-1 h-full">
                                         <Tabs>
-                                            <Tab title="Corpo" color="game-cyan">
+                                            <Tab title="Corpo" icon={<LuvIcon name="body" />} color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="body_types"
                                                     selectedId={skinToneId}
                                                     onSelect={setSkinToneId}
                                                 />
                                             </Tab>
-                                            <Tab title="Rosto" color="game-cyan">
+                                            <Tab title="Rosto" icon={<LuvIcon name="face" />} color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="faces"
                                                     selectedId={faceId}
                                                     onSelect={setFaceId}
                                                 />
                                             </Tab>
-                                            <Tab title="Cabelo" color="game-cyan">
+                                            <Tab title="Cabelo" icon={<LuvIcon name="hair" />} color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="hair_types"
                                                     selectedId={hairType}
                                                     onSelect={setHairType}
                                                 />
                                             </Tab>
-                                            <Tab title="Calça" color="game-cyan">
+                                            <Tab title="Calça" icon={<LuvIcon name="pants" />} color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="pants"
                                                     selectedId={pantsId}
                                                     onSelect={setPantsId}
                                                 />
                                             </Tab>
-                                            <Tab title="Blusa" color="game-cyan">
+                                            <Tab title="Blusa" icon={<LuvIcon name="blouse" />} color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="tops"
                                                     selectedId={topId}
                                                     onSelect={setTopId}
                                                 />
                                             </Tab>
-                                            <Tab title="Sobreposição" color="game-cyan">
+                                            <Tab title="Sobreposição" icon={<LuvIcon name="overlay" />} color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="overlays"
                                                     selectedId={overlayId}
                                                     onSelect={setOverlayId}
                                                 />
                                             </Tab>
-                                            <Tab title="Sapato" color="game-cyan">
+                                            <Tab title="Sapato" icon={<LuvIcon name="shoes" />} color="game-cyan">
                                                 <LayerOptionPicker
                                                     category="shoes"
                                                     selectedId={shoesId}

@@ -1,12 +1,6 @@
 import React, { useState, type ReactElement } from "react";
 import './Tabs.scss';
-import { Tab } from "./Tab";
-
-type TabProps = {
-  title: string;
-  color?: string;
-  children?: React.ReactNode;
-};
+import { Tab, type TabProps } from "./Tab";
 
 type TabsProps = {
   children?: ReactElement<TabProps> | ReactElement<TabProps>[];
@@ -33,8 +27,9 @@ export function Tabs({ children, defaultColor = "primary" }: TabsProps) {
               type="button"
               onClick={() => select(child.props.title)}
               className={child.props.title === active ? `active bg-${child.props.color ?? defaultColor}` : ""}
+              aria-label={child.props.icon ? child.props.title : undefined}
             >
-              {child.props.title}
+              {child.props.icon ?? child.props.title}
             </button>
           ))
         }

@@ -11,9 +11,15 @@ import {
     type SkinTone,
 } from "../../lib/api";
 
-// "male"/"female" têm ícone dedicado no Material Icons; "other" não tem um
-// símbolo universal equivalente, então continua mostrando o rótulo em texto.
-export const GENDER_OPTIONS: { value: Gender; label: string; icon?: string; color: string }[] = [
+// "male"/"female" têm ícone dedicado (nome de um svg do luv-icons, ver
+// LuvIcon); "other" não tem um símbolo universal equivalente, então
+// continua mostrando o rótulo em texto.
+export const GENDER_OPTIONS: {
+    value: Gender;
+    label: string;
+    icon?: string;
+    color: string;
+}[] = [
     { value: "male", label: "Masculino", icon: "male", color: "blue" },
     { value: "female", label: "Feminino", icon: "female", color: "pink" },
     { value: "other", label: "Outro", color: "gray" },

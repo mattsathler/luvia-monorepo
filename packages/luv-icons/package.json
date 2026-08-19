@@ -1,5 +1,5 @@
 {
-  "name": "luv-ui",
+  "name": "luv-icons",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -13,13 +13,12 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./styles.css": "./dist/index.css"
+    }
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "src/**/*.svg"
   ],
   "scripts": {
     "dev": "vite",
@@ -29,18 +28,7 @@
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage"
   },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
     "vitest": "^4.1.10"
-  },
-  "dependencies": {
-    "material-icons": "^1.13.14",
-    "luv-icons": "*"
   }
 }

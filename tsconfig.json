@@ -5,6 +5,9 @@
       "path": "./packages/luv-ui"
     },
     {
+      "path": "./packages/luv-icons"
+    },
+    {
       "path": "./apps/docs"
     },
     {
