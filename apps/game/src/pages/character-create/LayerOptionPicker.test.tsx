@@ -8,10 +8,6 @@ vi.mock("../../lib/character-assets", () => ({
     getLayerAssets: vi.fn(),
 }));
 
-vi.mock("../../lib/useTrimmedImage", () => ({
-    useTrimmedImage: (src: string) => src,
-}));
-
 describe("LayerOptionPicker", () => {
     const onSelect = vi.fn();
 
@@ -31,8 +27,8 @@ describe("LayerOptionPicker", () => {
 
     it("renders one thumbnail per available option", () => {
         (getLayerAssets as ReturnType<typeof vi.fn>).mockReturnValue([
-            { id: "0", src: "hair-0.png" },
-            { id: "1", src: "hair-1.png" },
+            { id: "0", src: "hair-0.png", previewSrc: "hair-0_preview.png" },
+            { id: "1", src: "hair-1.png", previewSrc: "hair-1_preview.png" },
         ]);
 
         render(<LayerOptionPicker category="hair_types" selectedId="0" onSelect={onSelect} />);
@@ -43,8 +39,8 @@ describe("LayerOptionPicker", () => {
 
     it("calls onSelect with the clicked option's id", async () => {
         (getLayerAssets as ReturnType<typeof vi.fn>).mockReturnValue([
-            { id: "0", src: "hair-0.png" },
-            { id: "1", src: "hair-1.png" },
+            { id: "0", src: "hair-0.png", previewSrc: "hair-0_preview.png" },
+            { id: "1", src: "hair-1.png", previewSrc: "hair-1_preview.png" },
         ]);
         const user = userEvent.setup();
 

@@ -9,15 +9,20 @@ describe("character-assets", () => {
         expect(assets.every((asset) => typeof asset.src === "string" && asset.src.length > 0)).toBe(true);
     });
 
-    it("lists a single option for faces, pants, shoes and tops", () => {
-        expect(getLayerAssets("faces").map((asset) => asset.id)).toEqual(["0"]);
-        expect(getLayerAssets("pants").map((asset) => asset.id)).toEqual(["0"]);
+    it("lists two options for faces, tops, pants and overlays", () => {
+        expect(getLayerAssets("faces").map((asset) => asset.id)).toEqual(["0", "1"]);
+        expect(getLayerAssets("tops").map((asset) => asset.id)).toEqual(["0", "1"]);
+        expect(getLayerAssets("pants").map((asset) => asset.id)).toEqual(["0", "1"]);
+        expect(getLayerAssets("overlays").map((asset) => asset.id)).toEqual(["0", "1"]);
+    });
+
+    it("lists a single option for hair_types and shoes", () => {
+        expect(getLayerAssets("hair_types").map((asset) => asset.id)).toEqual(["0"]);
         expect(getLayerAssets("shoes").map((asset) => asset.id)).toEqual(["0"]);
-        expect(getLayerAssets("tops").map((asset) => asset.id)).toEqual(["0"]);
     });
 
     it("returns an empty list for a category with no assets yet", () => {
-        expect(getLayerAssets("hair_types")).toEqual([]);
+        expect(getLayerAssets("accessory")).toEqual([]);
     });
 
     it("resolves the src of a known id within a category", () => {
@@ -28,6 +33,26 @@ describe("character-assets", () => {
 
     it("returns undefined for an unknown id or category", () => {
         expect(getLayerSrc("body_types", "99")).toBeUndefined();
-        expect(getLayerSrc("hair_types", "0")).toBeUndefined();
+        expect(getLayerSrc("accessory", "0")).toBeUndefined();
+    });
+
+    it("gives every asset a previewSrc distinct from its src (every asset today has a dedicated preview)", () => {
+        for (const category of ["body_types", "faces", "tops", "pants", "hair_types", "shoes", "overlays"]) {
+            for (const asset of getLayerAssets(category)) {
+                expect(typeof asset.previewSrc).toBe("string");
+                expect(asset.previewSrc.length).toBeGreaterThan(0);
+                expect(asset.previewSrc).not.toBe(asset.src);
+            }
+        }
+    });
+
+    it("uses a dedicated (different) preview for the 'remove this piece' slot of optional layers", () => {
+        const [noHair] = getLayerAssets("hair_types");
+        const [noShoes] = getLayerAssets("shoes");
+        const [noOverlay] = getLayerAssets("overlays");
+
+        expect(noHair.previewSrc).not.toBe(noHair.src);
+        expect(noShoes.previewSrc).not.toBe(noShoes.src);
+        expect(noOverlay.previewSrc).not.toBe(noOverlay.src);
     });
 });

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { composeAndTrimLayers, trimTransparentPadding } from "./image-trim";
+import { composeAndTrimLayers } from "./image-trim";
 
 class FakeImage {
     naturalWidth: number;
@@ -58,86 +58,6 @@ function stubCanvases(canvases: ReturnType<typeof fakeCanvas>[]) {
         return realCreateElement(tag);
     }) as typeof document.createElement);
 }
-
-describe("trimTransparentPadding", () => {
-    afterEach(() => {
-        vi.restoreAllMocks();
-        vi.unstubAllGlobals();
-    });
-
-    it("crops to the bounding box of the non-transparent pixels", async () => {
-        // Pontos escolhidos para exercitar os quatro ramos de comparação do
-        // bounding box (x/y menor que o mínimo, x/y maior que o máximo) tanto
-        // no caminho verdadeiro quanto no falso, na ordem de varredura
-        // (linha a linha, esquerda pra direita): (2,1) então (3,1) então (1,2).
-        const width = 4;
-        const height = 4;
-        const data = new Uint8ClampedArray(width * height * 4);
-        const setAlpha = (x: number, y: number, alpha: number) => {
-            data[(y * width + x) * 4 + 3] = alpha;
-        };
-        setAlpha(2, 1, 255);
-        setAlpha(3, 1, 255);
-        setAlpha(1, 2, 255);
-
-        stubImages([new FakeImage(width, height)]);
-
-        const sourceContext = fakeContext({ data, width, height });
-        const sourceCanvas = fakeCanvas(sourceContext);
-        const trimmedContext = fakeContext({ data, width, height });
-        const trimmedCanvas = fakeCanvas(trimmedContext);
-        stubCanvases([sourceCanvas, trimmedCanvas]);
-
-        const result = await trimTransparentPadding("body.png");
-
-        expect(trimmedCanvas.width).toBe(3);
-        expect(trimmedCanvas.height).toBe(2);
-        expect(trimmedContext.drawImage).toHaveBeenCalledWith(sourceCanvas, 1, 1, 3, 2, 0, 0, 3, 2);
-        expect(result).toBe("data:image/png;base64,trimmed");
-    });
-
-    it("returns the original src when the image is fully transparent", async () => {
-        const width = 2;
-        const height = 2;
-        const data = new Uint8ClampedArray(width * height * 4);
-
-        stubImages([new FakeImage(width, height)]);
-        stubCanvases([fakeCanvas(fakeContext({ data, width, height }))]);
-
-        const result = await trimTransparentPadding("blank.png");
-
-        expect(result).toBe("blank.png");
-    });
-
-    it("returns the original src when a 2d context is unavailable", async () => {
-        stubImages([new FakeImage(2, 2)]);
-        stubCanvases([fakeCanvas(null)]);
-
-        const result = await trimTransparentPadding("body.png");
-
-        expect(result).toBe("body.png");
-    });
-
-    it("returns the original src when the trimmed canvas has no 2d context", async () => {
-        const width = 2;
-        const height = 2;
-        const data = new Uint8ClampedArray(width * height * 4);
-        data[3] = 255; // opaque pixel at (0,0)
-
-        stubImages([new FakeImage(width, height)]);
-        stubCanvases([fakeCanvas(fakeContext({ data, width, height })), fakeCanvas(null)]);
-
-        const result = await trimTransparentPadding("body.png");
-
-        expect(result).toBe("body.png");
-    });
-
-    it("rejects when the image fails to load", async () => {
-        stubImages([new FakeImage(2, 2, true)]);
-
-        await expect(trimTransparentPadding("missing.png")).rejects.toThrow("Failed to load image: missing.png");
-    });
-});
 
 describe("composeAndTrimLayers", () => {
     afterEach(() => {

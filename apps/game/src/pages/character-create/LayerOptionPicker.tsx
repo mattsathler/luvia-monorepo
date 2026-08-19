@@ -23,7 +23,7 @@ export function LayerOptionPicker({ category, selectedId, onSelect }: LayerOptio
                         <ThumbnailOption
                             key={asset.id}
                             id={asset.id}
-                            imageSrc={asset.src}
+                            previewSrc={asset.previewSrc}
                             isSelected={selectedId === asset.id}
                             onSelect={() => onSelect(asset.id)}
                         />

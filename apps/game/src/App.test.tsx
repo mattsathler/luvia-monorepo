@@ -45,10 +45,6 @@ vi.mock("./lib/api", async (importOriginal) => {
     };
 });
 
-vi.mock("./lib/useTrimmedImage", () => ({
-    useTrimmedImage: (src: string) => src,
-}));
-
 vi.mock("./lib/useComposedCharacterPreview", () => ({
     useComposedCharacterPreview: () => null,
 }));

@@ -51,36 +51,6 @@ function cropToBoundingBox(source: HTMLCanvasElement, box: BoundingBox): string 
 }
 
 /**
- * Recorta a blank area transparente ao redor do conteúdo de um PNG de peça
- * de personagem — ver docs/decisions/0020-assets-de-personagem-em-canvas-fixo-com-blank-area.md.
- * Cada peça é exportada num canvas fixo bem maior que o desenho em si (para
- * que as camadas se alinhem ao empilhar), o que deixa uma miniatura isolada
- * (ex.: swatch de tom de pele) com a maior parte do espaço vazia. Não usar
- * isto para compor camadas sobrepostas — o recorte quebra o alinhamento
- * entre elas; para isso ver `composeAndTrimLayers`.
- */
-export async function trimTransparentPadding(src: string): Promise<string> {
-    const image = await loadImage(src);
-    const canvas = document.createElement("canvas");
-    canvas.width = image.naturalWidth;
-    canvas.height = image.naturalHeight;
-
-    const context = canvas.getContext("2d");
-    if (!context) {
-        return src;
-    }
-
-    context.drawImage(image, 0, 0);
-
-    const box = contentBoundingBox(context, canvas.width, canvas.height);
-    if (!box) {
-        return src;
-    }
-
-    return cropToBoundingBox(canvas, box) ?? src;
-}
-
-/**
  * Empilha várias peças (na ordem dada, de baixo para cima) num único canvas
  * e recorta o resultado para a blank area do conjunto — como todas as peças
  * nascem no mesmo canvas fixo (ver docs/decisions/0020-...), desenhá-las
