@@ -16,6 +16,7 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 4. [[planos/04-personalizacao-de-lote]]
 5. [[planos/05-evolucao-do-lote]]
 6. [[planos/06-interacao-com-a-metropole]]
+7. [[planos/07-lowys-carregamento-em-chunks]]
 
 ## Escopo
 

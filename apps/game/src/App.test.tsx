@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import * as api from "./lib/api";
 import { clearStoredToken, setStoredToken } from "./auth/token-storage";
@@ -43,6 +43,7 @@ vi.mock("./lib/api", async (importOriginal) => {
         updateAppearance: vi.fn(),
         getCharacterLot: vi.fn(),
         getCity: vi.fn(),
+        getCityChunk: vi.fn(),
     };
 });
 
@@ -50,10 +51,30 @@ vi.mock("./lib/useComposedCharacterPreview", () => ({
     useComposedCharacterPreview: () => null,
 }));
 
+// LOWYS (CityGrid) usa IntersectionObserver, que o jsdom não implementa —
+// este fake reporta toda região como visível na hora, então os testes de
+// App (que só querem confirmar que a navegação chega numa cidade
+// funcionando, não testar o próprio mecanismo de chunk) não precisam
+// simular scroll. O mecanismo em si tem cobertura própria em CityGrid.test.tsx.
+class AutoIntersectionObserver {
+    callback: IntersectionObserverCallback;
+
+    constructor(callback: IntersectionObserverCallback) {
+        this.callback = callback;
+    }
+
+    observe(target: Element) {
+        this.callback([{ target, isIntersecting: true } as IntersectionObserverEntry], this as unknown as IntersectionObserver);
+    }
+    unobserve() {}
+    disconnect() {}
+}
+
 describe("App", () => {
     beforeEach(() => {
         clearStoredToken();
         vi.clearAllMocks();
+        vi.stubGlobal("IntersectionObserver", AutoIntersectionObserver);
         window.history.pushState(null, "", "/");
         (api.getCharacterLot as ReturnType<typeof vi.fn>).mockResolvedValue({
             id: "lot-1",
@@ -62,12 +83,15 @@ describe("App", () => {
             x: 0,
             y: 0,
         });
-        (api.getCity as ReturnType<typeof vi.fn>).mockResolvedValue({
-            width: 1,
-            height: 1,
+        (api.getCity as ReturnType<typeof vi.fn>).mockResolvedValue({ width: 1, height: 1 });
+        (api.getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
             tiles: [{ x: 0, y: 0, type: "grass" }],
             lots: [{ id: "lot-1", characterId: CHARACTER.id, type: "residential", x: 0, y: 0 }],
         });
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
     });
 
     it("shows the login page when there is no session", async () => {

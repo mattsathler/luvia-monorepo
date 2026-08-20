@@ -1,4 +1,4 @@
-import { IsoGrid } from "luv-ui";
+import { CityGrid } from "./CityGrid";
 import type { Character } from "../../lib/api";
 import { CITY_TILE_SIZE, isTileClickable, useHomePageController } from "./HomePage.controller";
 
@@ -9,7 +9,7 @@ type HomePageProps = {
 // O mapa ocupa a tela inteira — qualquer UI futura (HUD, painéis) fica
 // sobreposta a ele, como num jogo, em vez de empurrar o mapa pra baixo.
 export function HomePage({ character }: HomePageProps) {
-    const { tiles, loadError, handleTileClick } = useHomePageController({ character });
+    const { dimensions, loadError, handleTileClick, accessToken } = useHomePageController({ character });
 
     return (
         <div className="w-full h-screen">
@@ -21,14 +21,21 @@ export function HomePage({ character }: HomePageProps) {
                 </div>
             )}
 
-            {!tiles && !loadError && (
+            {!dimensions && !loadError && (
                 <div className="d-flex items-center justify-center w-full h-full">
                     <p className="text-text">Carregando cidade...</p>
                 </div>
             )}
 
-            {tiles && (
-                <IsoGrid tiles={tiles} tileSize={CITY_TILE_SIZE} onTileClick={handleTileClick} isTileClickable={isTileClickable} />
+            {dimensions && accessToken && (
+                <CityGrid
+                    dimensions={dimensions}
+                    tileSize={CITY_TILE_SIZE}
+                    accessToken={accessToken}
+                    characterId={character.id}
+                    onTileClick={handleTileClick}
+                    isTileClickable={isTileClickable}
+                />
             )}
         </div>
     );

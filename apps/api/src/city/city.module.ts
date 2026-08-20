@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GetCharacterLotUseCase } from './application/use-cases/get-character-lot.use-case';
+import { GetCityChunkUseCase } from './application/use-cases/get-city-chunk.use-case';
 import { GetCityUseCase } from './application/use-cases/get-city.use-case';
 import { GetOrGenerateCityMapUseCase } from './application/use-cases/get-or-generate-city-map.use-case';
 import { CITY_MAP_REPOSITORY } from './domain/repositories/city-map.repository';
@@ -21,6 +22,7 @@ import { CityController } from './presentation/city.controller';
   controllers: [CityController],
   providers: [
     GetCityUseCase,
+    GetCityChunkUseCase,
     GetCharacterLotUseCase,
     GetOrGenerateCityMapUseCase,
     { provide: LOT_REPOSITORY, useClass: LotMongoRepository },

@@ -191,12 +191,27 @@ export type TerrainTile = {
 export type City = {
     width: number;
     height: number;
+};
+
+export type CityChunk = {
     tiles: TerrainTile[];
     lots: Lot[];
 };
 
+// Ver docs/technical/lowys-carregamento-em-chunks.md — GET /city só devolve
+// as dimensões da grade; terreno e lotes são pedidos por chunk sob demanda.
 export async function getCity(accessToken: string): Promise<City> {
     const response = await authFetch("/city", accessToken);
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
+export async function getCityChunk(accessToken: string, chunkX: number, chunkY: number): Promise<CityChunk> {
+    const response = await authFetch(`/city/chunks/${chunkX}/${chunkY}`, accessToken);
 
     if (!response.ok) {
         throw new ApiError(await parseErrorMessage(response));

@@ -1,0 +1,180 @@
+import { useEffect, useMemo, useRef } from "react";
+import { Block, TILE_TYPES } from "luv-ui";
+import type { TileData } from "luv-ui";
+import { CHUNK_SIZE, useCityGridController } from "./CityGrid.controller";
+
+/** ~1 chunk de buffer em todas as direções — ver docs/technical/lowys-carregamento-em-chunks.md. */
+const PREFETCH_MARGIN = "640px";
+
+function isoCornersBoundingBox(corners: { x: number; y: number }[], size: number) {
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+
+    corners.forEach(({ x, y }) => {
+        const isoX = (x - y) * (size / 2);
+        const isoY = (x + y) * (size / 4);
+        minX = Math.min(minX, isoX);
+        maxX = Math.max(maxX, isoX);
+        minY = Math.min(minY, isoY);
+        maxY = Math.max(maxY, isoY);
+    });
+
+    return { minX, maxX, minY, maxY };
+}
+
+/**
+ * Mesma fórmula de IsoGrid#getIsoBounds (packages/luv-ui), só que calculada
+ * a partir dos 4 cantos da grade em vez de escanear todos os tiles — LOWYS
+ * não busca a cidade inteira, só sabe as dimensões (ver CityGrid.controller.ts).
+ */
+function getGridIsoBounds(width: number, height: number, size: number) {
+    const { minX, maxX, minY, maxY } = isoCornersBoundingBox(
+        [
+            { x: 0, y: 0 },
+            { x: width - 1, y: 0 },
+            { x: 0, y: height - 1 },
+            { x: width - 1, y: height - 1 },
+        ],
+        size,
+    );
+
+    return {
+        width: maxX - minX + size,
+        height: maxY - minY + size,
+        offsetX: -minX,
+        offsetY: -minY + size * 2,
+    };
+}
+
+/** Retângulo (em pixels, mesmo espaço de coordenadas dos tiles) que envolve um chunk. */
+function getChunkPixelBox(chunkX: number, chunkY: number, gridWidth: number, gridHeight: number, size: number) {
+    const minTileX = chunkX * CHUNK_SIZE;
+    const minTileY = chunkY * CHUNK_SIZE;
+    const maxTileX = Math.min(minTileX + CHUNK_SIZE, gridWidth) - 1;
+    const maxTileY = Math.min(minTileY + CHUNK_SIZE, gridHeight) - 1;
+
+    const { minX, maxX, minY, maxY } = isoCornersBoundingBox(
+        [
+            { x: minTileX, y: minTileY },
+            { x: maxTileX, y: minTileY },
+            { x: minTileX, y: maxTileY },
+            { x: maxTileX, y: maxTileY },
+        ],
+        size,
+    );
+
+    return { left: minX, top: minY, width: maxX - minX + size, height: maxY - minY + size };
+}
+
+type CityGridProps = {
+    dimensions: { width: number; height: number };
+    tileSize: number;
+    accessToken: string;
+    characterId: string;
+    onTileClick?: (tile: TileData) => void;
+    isTileClickable?: (tile: TileData) => boolean;
+};
+
+/**
+ * LOWYS (Load Only What You See) — ver docs/technical/lowys-carregamento-em-chunks.md.
+ * Um placeholder por chunk cobre a grade inteira desde o início (pra a área
+ * de scroll ter o tamanho certo); um `IntersectionObserver` compartilhado
+ * decide quais chunks estão visíveis (+ margem) e só esses têm seus tiles
+ * de verdade montados como `Block` — os demais ficam só como placeholder,
+ * mas seus dados continuam em cache (ver CityGrid.controller.ts).
+ */
+export function CityGrid({ dimensions, tileSize, accessToken, characterId, onTileClick, isTileClickable }: CityGridProps) {
+    const { chunkCoords, tiles, onChunkEnter, onChunkLeave } = useCityGridController({
+        dimensions,
+        accessToken,
+        characterId,
+    });
+
+    const containerRef = useRef<HTMLDivElement>(null);
+    const placeholderRefs = useRef(new Map<string, HTMLDivElement>());
+
+    const bounds = useMemo(
+        () => getGridIsoBounds(dimensions.width, dimensions.height, tileSize),
+        [dimensions.width, dimensions.height, tileSize],
+    );
+
+    useEffect(() => {
+        // O ref já está anexado ao `<div>` quando este efeito roda (React
+        // sempre comita refs antes de disparar effects) — a asserção evita
+        // simular em teste um branch que não acontece de verdade.
+        const container = containerRef.current!;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const chunkX = Number(entry.target.getAttribute("data-chunk-x"));
+                    const chunkY = Number(entry.target.getAttribute("data-chunk-y"));
+
+                    if (entry.isIntersecting) {
+                        onChunkEnter(chunkX, chunkY);
+                    } else {
+                        onChunkLeave(chunkX, chunkY);
+                    }
+                });
+            },
+            { root: container, rootMargin: PREFETCH_MARGIN },
+        );
+
+        placeholderRefs.current.forEach((element) => observer.observe(element));
+
+        return () => observer.disconnect();
+    }, [chunkCoords, onChunkEnter, onChunkLeave]);
+
+    return (
+        <div ref={containerRef} className="iso-grid scroll-auto h-full w-full">
+            <div
+                className="iso-inner"
+                style={{
+                    marginLeft: `${bounds.offsetX * 2}px`,
+                    marginTop: `${bounds.offsetY}px`,
+                    width: bounds.width,
+                    height: bounds.height,
+                    position: "relative",
+                }}
+            >
+                {chunkCoords.map(({ chunkX, chunkY }) => {
+                    const box = getChunkPixelBox(chunkX, chunkY, dimensions.width, dimensions.height, tileSize);
+                    const key = `${chunkX}:${chunkY}`;
+
+                    return (
+                        <div
+                            key={key}
+                            ref={(element) => {
+                                if (element) {
+                                    placeholderRefs.current.set(key, element);
+                                } else {
+                                    placeholderRefs.current.delete(key);
+                                }
+                            }}
+                            data-chunk-x={chunkX}
+                            data-chunk-y={chunkY}
+                            style={{ position: "absolute", left: box.left, top: box.top, width: box.width, height: box.height }}
+                        />
+                    );
+                })}
+
+                {tiles.map((tile) => {
+                    const clickable = Boolean(onTileClick) && (!isTileClickable || isTileClickable(tile));
+
+                    return (
+                        <Block
+                            key={`${tile.x}:${tile.y}`}
+                            {...tile}
+                            size={tileSize}
+                            color={TILE_TYPES[tile.type as keyof typeof TILE_TYPES]?.color}
+                            texture={TILE_TYPES[tile.type as keyof typeof TILE_TYPES]?.texture}
+                            onClick={clickable ? () => onTileClick!(tile) : undefined}
+                        />
+                    );
+                })}
+            </div>
+        </div>
+    );
+}

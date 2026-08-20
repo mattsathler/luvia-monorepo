@@ -6,6 +6,7 @@ import {
     createCharacter,
     getCharacterLot,
     getCity,
+    getCityChunk,
     listMyCharacters,
     listSkills,
     login,
@@ -261,13 +262,8 @@ describe("getCity", () => {
         vi.unstubAllGlobals();
     });
 
-    it("returns the city dimensions and lots on success", async () => {
-        const body = {
-            width: 40,
-            height: 40,
-            tiles: [{ x: 0, y: 0, type: "ocean" }],
-            lots: [{ id: "lot-1", characterId: "char-1", type: "residential", x: 0, y: 0 }],
-        };
+    it("returns the city dimensions on success", async () => {
+        const body = { width: 40, height: 40 };
         const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
         vi.stubGlobal("fetch", fetchMock);
 
@@ -281,6 +277,32 @@ describe("getCity", () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(500, { message: "Erro ao carregar a cidade" })));
 
         await expect(getCity("token-123")).rejects.toThrow("Erro ao carregar a cidade");
+    });
+});
+
+describe("getCityChunk", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("returns the chunk's tiles and lots on success", async () => {
+        const body = {
+            tiles: [{ x: 0, y: 0, type: "grass" }],
+            lots: [{ id: "lot-1", characterId: "char-1", type: "residential", x: 0, y: 0 }],
+        };
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
+        vi.stubGlobal("fetch", fetchMock);
+
+        const result = await getCityChunk("token-123", 1, 2);
+
+        expect(result).toEqual(body);
+        expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/city/chunks/1/2"), expect.anything());
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(500, { message: "Erro ao carregar o chunk" })));
+
+        await expect(getCityChunk("token-123", 0, 0)).rejects.toThrow("Erro ao carregar o chunk");
     });
 });
 

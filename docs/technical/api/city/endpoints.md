@@ -34,28 +34,44 @@ Todas as rotas exigem autenticação (`Authorization: Bearer <token>`).
 
 ## `GET /city`
 
-Retorna a grade da cidade inteira — dimensões, o terreno completo (ruas, água, pontos de interesse etc.) e todo lote já reivindicado. Ver [[../../../decisions/0005-cidade-unica-persistente]]: existe apenas uma cidade, então esta rota não recebe nenhum id.
+Retorna só as **dimensões** da grade. Ver [[../../../decisions/0005-cidade-unica-persistente]]: existe apenas uma cidade, então esta rota não recebe nenhum id.
+
+Desde [[../../../technical/lowys-carregamento-em-chunks]] (LOWYS), este endpoint **não** devolve mais `tiles`/`lots` — isso agora é `GET /city/chunks/:x/:y`, pedido sob demanda por região conforme o jogador rola a tela. `GET /city` serve só pra saber o tamanho total da grade (necessário pra calcular quantos chunks existem e dimensionar a área de scroll no frontend).
+
+**Resposta (200):**
+
+```json
+{ "width": 40, "height": 40 }
+```
+
+**Pontos de importância:**
+
+- Qualquer conta autenticada pode chamar.
+- Chamado uma vez, não em loop — o resultado não muda depois que o terreno já foi gerado (ver [[../../../decisions/0026-terreno-da-cidade-gerado-e-persistido]]).
+
+## `GET /city/chunks/:x/:y`
+
+Retorna o terreno e os lotes de um **chunk** — um recorte quadrado de `CHUNK_SIZE` × `CHUNK_SIZE` tiles da grade (`CHUNK_SIZE = 10` — ver [[../../../technical/lowys-carregamento-em-chunks]]). `:x`/`:y` são a **coordenada do chunk**, não do tile — o chunk `(cx, cy)` cobre os tiles `[cx·10, cx·10+10) × [cy·10, cy·10+10)`.
 
 **Resposta (200):**
 
 ```json
 {
-  "width": 40,
-  "height": 40,
   "tiles": [
-    { "x": 0, "y": 0, "type": "ocean" }
+    { "x": 0, "y": 0, "type": "grass" }
   ],
   "lots": [
-    { "id": "uuid", "characterId": "uuid", "type": "residential", "x": 20, "y": 18 }
+    { "id": "uuid", "characterId": "uuid", "type": "residential", "x": 7, "y": 7 }
   ]
 }
 ```
 
 **Pontos de importância:**
 
-- `tiles` sempre tem `width * height` entradas — cobre a grade inteira, terreno gerado uma vez e persistido (não recalculado a cada request; ver [[../../../decisions/0026-terreno-da-cidade-gerado-e-persistido]]).
-- `lots` só contém posições já reivindicadas, sempre sobre um tile `grass` de `tiles` — o frontend sobrepõe a posse por cima do terreno pra destacar o lote do jogador.
-- Qualquer conta autenticada pode chamar — não é restrito a quem é dono de que lote (necessário para renderizar a cidade inteira, não só o próprio lote).
+- Uma coordenada de chunk fora da grade real (ou uma grade menor que `CHUNK_SIZE`, num ambiente de teste por exemplo) devolve `{ "tiles": [], "lots": [] }`, sem erro — sem validação de limite.
+- `lots` só contém as posições já reivindicadas **dentro desse chunk**, sempre sobre um tile `grass` de `tiles` — o frontend sobrepõe a posse por cima do terreno do próprio chunk pra destacar o lote do jogador.
+- Qualquer conta autenticada pode chamar — não é restrito a quem é dono de que lote.
+- Cada chamada busca o documento `city_maps` inteiro e a coleção `lots` inteira do Mongo e filtra em memória pelo chunk pedido — não é uma query por região de verdade. Aceitável na escala atual (uma cidade, pré-lançamento); revisitar se a carga de jogadores concorrentes crescer.
 
 ## `GET /city/lots/:characterId`
 
@@ -82,3 +98,4 @@ Retorna o lote residencial do personagem. Se ele ainda não tiver um, esta leitu
 - [[../../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]
 - [[../../../decisions/0026-terreno-da-cidade-gerado-e-persistido]]
 - [[../../../decisions/0027-cidade-sem-borda-fixa-e-so-com-lagoa]]
+- [[../../../technical/lowys-carregamento-em-chunks]]

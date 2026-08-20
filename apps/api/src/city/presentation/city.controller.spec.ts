@@ -1,15 +1,17 @@
 import { CityController } from './city.controller';
 import { GetCityUseCase } from '../application/use-cases/get-city.use-case';
+import { GetCityChunkUseCase } from '../application/use-cases/get-city-chunk.use-case';
 import { GetCharacterLotUseCase } from '../application/use-cases/get-character-lot.use-case';
 
 describe('CityController', () => {
   function buildController() {
     const getCityUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCityUseCase>;
+    const getCityChunkUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCityChunkUseCase>;
     const getCharacterLotUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCharacterLotUseCase>;
 
-    const controller = new CityController(getCityUseCase, getCharacterLotUseCase);
+    const controller = new CityController(getCityUseCase, getCityChunkUseCase, getCharacterLotUseCase);
 
-    return { controller, getCityUseCase, getCharacterLotUseCase };
+    return { controller, getCityUseCase, getCityChunkUseCase, getCharacterLotUseCase };
   }
 
   it('getCity() delegates to GetCityUseCase', () => {
@@ -20,6 +22,16 @@ describe('CityController', () => {
 
     expect(getCityUseCase.execute).toHaveBeenCalledWith();
     expect(result).resolves.toBe('city');
+  });
+
+  it('getCityChunk() delegates to GetCityChunkUseCase with the parsed chunk coordinates', () => {
+    const { controller, getCityChunkUseCase } = buildController();
+    getCityChunkUseCase.execute.mockResolvedValue('chunk' as never);
+
+    const result = controller.getCityChunk(1, 2);
+
+    expect(getCityChunkUseCase.execute).toHaveBeenCalledWith(1, 2);
+    expect(result).resolves.toBe('chunk');
   });
 
   it('getCharacterLot() delegates to GetCharacterLotUseCase with the characterId param', () => {

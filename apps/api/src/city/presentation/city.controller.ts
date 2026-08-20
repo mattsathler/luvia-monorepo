@@ -1,17 +1,27 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { GetCharacterLotUseCase } from '../application/use-cases/get-character-lot.use-case';
+import { GetCityChunkUseCase } from '../application/use-cases/get-city-chunk.use-case';
 import { GetCityUseCase } from '../application/use-cases/get-city.use-case';
 
 @Controller('city')
 export class CityController {
   constructor(
     private readonly getCityUseCase: GetCityUseCase,
+    private readonly getCityChunkUseCase: GetCityChunkUseCase,
     private readonly getCharacterLotUseCase: GetCharacterLotUseCase,
   ) {}
 
   @Get()
   getCity() {
     return this.getCityUseCase.execute();
+  }
+
+  // Precisa vir antes de `lots/:characterId` só por clareza — os prefixos
+  // ("chunks" vs "lots") já não colidem, mas mantém a ordem espelhando a
+  // convenção de rotas mais específicas primeiro usada em outros controllers.
+  @Get('chunks/:x/:y')
+  getCityChunk(@Param('x', ParseIntPipe) x: number, @Param('y', ParseIntPipe) y: number) {
+    return this.getCityChunkUseCase.execute(x, y);
   }
 
   @Get('lots/:characterId')

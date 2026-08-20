@@ -1,5 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HomePage } from "./HomePage";
 import { useAuth } from "../../auth/AuthContext";
@@ -18,6 +17,15 @@ vi.mock("../../lib/api", async () => {
         getCity: vi.fn(),
     };
 });
+
+// CityGrid tem cobertura própria (chunk cache, IntersectionObserver etc. —
+// ver CityGrid.test.tsx); aqui só interessa que a HomePage passa as props
+// certas depois que a cidade carrega.
+vi.mock("./CityGrid", () => ({
+    CityGrid: (props: Record<string, unknown>) => (
+        <div data-testid="city-grid" data-props={JSON.stringify(props)} />
+    ),
+}));
 
 const CHARACTER: Character = {
     id: "char-1",
@@ -46,39 +54,42 @@ const CHARACTER: Character = {
     },
 };
 
-const CITY: City = {
-    width: 2,
-    height: 1,
-    tiles: [
-        { x: 0, y: 0, type: "grass" },
-        { x: 1, y: 0, type: "road-r" },
-    ],
-    lots: [{ id: "lot-1", characterId: "char-1", type: "residential", x: 0, y: 0 }],
-};
+const CITY: City = { width: 40, height: 40 };
 
 describe("HomePage", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: "token-123" });
-        (getCharacterLot as ReturnType<typeof vi.fn>).mockResolvedValue(CITY.lots[0]);
+        (getCharacterLot as ReturnType<typeof vi.fn>).mockResolvedValue({
+            id: "lot-1",
+            characterId: "char-1",
+            type: "residential",
+            x: 0,
+            y: 0,
+        });
         (getCity as ReturnType<typeof vi.fn>).mockResolvedValue(CITY);
     });
 
-    it("shows a loading state before the city arrives", () => {
+    it("shows a loading state before the city's dimensions arrive", () => {
         render(<HomePage character={CHARACTER} />);
 
         expect(screen.getByText("Carregando cidade...")).toBeInTheDocument();
     });
 
-    it("claims the character's lot before rendering the city grid, filling the whole screen", async () => {
-        const { container } = render(<HomePage character={CHARACTER} />);
+    it("claims the character's lot, then renders CityGrid full-screen with the right props", async () => {
+        render(<HomePage character={CHARACTER} />);
 
-        await waitFor(() => expect(container.querySelectorAll(".tile")).toHaveLength(2));
+        const cityGrid = await screen.findByTestId("city-grid");
 
         expect(getCharacterLot).toHaveBeenCalledWith("token-123", "char-1");
         expect(getCity).toHaveBeenCalledWith("token-123");
         expect(screen.queryByText("Carregando cidade...")).not.toBeInTheDocument();
-        expect(container.querySelector(".h-screen")).toBeInTheDocument();
+
+        const props = JSON.parse(cityGrid.getAttribute("data-props")!);
+        expect(props.dimensions).toEqual(CITY);
+        expect(props.tileSize).toBe(64);
+        expect(props.accessToken).toBe("token-123");
+        expect(props.characterId).toBe("char-1");
     });
 
     it("does not fetch the city when there is no access token", () => {
@@ -96,22 +107,5 @@ describe("HomePage", () => {
         render(<HomePage character={CHARACTER} />);
 
         expect(await screen.findByText("Não foi possível carregar a cidade. Tente novamente.")).toBeInTheDocument();
-    });
-
-    it("makes non-road tiles clickable and reports the clicked tile", async () => {
-        const user = userEvent.setup();
-        const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-        render(<HomePage character={CHARACTER} />);
-
-        // Só o tile de grama (0,0) é clicável — a rua (1,0) fica de fora.
-        const tiles = await screen.findAllByRole("button");
-        expect(tiles).toHaveLength(1);
-
-        await user.click(tiles[0]);
-
-        expect(logSpy).toHaveBeenCalledWith("Tile clicado:", expect.objectContaining({ x: 0, y: 0 }));
-
-        logSpy.mockRestore();
     });
 });
