@@ -12,13 +12,20 @@ describe('generate-city-map.script', () => {
     const { buildCityMapDocument } = await import('./generate-city-map.script');
     const { CityMap } = await import('../domain/entities/city-map.entity');
 
-    const cityMap = new CityMap({ width: 2, height: 1, seed: 'seed-1', tiles: [{ x: 0, y: 0, type: 'grass' }] });
+    const cityMap = new CityMap({
+      width: 2,
+      height: 1,
+      seed: 'seed-1',
+      backgroundColor: '#7bc96f',
+      tiles: [{ x: 0, y: 0, type: 'grass' }],
+    });
 
     expect(buildCityMapDocument(cityMap)).toEqual({
       key: 'default',
       width: 2,
       height: 1,
       seed: 'seed-1',
+      backgroundColor: '#7bc96f',
       tiles: cityMap.tiles,
     });
   });

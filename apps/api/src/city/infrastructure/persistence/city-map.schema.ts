@@ -19,6 +19,10 @@ export class CityMapModel {
   @Prop({ required: true })
   seed!: string;
 
+  /** Hex — ver `city-map.entity.ts#DEFAULT_BACKGROUND_COLOR`. */
+  @Prop({ required: true })
+  backgroundColor!: string;
+
   /**
    * O subcampo `type` precisa ser `{ type: String }` (não `String` direto) —
    * Mongoose reserva a chave `type` num objeto de definição de schema pra

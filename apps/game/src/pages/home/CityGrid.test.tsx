@@ -55,16 +55,24 @@ describe("CityGrid", () => {
 
     it("renders one placeholder per chunk and no tiles before anything intersects", () => {
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
         );
 
         expect(container.querySelectorAll("[data-chunk-x]")).toHaveLength(2);
         expect(container.querySelectorAll(".tile")).toHaveLength(0);
     });
 
+    it("applies the given background color to the scroll container", () => {
+        const { container } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+        );
+
+        expect((container.querySelector(".iso-grid") as HTMLElement).style.backgroundColor).toBe("rgb(123, 201, 111)");
+    });
+
     it("observes with the shared IntersectionObserver rooted at the scroll container", () => {
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
         );
 
         expect(FakeIntersectionObserver.instances).toHaveLength(1);
@@ -81,7 +89,7 @@ describe("CityGrid", () => {
         });
 
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
         );
 
         act(() => FakeIntersectionObserver.instances[0].trigger(targetFor(0, 0), true));
@@ -97,7 +105,7 @@ describe("CityGrid", () => {
         });
 
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
         );
         const observer = FakeIntersectionObserver.instances[0];
         const target = targetFor(0, 0);
@@ -121,7 +129,7 @@ describe("CityGrid", () => {
         }));
 
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
         );
         const observer = FakeIntersectionObserver.instances[0];
 
@@ -149,6 +157,7 @@ describe("CityGrid", () => {
             <CityGrid
                 dimensions={dimensions}
                 tileSize={64}
+                backgroundColor="#7bc96f"
                 accessToken="token-123"
                 characterId="char-1"
                 onTileClick={onTileClick}
@@ -168,7 +177,7 @@ describe("CityGrid", () => {
 
     it("disconnects the observer on unmount", () => {
         const { unmount } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
         );
         const observer = FakeIntersectionObserver.instances[0];
 

@@ -47,6 +47,10 @@ Esse último ponto é o que resolve diretamente o requisito original: descer a v
 
 `packages/luv-ui` (`IsoGrid`/`Block`) não mudou — o LOWYS vive inteiro em `apps/game`, usando `Block`/`TILE_TYPES` (já exportados publicamente) direto. `apps/docs` continua passando o array de tiles inteiro pro `IsoGrid`, sem chunking.
 
+### Tamanho do tile como otimização adicional (zoom)
+
+Tile maior = menos tiles cabem na tela = menos DOM montado por vez, então o tamanho do tile (`tileSize`) é mais uma alavanca da mesma otimização, independente do chunking. `HomePage.controller.ts` já implementa o ajuste (`MIN_TILE_SIZE`/`MAX_TILE_SIZE`/`DEFAULT_TILE_SIZE`/`ZOOM_STEP`, `zoomIn`/`zoomOut`, persistência via `city-zoom-storage.ts`), mas sem UI própria por enquanto — expor esse ajuste pro jogador fica pra um futuro menu de configurações (ver [[../ui-ux/settings-menu]]). Como o cache do LOWYS é indexado por coordenada de chunk (não por pixel), mudar `tileSize` não invalida o cache nem dispara novas buscas.
+
 ### Prédios seguem a mesma regra dos tiles
 
 Qualquer visual mais pesado associado a um lote (fachada personalizada, prédio — ver [[../roadmap/03-cidade-e-lar/planos/04-personalizacao-de-lote]], ainda não implementado) deve ser amarrado ao chunk do tile onde o lote está — monta/desmonta junto com o chunk, sem ciclo de vida próprio. `CityGrid.controller.ts#buildChunkTiles` é o lugar natural pra incluir esse dado quando o lote ganhar personalização de verdade.
@@ -75,3 +79,4 @@ Ainda não definidos (**Pendente** — trade-offs de produto/operação, não de
 - [[api/city/endpoints]]
 - [[../roadmap/03-cidade-e-lar/planos/04-personalizacao-de-lote]]
 - [[../roadmap/03-cidade-e-lar/planos/07-lowys-carregamento-em-chunks]]
+- [[../ui-ux/settings-menu]]

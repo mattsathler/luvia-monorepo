@@ -37,7 +37,7 @@ describe('GetCharacterLotUseCase', () => {
       { x: 1, y: 0, type: 'ocean' },
       { x: 2, y: 0, type: 'grass' },
     ];
-    getOrGenerateCityMapUseCase.execute.mockResolvedValue(new CityMap({ width: 3, height: 1, seed: 'seed', tiles }));
+    getOrGenerateCityMapUseCase.execute.mockResolvedValue(new CityMap({ width: 3, height: 1, seed: 'seed', backgroundColor: '#7bc96f', tiles }));
     lotRepository.findAll.mockResolvedValue([]);
     lotRepository.save.mockImplementation(async (lot) => lot);
 
@@ -54,7 +54,7 @@ describe('GetCharacterLotUseCase', () => {
     const { useCase, lotRepository, getOrGenerateCityMapUseCase } = buildUseCase();
     lotRepository.findByCharacterId.mockResolvedValue(null);
     const tiles: TerrainTile[] = [{ x: 0, y: 0, type: 'grass' }];
-    getOrGenerateCityMapUseCase.execute.mockResolvedValue(new CityMap({ width: 1, height: 1, seed: 'seed', tiles }));
+    getOrGenerateCityMapUseCase.execute.mockResolvedValue(new CityMap({ width: 1, height: 1, seed: 'seed', backgroundColor: '#7bc96f', tiles }));
     lotRepository.findAll.mockResolvedValue([Lot.create({ characterId: 'char-2', type: 'residential', x: 0, y: 0 }, 'lot-2')]);
 
     await expect(useCase.execute('char-1')).rejects.toThrow('A cidade não tem mais posições livres para lotes residenciais.');

@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { HomePage } from "./HomePage";
 import { useAuth } from "../../auth/AuthContext";
 import { getCharacterLot, getCity } from "../../lib/api";
+import { DEFAULT_TILE_SIZE } from "./HomePage.controller";
 import type { Character, City } from "../../lib/api";
 
 vi.mock("../../auth/AuthContext", () => ({
@@ -54,11 +55,12 @@ const CHARACTER: Character = {
     },
 };
 
-const CITY: City = { width: 40, height: 40 };
+const CITY: City = { width: 40, height: 40, backgroundColor: "#7bc96f" };
 
 describe("HomePage", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        localStorage.clear();
         (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: "token-123" });
         (getCharacterLot as ReturnType<typeof vi.fn>).mockResolvedValue({
             id: "lot-1",
@@ -68,6 +70,10 @@ describe("HomePage", () => {
             y: 0,
         });
         (getCity as ReturnType<typeof vi.fn>).mockResolvedValue(CITY);
+    });
+
+    afterEach(() => {
+        localStorage.clear();
     });
 
     it("shows a loading state before the city's dimensions arrive", () => {
@@ -87,7 +93,7 @@ describe("HomePage", () => {
 
         const props = JSON.parse(cityGrid.getAttribute("data-props")!);
         expect(props.dimensions).toEqual(CITY);
-        expect(props.tileSize).toBe(64);
+        expect(props.tileSize).toBe(DEFAULT_TILE_SIZE);
         expect(props.accessToken).toBe("token-123");
         expect(props.characterId).toBe("char-1");
     });

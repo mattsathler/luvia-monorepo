@@ -9,6 +9,7 @@ function cityMapDocument(overrides: Partial<CityMapDocument> = {}): CityMapDocum
     width: 40,
     height: 40,
     seed: 'seed-1',
+    backgroundColor: '#7bc96f',
     tiles: [{ x: 0, y: 0, type: 'grass' }],
     ...overrides,
   } as CityMapDocument;
@@ -19,6 +20,7 @@ function cityMap(overrides: Partial<CityMapProps> = {}): CityMap {
     width: 40,
     height: 40,
     seed: 'seed-1',
+    backgroundColor: '#7bc96f',
     tiles: [{ x: 0, y: 0, type: 'grass' }],
     ...overrides,
   });
@@ -48,7 +50,7 @@ describe('CityMapMongoRepository', () => {
 
     expect(model.findOneAndUpdate).toHaveBeenCalledWith(
       { key: 'default' },
-      { key: 'default', width: 40, height: 40, seed: 'seed-1', tiles: input.tiles },
+      { key: 'default', width: 40, height: 40, seed: 'seed-1', backgroundColor: '#7bc96f', tiles: input.tiles },
       { upsert: true, returnDocument: 'after' },
     );
     expect(result).toBe(input);

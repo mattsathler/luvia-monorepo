@@ -36,4 +36,10 @@ describe('generateCityMap', () => {
 
     expect(tileAt(tiles, 0, 0).type).not.toBe('ocean');
   });
+
+  it('produces no landmark tiles while the landmarks pass is temporarily disabled', () => {
+    const tiles = generateCityMap(WIDTH, HEIGHT, SEED);
+
+    expect(tiles.some((t) => t.type === 'landmark')).toBe(false);
+  });
 });

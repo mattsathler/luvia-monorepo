@@ -191,6 +191,8 @@ export type TerrainTile = {
 export type City = {
     width: number;
     height: number;
+    /** Hex — salvo no doc da cidade (não fixo no front) pra permitir biomas diferentes no futuro (ex.: neve, outono). */
+    backgroundColor: string;
 };
 
 export type CityChunk = {

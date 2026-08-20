@@ -9,13 +9,19 @@ describe('GetCityUseCase', () => {
     return { useCase, getOrGenerateCityMapUseCase };
   }
 
-  it('returns only the city dimensions, not the terrain nor the lots', async () => {
+  it('returns the city dimensions and background color, not the terrain nor the lots', async () => {
     const { useCase, getOrGenerateCityMapUseCase } = buildUseCase();
-    const cityMap = new CityMap({ width: 40, height: 40, seed: 'seed', tiles: [{ x: 0, y: 0, type: 'grass' }] });
+    const cityMap = new CityMap({
+      width: 40,
+      height: 40,
+      seed: 'seed',
+      backgroundColor: '#7bc96f',
+      tiles: [{ x: 0, y: 0, type: 'grass' }],
+    });
     getOrGenerateCityMapUseCase.execute.mockResolvedValue(cityMap);
 
     const result = await useCase.execute();
 
-    expect(result).toEqual({ width: 40, height: 40 });
+    expect(result).toEqual({ width: 40, height: 40, backgroundColor: '#7bc96f' });
   });
 });

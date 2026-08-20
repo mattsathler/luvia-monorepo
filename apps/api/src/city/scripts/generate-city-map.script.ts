@@ -10,11 +10,19 @@ export type CityMapDocument = {
   width: number;
   height: number;
   seed: string;
+  backgroundColor: string;
   tiles: TerrainTile[];
 };
 
 export function buildCityMapDocument(cityMap: CityMap): CityMapDocument {
-  return { key: 'default', width: cityMap.width, height: cityMap.height, seed: cityMap.seed, tiles: cityMap.tiles };
+  return {
+    key: 'default',
+    width: cityMap.width,
+    height: cityMap.height,
+    seed: cityMap.seed,
+    backgroundColor: cityMap.backgroundColor,
+    tiles: cityMap.tiles,
+  };
 }
 
 /**

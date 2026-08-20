@@ -157,6 +157,28 @@ describe("useCityGridController", () => {
         expect(getCityChunk).toHaveBeenCalledWith("token-123", 1, 0);
     });
 
+    it("keeps tiles in back-to-front paint order (x+y ascending) regardless of the order chunks were scrolled into view", async () => {
+        (getCityChunk as ReturnType<typeof vi.fn>).mockImplementation(async (_token, chunkX: number, chunkY: number) => ({
+            tiles: [{ x: chunkX * CHUNK_SIZE, y: chunkY * CHUNK_SIZE, type: "grass" }],
+            lots: [],
+        }));
+
+        const { result } = setup();
+
+        // Chunk (2,0) — mais "à frente" na projeção isométrica (x+y maior)
+        // — entra na tela ANTES do chunk (0,0), simulando o jogador rolando
+        // de baixo pra cima. Sem reordenar, ele seria montado primeiro no
+        // DOM e o chunk (0,0), que deveria ficar atrás, desenharia por cima.
+        act(() => {
+            result.current.onChunkEnter(2, 0);
+            result.current.onChunkEnter(0, 0);
+        });
+
+        await waitFor(() => expect(result.current.tiles).toHaveLength(2));
+
+        expect(result.current.tiles.map((tile) => `${tile.x}:${tile.y}`)).toEqual(["0:0", "20:0"]);
+    });
+
     it("does not cache a chunk when the fetch fails, so a later entry retries it", async () => {
         (getCityChunk as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("network error"));
 

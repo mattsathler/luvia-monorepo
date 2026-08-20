@@ -11,7 +11,7 @@ describe('GetOrGenerateCityMapUseCase', () => {
 
   it('returns the existing map when it matches the current seed/dimensions', async () => {
     const { useCase, cityMapRepository } = buildUseCase();
-    const existing = new CityMap({ width: CITY_WIDTH, height: CITY_HEIGHT, seed: CITY_SEED, tiles: [] });
+    const existing = new CityMap({ width: CITY_WIDTH, height: CITY_HEIGHT, seed: CITY_SEED, backgroundColor: '#7bc96f', tiles: [] });
     cityMapRepository.find.mockResolvedValue(existing);
 
     const result = await useCase.execute();
@@ -34,7 +34,7 @@ describe('GetOrGenerateCityMapUseCase', () => {
 
   it('regenerates when the stored map has a stale seed/dimensions', async () => {
     const { useCase, cityMapRepository } = buildUseCase();
-    const stale = new CityMap({ width: CITY_WIDTH, height: CITY_HEIGHT, seed: 'old-seed', tiles: [] });
+    const stale = new CityMap({ width: CITY_WIDTH, height: CITY_HEIGHT, seed: 'old-seed', backgroundColor: '#7bc96f', tiles: [] });
     cityMapRepository.find.mockResolvedValue(stale);
     cityMapRepository.save.mockImplementation(async (map) => map);
 

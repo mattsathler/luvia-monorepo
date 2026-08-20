@@ -103,6 +103,16 @@ export function useCityGridController({ dimensions, accessToken, characterId }: 
                 result.push(...cached);
             }
         });
+
+        // Ordem de pintura isométrica (fundo pra frente): `mountedKeys` segue
+        // a ordem em que os chunks entraram na tela ao rolar, não a posição
+        // deles na grade — sem reordenar aqui, um chunk montado por último
+        // (ex.: ao rolar de volta pra cima) desenha por cima de tiles que
+        // deveriam ficar atrás dele, incluindo o "lot-mine" do jogador.
+        // `x + y` cresce em direção à parte de baixo da tela (mesma fórmula
+        // de `getGridIsoBounds`/`getChunkPixelBox` em CityGrid.tsx).
+        result.sort((a, b) => a.x + a.y - (b.x + b.y));
+
         return result;
         // `version` não é usado no corpo, só força o recálculo quando o
         // cache (um ref) muda por fora do ciclo normal do React.

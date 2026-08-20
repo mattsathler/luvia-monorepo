@@ -1,4 +1,11 @@
-import { CITY_HEIGHT, CITY_SEED, CITY_WIDTH, CityMap, findFreeBuildablePosition } from './city-map.entity';
+import {
+  CITY_HEIGHT,
+  CITY_SEED,
+  CITY_WIDTH,
+  CityMap,
+  DEFAULT_BACKGROUND_COLOR,
+  findFreeBuildablePosition,
+} from './city-map.entity';
 import { TerrainTile } from './terrain-tile';
 
 describe('CityMap.generate', () => {
@@ -21,12 +28,13 @@ describe('CityMap.generate', () => {
     expect(second.tiles).toEqual(first.tiles);
   });
 
-  it('defaults to CITY_WIDTH/CITY_HEIGHT/CITY_SEED when called with no arguments', () => {
+  it('defaults to CITY_WIDTH/CITY_HEIGHT/CITY_SEED/DEFAULT_BACKGROUND_COLOR when called with no arguments', () => {
     const map = CityMap.generate();
 
     expect(map.width).toBe(CITY_WIDTH);
     expect(map.height).toBe(CITY_HEIGHT);
     expect(map.seed).toBe(CITY_SEED);
+    expect(map.backgroundColor).toBe(DEFAULT_BACKGROUND_COLOR);
   });
 });
 

@@ -262,8 +262,8 @@ describe("getCity", () => {
         vi.unstubAllGlobals();
     });
 
-    it("returns the city dimensions on success", async () => {
-        const body = { width: 40, height: 40 };
+    it("returns the city dimensions and background color on success", async () => {
+        const body = { width: 40, height: 40, backgroundColor: "#7bc96f" };
         const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
         vi.stubGlobal("fetch", fetchMock);
 

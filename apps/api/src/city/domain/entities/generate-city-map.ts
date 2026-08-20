@@ -1,4 +1,3 @@
-import { applyLandmarks } from './generate-landmarks';
 import { placeRoads, resolveRoadOrientation } from './generate-roads';
 import { RawTerrainTile, TerrainTile } from './terrain-tile';
 
@@ -11,18 +10,19 @@ import { RawTerrainTile, TerrainTile } from './terrain-tile';
  * Ordem dos passes, de propósito:
  * 1. grama em toda a grade;
  * 2. ruas em bruto — só sobre grama restante;
- * 3. pontos de interesse — só sobre grama restante;
- * 4. orientação final das ruas — por último, já vê a adjacência definitiva.
+ * 3. orientação final das ruas — por último, já vê a adjacência definitiva.
  *
  * Sem borda de oceano/praia: a cidade não tem um limite de mundo fixo —
  * ver docs/decisions/0027-cidade-sem-borda-fixa-e-so-com-lagoa.md.
  *
- * A lagoa (`generate-lake.ts#applyLake`) está temporariamente fora do pipeline
- * — por pedido explícito, pra voltar depois com ajustes. O passe continua
- * existindo e testado isoladamente, só não é chamado aqui por enquanto; pra
- * reativar, basta importar `applyLake` de volta e rodá-lo antes de
- * `placeRoads` (precisa continuar reservando as próprias células antes de
- * qualquer rua existir, já que não modelamos pontes).
+ * A lagoa (`generate-lake.ts#applyLake`) e os pontos de interesse/prédios
+ * públicos (`generate-landmarks.ts#applyLandmarks`) estão temporariamente
+ * fora do pipeline — por pedido explícito, tudo grama por enquanto. Os dois
+ * passes continuam existindo e testados isoladamente, só não são chamados
+ * aqui; pra reativar `applyLandmarks`, basta importar de volta e rodar entre
+ * `placeRoads` e `resolveRoadOrientation` (mesma posição de antes — precisa
+ * de ruas já colocadas, mas roda antes da orientação final ver a adjacência
+ * definitiva). Pra `applyLake`, ver o histórico deste arquivo.
  */
 export function generateCityMap(width: number, height: number, seed: string): TerrainTile[] {
   let tiles: RawTerrainTile[] = [];
@@ -33,7 +33,6 @@ export function generateCityMap(width: number, height: number, seed: string): Te
   }
 
   tiles = placeRoads(tiles, width, height);
-  tiles = applyLandmarks(tiles, width, height, seed);
 
   return resolveRoadOrientation(tiles);
 }

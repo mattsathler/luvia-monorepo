@@ -22,7 +22,14 @@ export class CityMapMongoRepository implements CityMapRepository {
   async save(cityMap: CityMap): Promise<CityMap> {
     await this.model.findOneAndUpdate(
       { key: SINGLETON_KEY },
-      { key: SINGLETON_KEY, width: cityMap.width, height: cityMap.height, seed: cityMap.seed, tiles: cityMap.tiles },
+      {
+        key: SINGLETON_KEY,
+        width: cityMap.width,
+        height: cityMap.height,
+        seed: cityMap.seed,
+        backgroundColor: cityMap.backgroundColor,
+        tiles: cityMap.tiles,
+      },
       { upsert: true, returnDocument: 'after' },
     );
 
@@ -34,6 +41,7 @@ export class CityMapMongoRepository implements CityMapRepository {
       width: document.width,
       height: document.height,
       seed: document.seed,
+      backgroundColor: document.backgroundColor,
       tiles: document.tiles,
     });
   }

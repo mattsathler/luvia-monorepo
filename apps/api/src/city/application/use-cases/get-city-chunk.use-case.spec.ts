@@ -21,7 +21,7 @@ describe('GetCityChunkUseCase', () => {
       { x: CHUNK_SIZE, y: 0, type: 'grass' as const },
     ];
     getOrGenerateCityMapUseCase.execute.mockResolvedValue(
-      new CityMap({ width: CHUNK_SIZE * 2, height: CHUNK_SIZE, seed: 'seed', tiles }),
+      new CityMap({ width: CHUNK_SIZE * 2, height: CHUNK_SIZE, seed: 'seed', backgroundColor: '#7bc96f', tiles }),
     );
 
     const lots = [
@@ -39,7 +39,7 @@ describe('GetCityChunkUseCase', () => {
     const { useCase, lotRepository, getOrGenerateCityMapUseCase } = buildUseCase();
 
     getOrGenerateCityMapUseCase.execute.mockResolvedValue(
-      new CityMap({ width: CHUNK_SIZE, height: CHUNK_SIZE, seed: 'seed', tiles: [{ x: 0, y: 0, type: 'grass' }] }),
+      new CityMap({ width: CHUNK_SIZE, height: CHUNK_SIZE, seed: 'seed', backgroundColor: '#7bc96f', tiles: [{ x: 0, y: 0, type: 'grass' }] }),
     );
     lotRepository.findAll.mockResolvedValue([]);
 

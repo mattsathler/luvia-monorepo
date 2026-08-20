@@ -30,24 +30,25 @@ Todas as rotas exigem autenticação (`Authorization: Bearer <token>`).
 { "x": 0, "y": 0, "type": "ocean" }
 ```
 
-`type` é um de: `grass`, `ocean` (lagoa — atualmente **desativada** na geração, ver [[../../../decisions/0027-cidade-sem-borda-fixa-e-so-com-lagoa]]), `road-r`, `road-l`, `road-i`, `landmark`. Só `grass` é reivindicável como lote. Quando a lagoa voltar, nenhuma rua deve cruzá-la (sem pontes).
+`type` é um de: `grass`, `ocean` (lagoa — atualmente **desativada** na geração, ver [[../../../decisions/0027-cidade-sem-borda-fixa-e-so-com-lagoa]]), `road-r`, `road-l`, `road-i`, `landmark` (pontos de interesse/prédios públicos — atualmente **desativados** na geração também, por pedido explícito; tudo fica `grass` por enquanto, ver `generate-city-map.ts`). Só `grass` é reivindicável como lote. Quando a lagoa voltar, nenhuma rua deve cruzá-la (sem pontes).
 
 ## `GET /city`
 
-Retorna só as **dimensões** da grade. Ver [[../../../decisions/0005-cidade-unica-persistente]]: existe apenas uma cidade, então esta rota não recebe nenhum id.
+Retorna as **dimensões** da grade e a **cor de fundo**. Ver [[../../../decisions/0005-cidade-unica-persistente]]: existe apenas uma cidade, então esta rota não recebe nenhum id.
 
-Desde [[../../../technical/lowys-carregamento-em-chunks]] (LOWYS), este endpoint **não** devolve mais `tiles`/`lots` — isso agora é `GET /city/chunks/:x/:y`, pedido sob demanda por região conforme o jogador rola a tela. `GET /city` serve só pra saber o tamanho total da grade (necessário pra calcular quantos chunks existem e dimensionar a área de scroll no frontend).
+Desde [[../../../technical/lowys-carregamento-em-chunks]] (LOWYS), este endpoint **não** devolve mais `tiles`/`lots` — isso agora é `GET /city/chunks/:x/:y`, pedido sob demanda por região conforme o jogador rola a tela. `GET /city` serve pra saber o tamanho total da grade (necessário pra calcular quantos chunks existem e dimensionar a área de scroll no frontend) e a cor de fundo a usar atrás dos tiles.
 
 **Resposta (200):**
 
 ```json
-{ "width": 40, "height": 40 }
+{ "width": 40, "height": 40, "backgroundColor": "#7bc96f" }
 ```
 
 **Pontos de importância:**
 
 - Qualquer conta autenticada pode chamar.
 - Chamado uma vez, não em loop — o resultado não muda depois que o terreno já foi gerado (ver [[../../../decisions/0026-terreno-da-cidade-gerado-e-persistido]]).
+- `backgroundColor` (hex) fica salvo no documento da cidade, não fixo no frontend — a hipótese é ter cidades com biomas diferentes no futuro (ex.: neve, outono — já existem texturas de tile pra isso), cada uma com seu próprio fundo. Hoje sempre `#7bc96f` (mesmo verde do tile de `grass`), ver `CityMap#DEFAULT_BACKGROUND_COLOR`.
 
 ## `GET /city/chunks/:x/:y`
 

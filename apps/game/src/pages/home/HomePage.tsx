@@ -1,6 +1,6 @@
 import { CityGrid } from "./CityGrid";
 import type { Character } from "../../lib/api";
-import { CITY_TILE_SIZE, isTileClickable, useHomePageController } from "./HomePage.controller";
+import { isTileClickable, useHomePageController } from "./HomePage.controller";
 
 type HomePageProps = {
     character: Character;
@@ -9,7 +9,7 @@ type HomePageProps = {
 // O mapa ocupa a tela inteira — qualquer UI futura (HUD, painéis) fica
 // sobreposta a ele, como num jogo, em vez de empurrar o mapa pra baixo.
 export function HomePage({ character }: HomePageProps) {
-    const { dimensions, loadError, handleTileClick, accessToken } = useHomePageController({ character });
+    const { dimensions, loadError, handleTileClick, accessToken, tileSize } = useHomePageController({ character });
 
     return (
         <div className="w-full h-screen">
@@ -30,7 +30,8 @@ export function HomePage({ character }: HomePageProps) {
             {dimensions && accessToken && (
                 <CityGrid
                     dimensions={dimensions}
-                    tileSize={CITY_TILE_SIZE}
+                    tileSize={tileSize}
+                    backgroundColor={dimensions.backgroundColor}
                     accessToken={accessToken}
                     characterId={character.id}
                     onTileClick={handleTileClick}

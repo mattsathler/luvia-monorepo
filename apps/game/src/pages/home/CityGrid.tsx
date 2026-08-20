@@ -71,6 +71,8 @@ function getChunkPixelBox(chunkX: number, chunkY: number, gridWidth: number, gri
 type CityGridProps = {
     dimensions: { width: number; height: number };
     tileSize: number;
+    /** Hex, vem do doc da cidade (ver apps/api CityMap#backgroundColor) — não fixo aqui, pra permitir biomas diferentes no futuro. */
+    backgroundColor: string;
     accessToken: string;
     characterId: string;
     onTileClick?: (tile: TileData) => void;
@@ -85,7 +87,15 @@ type CityGridProps = {
  * de verdade montados como `Block` — os demais ficam só como placeholder,
  * mas seus dados continuam em cache (ver CityGrid.controller.ts).
  */
-export function CityGrid({ dimensions, tileSize, accessToken, characterId, onTileClick, isTileClickable }: CityGridProps) {
+export function CityGrid({
+    dimensions,
+    tileSize,
+    backgroundColor,
+    accessToken,
+    characterId,
+    onTileClick,
+    isTileClickable,
+}: CityGridProps) {
     const { chunkCoords, tiles, onChunkEnter, onChunkLeave } = useCityGridController({
         dimensions,
         accessToken,
@@ -128,7 +138,7 @@ export function CityGrid({ dimensions, tileSize, accessToken, characterId, onTil
     }, [chunkCoords, onChunkEnter, onChunkLeave]);
 
     return (
-        <div ref={containerRef} className="iso-grid scroll-auto h-full w-full">
+        <div ref={containerRef} className="iso-grid scroll-auto h-full w-full" style={{ backgroundColor }}>
             <div
                 className="iso-inner"
                 style={{

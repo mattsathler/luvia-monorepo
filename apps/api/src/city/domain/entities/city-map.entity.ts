@@ -9,12 +9,23 @@ import { GridPosition, TerrainTile, isBuildableTerrain } from './terrain-tile';
  */
 export const CITY_WIDTH = 40;
 export const CITY_HEIGHT = 40;
-export const CITY_SEED = 'luvia-city-v3';
+export const CITY_SEED = 'luvia-city-v4';
+
+/**
+ * Verde de `packages/luv-ui/src/styles/_colors.scss` (`green`) — mesma
+ * duplicação já aceita pra `TerrainKind`/tokens de cor entre backend e
+ * frontend. Cor de fundo da cidade fica salva no documento (não fixa no
+ * frontend) porque a hipótese é ter cidades com biomas diferentes no futuro
+ * (ex.: neve, outono — já existem texturas de tile pra isso em
+ * `TILE_TYPES`), cada uma com seu próprio fundo.
+ */
+export const DEFAULT_BACKGROUND_COLOR = '#7bc96f';
 
 export type CityMapProps = {
   width: number;
   height: number;
   seed: string;
+  backgroundColor: string;
   tiles: TerrainTile[];
 };
 
@@ -27,18 +38,25 @@ export class CityMap {
   readonly width: number;
   readonly height: number;
   readonly seed: string;
+  readonly backgroundColor: string;
   readonly tiles: TerrainTile[];
 
   constructor(props: CityMapProps) {
     this.width = props.width;
     this.height = props.height;
     this.seed = props.seed;
+    this.backgroundColor = props.backgroundColor;
     this.tiles = props.tiles;
   }
 
   /** Delega a geração em si pro algoritmo isolado em `generate-city-map.ts`. */
-  static generate(width: number = CITY_WIDTH, height: number = CITY_HEIGHT, seed: string = CITY_SEED): CityMap {
-    return new CityMap({ width, height, seed, tiles: generateCityMap(width, height, seed) });
+  static generate(
+    width: number = CITY_WIDTH,
+    height: number = CITY_HEIGHT,
+    seed: string = CITY_SEED,
+    backgroundColor: string = DEFAULT_BACKGROUND_COLOR,
+  ): CityMap {
+    return new CityMap({ width, height, seed, backgroundColor, tiles: generateCityMap(width, height, seed) });
   }
 }
 
