@@ -2,6 +2,7 @@ import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { GetCharacterLotUseCase } from '../application/use-cases/get-character-lot.use-case';
 import { GetCityChunkUseCase } from '../application/use-cases/get-city-chunk.use-case';
 import { GetCityUseCase } from '../application/use-cases/get-city.use-case';
+import { GetCurrentLotUseCase } from '../application/use-cases/get-current-lot.use-case';
 
 @Controller('city')
 export class CityController {
@@ -9,6 +10,7 @@ export class CityController {
     private readonly getCityUseCase: GetCityUseCase,
     private readonly getCityChunkUseCase: GetCityChunkUseCase,
     private readonly getCharacterLotUseCase: GetCharacterLotUseCase,
+    private readonly getCurrentLotUseCase: GetCurrentLotUseCase,
   ) {}
 
   @Get()
@@ -27,5 +29,10 @@ export class CityController {
   @Get('lots/:characterId')
   getCharacterLot(@Param('characterId') characterId: string) {
     return this.getCharacterLotUseCase.execute(characterId);
+  }
+
+  @Get('current-lot/:characterId')
+  getCurrentLot(@Param('characterId') characterId: string) {
+    return this.getCurrentLotUseCase.execute(characterId);
   }
 }

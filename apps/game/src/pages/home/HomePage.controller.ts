@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import type { TileData } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
-import { getCharacterLot, getCity, type Character, type City } from "../../lib/api";
+import { getCity, getCurrentLot, type Character, type City, type CurrentLot } from "../../lib/api";
 import { getStoredTileSize, setStoredTileSize } from "./city-zoom-storage";
+
+export type { CurrentLot } from "../../lib/api";
 
 /**
  * Tamanho do tile é uma otimização (ver docs/technical/lowys-carregamento-em-chunks.md):
@@ -14,7 +16,7 @@ import { getStoredTileSize, setStoredTileSize } from "./city-zoom-storage";
  */
 export const MIN_TILE_SIZE = 200;
 export const MAX_TILE_SIZE = 640;
-export const DEFAULT_TILE_SIZE = 480;
+export const DEFAULT_TILE_SIZE = 240;
 export const ZOOM_STEP = 40;
 
 function clampTileSize(size: number): number {
@@ -33,6 +35,7 @@ type UseHomePageControllerParams = {
 export function useHomePageController({ character }: UseHomePageControllerParams) {
     const { accessToken } = useAuth();
     const [dimensions, setDimensions] = useState<City | null>(null);
+    const [currentLot, setCurrentLot] = useState<CurrentLot | null>(null);
     const [loadError, setLoadError] = useState<string | null>(null);
     const [tileSize, setTileSize] = useState(() => clampTileSize(getStoredTileSize() ?? DEFAULT_TILE_SIZE));
 
@@ -41,12 +44,18 @@ export function useHomePageController({ character }: UseHomePageControllerParams
             return;
         }
 
-        // Garante que o personagem já tem um lote residencial (reivindicando
-        // um automaticamente na primeira vez) antes de saber o tamanho da
-        // cidade — o terreno em si (ver LOWYS, docs/technical/lowys-carregamento-em-chunks.md)
-        // é buscado por chunk sob demanda, não aqui.
-        getCharacterLot(accessToken, character.id)
-            .then(() => getCity(accessToken))
+        // getCurrentLot resolve, no backend, o lote onde o personagem está
+        // agora (casa, trabalho, evento — ver GetCurrentLotUseCase na API) a
+        // partir da atividade atual, e de quebra garante que o personagem já
+        // tem um lote residencial (reivindicando um automaticamente na
+        // primeira vez) antes de saber o tamanho da cidade — o terreno em si
+        // (ver LOWYS, docs/technical/lowys-carregamento-em-chunks.md) é
+        // buscado por chunk sob demanda, não aqui. Alimenta o CalendarPanel.
+        getCurrentLot(accessToken, character.id)
+            .then((lot) => {
+                setCurrentLot(lot);
+                return getCity(accessToken);
+            })
             .then(setDimensions)
             .catch(() => setLoadError("Não foi possível carregar a cidade. Tente novamente."));
     }, [accessToken, character.id]);
@@ -76,6 +85,7 @@ export function useHomePageController({ character }: UseHomePageControllerParams
 
     return {
         dimensions,
+        currentLot,
         loadError,
         handleTileClick,
         accessToken,

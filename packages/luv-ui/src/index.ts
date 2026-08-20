@@ -12,6 +12,8 @@ import './components/Input/DatePicker.scss';
 import './components/Dialog/Dialog.scss';
 import './components/Card/Card.scss';
 import './components/Stepper/Stepper.scss';
+import './components/StatBar/StatBar.scss';
+import './components/Divider/Divider.scss';
 
 
 import './components/Tabs/Tabs';
@@ -32,6 +34,10 @@ export { LuvStepper, useLuvStepper } from './components/Stepper/LuvStepper';
 export type { LuvStep, LuvStepperProps, LuvStepperContextValue } from './components/Stepper/LuvStepper';
 export { LuvStepperStep } from './components/Stepper/LuvStepperStep';
 export type { LuvStepperStepProps } from './components/Stepper/LuvStepperStep';
+export { LuvStatBar } from './components/StatBar/LuvStatBar';
+export type { LuvStatBarProps } from './components/StatBar/LuvStatBar';
+export { LuvDivider } from './components/Divider/LuvDivider';
+export type { LuvDividerProps, LuvDividerOrientation } from './components/Divider/LuvDivider';
 export { SnackbarProvider } from './components/Snackbar/SnackbarProvider';
 export { showSnackbar } from './components/Snackbar/snackbar';
 export type { SnackbarOptions, SnackbarVariant } from './components/Snackbar/snackbar';

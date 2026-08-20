@@ -516,6 +516,14 @@ $vh-scale: (
     box-shadow: none !important;
 }
 
+.pointer-events-none {
+    pointer-events: none !important;
+}
+
+.pointer-events-auto {
+    pointer-events: auto !important;
+}
+
 .cursor-normal {
     cursor: default;
 }

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { HomePage } from "./HomePage";
 import { useAuth } from "../../auth/AuthContext";
-import { getCharacterLot, getCity } from "../../lib/api";
+import { getCurrentLot, getCity } from "../../lib/api";
 import { DEFAULT_TILE_SIZE } from "./HomePage.controller";
 import type { Character, City } from "../../lib/api";
 
@@ -14,7 +14,7 @@ vi.mock("../../lib/api", async () => {
     const actual = await vi.importActual<typeof import("../../lib/api")>("../../lib/api");
     return {
         ...actual,
-        getCharacterLot: vi.fn(),
+        getCurrentLot: vi.fn(),
         getCity: vi.fn(),
     };
 });
@@ -62,13 +62,7 @@ describe("HomePage", () => {
         vi.clearAllMocks();
         localStorage.clear();
         (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: "token-123" });
-        (getCharacterLot as ReturnType<typeof vi.fn>).mockResolvedValue({
-            id: "lot-1",
-            characterId: "char-1",
-            type: "residential",
-            x: 0,
-            y: 0,
-        });
+        (getCurrentLot as ReturnType<typeof vi.fn>).mockResolvedValue({ name: "Residência", x: 0, y: 0 });
         (getCity as ReturnType<typeof vi.fn>).mockResolvedValue(CITY);
     });
 
@@ -82,12 +76,12 @@ describe("HomePage", () => {
         expect(screen.getByText("Carregando cidade...")).toBeInTheDocument();
     });
 
-    it("claims the character's lot, then renders CityGrid full-screen with the right props", async () => {
+    it("resolves the character's current lot, then renders CityGrid full-screen with the right props", async () => {
         render(<HomePage character={CHARACTER} />);
 
         const cityGrid = await screen.findByTestId("city-grid");
 
-        expect(getCharacterLot).toHaveBeenCalledWith("token-123", "char-1");
+        expect(getCurrentLot).toHaveBeenCalledWith("token-123", "char-1");
         expect(getCity).toHaveBeenCalledWith("token-123");
         expect(screen.queryByText("Carregando cidade...")).not.toBeInTheDocument();
 
@@ -103,12 +97,12 @@ describe("HomePage", () => {
 
         render(<HomePage character={CHARACTER} />);
 
-        expect(getCharacterLot).not.toHaveBeenCalled();
+        expect(getCurrentLot).not.toHaveBeenCalled();
         expect(getCity).not.toHaveBeenCalled();
     });
 
     it("shows an error state when the city fails to load", async () => {
-        (getCharacterLot as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network error"));
+        (getCurrentLot as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network error"));
 
         render(<HomePage character={CHARACTER} />);
 

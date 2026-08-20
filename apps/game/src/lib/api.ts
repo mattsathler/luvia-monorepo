@@ -232,6 +232,25 @@ export async function getCharacterLot(accessToken: string, characterId: string):
     return response.json();
 }
 
+export type CurrentLot = {
+    name: string;
+    x: number;
+    y: number;
+};
+
+// Onde o personagem está agora (casa, trabalho, evento — ver
+// GetCurrentLotUseCase na API), resolvido no backend a partir da atividade
+// atual. Diferente de getCharacterLot, que é sempre o lote residencial.
+export async function getCurrentLot(accessToken: string, characterId: string): Promise<CurrentLot> {
+    const response = await authFetch(`/city/current-lot/${characterId}`, accessToken);
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
 export async function authFetch(path: string, accessToken: string, init: RequestInit = {}): Promise<Response> {
     const response = await fetch(`${API_URL}${path}`, {
         ...init,

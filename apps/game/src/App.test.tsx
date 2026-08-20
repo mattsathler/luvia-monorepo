@@ -41,7 +41,7 @@ vi.mock("./lib/api", async (importOriginal) => {
         listMyCharacters: vi.fn(),
         createCharacter: vi.fn(),
         updateAppearance: vi.fn(),
-        getCharacterLot: vi.fn(),
+        getCurrentLot: vi.fn(),
         getCity: vi.fn(),
         getCityChunk: vi.fn(),
     };
@@ -76,13 +76,7 @@ describe("App", () => {
         vi.clearAllMocks();
         vi.stubGlobal("IntersectionObserver", AutoIntersectionObserver);
         window.history.pushState(null, "", "/");
-        (api.getCharacterLot as ReturnType<typeof vi.fn>).mockResolvedValue({
-            id: "lot-1",
-            characterId: CHARACTER.id,
-            type: "residential",
-            x: 0,
-            y: 0,
-        });
+        (api.getCurrentLot as ReturnType<typeof vi.fn>).mockResolvedValue({ name: "Residência", x: 0, y: 0 });
         (api.getCity as ReturnType<typeof vi.fn>).mockResolvedValue({ width: 1, height: 1 });
         (api.getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
             tiles: [{ x: 0, y: 0, type: "grass" }],

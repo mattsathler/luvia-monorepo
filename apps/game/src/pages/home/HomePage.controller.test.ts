@@ -10,11 +10,20 @@ import {
 } from "./HomePage.controller";
 import { useAuth } from "../../auth/AuthContext";
 import { getStoredTileSize } from "./city-zoom-storage";
-import type { Character } from "../../lib/api";
+import { getCity, getCurrentLot, type Character } from "../../lib/api";
 
 vi.mock("../../auth/AuthContext", () => ({
     useAuth: vi.fn(),
 }));
+
+vi.mock("../../lib/api", async () => {
+    const actual = await vi.importActual<typeof import("../../lib/api")>("../../lib/api");
+    return {
+        ...actual,
+        getCurrentLot: vi.fn(),
+        getCity: vi.fn(),
+    };
+});
 
 const CHARACTER = { id: "char-1" } as Character;
 
@@ -39,6 +48,25 @@ describe("useHomePageController handleTileClick", () => {
         expect(logSpy).toHaveBeenCalledWith("Tile clicado:", { x: 1, y: 2, z: 0, type: "grass" });
 
         logSpy.mockRestore();
+    });
+});
+
+describe("useHomePageController currentLot", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: "token-123" });
+        (getCity as ReturnType<typeof vi.fn>).mockResolvedValue({ width: 10, height: 10, backgroundColor: "#fff" });
+    });
+
+    it("exposes the lot the backend resolves as current", async () => {
+        (getCurrentLot as ReturnType<typeof vi.fn>).mockResolvedValue({ name: "Residência", x: 3, y: 5 });
+
+        const { result } = renderHook(() => useHomePageController({ character: CHARACTER }));
+
+        await vi.waitFor(() => expect(result.current.currentLot).not.toBeNull());
+
+        expect(getCurrentLot).toHaveBeenCalledWith("token-123", "char-1");
+        expect(result.current.currentLot).toEqual({ name: "Residência", x: 3, y: 5 });
     });
 });
 

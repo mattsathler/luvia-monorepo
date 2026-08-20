@@ -27,5 +27,6 @@ import { CharacterTickScheduler } from './infrastructure/scheduling/character-ti
     CharacterTickScheduler,
     { provide: CHARACTER_REPOSITORY, useClass: CharacterMongoRepository },
   ],
+  exports: [CHARACTER_REPOSITORY],
 })
 export class CharacterModule {}

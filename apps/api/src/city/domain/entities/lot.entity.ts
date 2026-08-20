@@ -1,5 +1,15 @@
 export type LotType = 'residential';
 
+/**
+ * Nome amigável por tipo de lote — usado por GetCurrentLotUseCase pra
+ * responder já pronto pra exibição (ver docs/game-design/lots-and-construction.md).
+ * Só "residential" existe hoje; comercial/industrial e lotes de evento
+ * entram aqui quando esses sistemas existirem (jobs.md, events.md).
+ */
+export const LOT_TYPE_NAMES: Record<LotType, string> = {
+  residential: 'Residência',
+};
+
 export type LotProps = {
   id: string;
   characterId: string;
