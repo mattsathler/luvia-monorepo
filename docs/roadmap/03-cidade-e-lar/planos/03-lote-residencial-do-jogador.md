@@ -2,7 +2,7 @@
 
 ## Status
 
-⏳ Pendente
+🚧 Em andamento. Atribuição automática de posição livre e destaque visual do próprio lote já feitos (via `GET /city/lots/:characterId`, adiantado junto com o plano 02). O item "atalho pra ir do dashboard direto pro próprio lote" não se aplica mais — não há dashboard separado, ver [[../../../decisions/0025-home-e-a-tela-da-cidade]].
 
 ## Objetivo técnico
 

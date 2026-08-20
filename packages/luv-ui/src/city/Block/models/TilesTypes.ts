@@ -51,7 +51,27 @@ export const TILE_TYPES = {
     snow: {
         color: "#ffffff00",
         texture: snow,
-    }
+    },
+
+    // Lote ocupado por outro jogador — reaproveita a textura de grass com um
+    // tingimento (color-mix + multiply em Block.scss já cuida do resto).
+    'lot': {
+        color: "#c9a06699",
+        texture: grass,
+    },
+
+    // O lote do jogador logado, destacado na grade da cidade.
+    'lot-mine': {
+        color: "#ffd54fcc",
+        texture: grass,
+    },
+
+    // Ponto de interesse (prédio público) — reaproveita a textura de grass
+    // com um tingimento próprio, sem precisar de arte nova.
+    'landmark': {
+        color: "#6c63ffcc",
+        texture: grass,
+    },
 };
 
 export type TileType = keyof typeof TILE_TYPES;

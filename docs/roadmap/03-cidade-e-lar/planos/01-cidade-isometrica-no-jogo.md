@@ -2,7 +2,7 @@
 
 ## Status
 
-⏳ Pendente
+🚧 Em andamento. `HomePage` (`/play`) já renderiza a grade isométrica (`IsoGrid`/`Block`) com dados reais de `GET /city`, com o lote do jogador destacado. Não existe rota `/city` separada — ver [[../../../decisions/0025-home-e-a-tela-da-cidade]], que corrige a premissa deste plano de que cidade e dashboard (M02) seriam telas distintas com navegação entre elas. Falta: cidade navegável por inteiro (plano 06), personalização/evolução de lote (planos 04/05).
 
 ## Objetivo técnico
 

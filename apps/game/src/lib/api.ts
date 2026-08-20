@@ -170,6 +170,51 @@ export async function updateAppearance(accessToken: string, characterId: string,
     return response.json();
 }
 
+export type LotType = "residential";
+
+export type Lot = {
+    id: string;
+    characterId: string;
+    type: LotType;
+    x: number;
+    y: number;
+};
+
+export type TerrainType = "grass" | "ocean" | "road-r" | "road-l" | "road-i" | "landmark";
+
+export type TerrainTile = {
+    x: number;
+    y: number;
+    type: TerrainType;
+};
+
+export type City = {
+    width: number;
+    height: number;
+    tiles: TerrainTile[];
+    lots: Lot[];
+};
+
+export async function getCity(accessToken: string): Promise<City> {
+    const response = await authFetch("/city", accessToken);
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
+export async function getCharacterLot(accessToken: string, characterId: string): Promise<Lot> {
+    const response = await authFetch(`/city/lots/${characterId}`, accessToken);
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
 export async function authFetch(path: string, accessToken: string, init: RequestInit = {}): Promise<Response> {
     const response = await fetch(`${API_URL}${path}`, {
         ...init,

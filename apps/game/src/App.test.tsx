@@ -41,6 +41,8 @@ vi.mock("./lib/api", async (importOriginal) => {
         listMyCharacters: vi.fn(),
         createCharacter: vi.fn(),
         updateAppearance: vi.fn(),
+        getCharacterLot: vi.fn(),
+        getCity: vi.fn(),
     };
 });
 
@@ -53,6 +55,19 @@ describe("App", () => {
         clearStoredToken();
         vi.clearAllMocks();
         window.history.pushState(null, "", "/");
+        (api.getCharacterLot as ReturnType<typeof vi.fn>).mockResolvedValue({
+            id: "lot-1",
+            characterId: CHARACTER.id,
+            type: "residential",
+            x: 0,
+            y: 0,
+        });
+        (api.getCity as ReturnType<typeof vi.fn>).mockResolvedValue({
+            width: 1,
+            height: 1,
+            tiles: [{ x: 0, y: 0, type: "grass" }],
+            lots: [{ id: "lot-1", characterId: CHARACTER.id, type: "residential", x: 0, y: 0 }],
+        });
     });
 
     it("shows the login page when there is no session", async () => {

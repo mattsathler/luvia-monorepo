@@ -8,6 +8,7 @@ import { SharedAuthModule } from './shared/auth/auth.module';
 import { JwtAuthGuard } from './shared/auth/guards/jwt-auth.guard';
 import { AccountModule } from './account/account.module';
 import { CharacterModule } from './character/character.module';
+import { CityModule } from './city/city.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CharacterModule } from './character/character.module';
     HealthModule,
     AccountModule,
     CharacterModule,
+    CityModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })

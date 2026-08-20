@@ -2,3 +2,6 @@ node_modules
 dist
 .env
 *.local
+
+# Output de `npm run city:generate` — regenerável, usado só pra colar no Atlas manualmente.
+generated

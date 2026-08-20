@@ -4,6 +4,8 @@ import {
     UnauthorizedError,
     authFetch,
     createCharacter,
+    getCharacterLot,
+    getCity,
     listMyCharacters,
     listSkills,
     login,
@@ -251,5 +253,56 @@ describe("listSkills", () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(500, { message: "Erro ao listar skills" })));
 
         await expect(listSkills("token-123")).rejects.toThrow("Erro ao listar skills");
+    });
+});
+
+describe("getCity", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("returns the city dimensions and lots on success", async () => {
+        const body = {
+            width: 40,
+            height: 40,
+            tiles: [{ x: 0, y: 0, type: "ocean" }],
+            lots: [{ id: "lot-1", characterId: "char-1", type: "residential", x: 0, y: 0 }],
+        };
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
+        vi.stubGlobal("fetch", fetchMock);
+
+        const result = await getCity("token-123");
+
+        expect(result).toEqual(body);
+        expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/city"), expect.anything());
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(500, { message: "Erro ao carregar a cidade" })));
+
+        await expect(getCity("token-123")).rejects.toThrow("Erro ao carregar a cidade");
+    });
+});
+
+describe("getCharacterLot", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("returns the character's lot on success", async () => {
+        const body = { id: "lot-1", characterId: "char-1", type: "residential", x: 3, y: 4 };
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
+        vi.stubGlobal("fetch", fetchMock);
+
+        const result = await getCharacterLot("token-123", "char-1");
+
+        expect(result).toEqual(body);
+        expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/city/lots/char-1"), expect.anything());
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(409, { message: "Cidade cheia" })));
+
+        await expect(getCharacterLot("token-123", "char-1")).rejects.toThrow("Cidade cheia");
     });
 });

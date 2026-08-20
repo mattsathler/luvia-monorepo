@@ -2,7 +2,7 @@
 
 ## Status
 
-⏳ Pendente
+✅ Feito. Bounded context `City` criado em `apps/api/src/city/`, com entidade `Lot`, repositório Mongo, `GET /city` (lista a grade inteira) e `GET /city/lots/:characterId` (retorna o lote do personagem, reivindicando automaticamente — ver [[../../../decisions/0025-home-e-a-tela-da-cidade]]). Documentado em `docs/technical/api/city/endpoints.md`.
 
 ## Objetivo técnico
 

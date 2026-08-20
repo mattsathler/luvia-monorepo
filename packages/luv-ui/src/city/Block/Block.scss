@@ -1,3 +1,15 @@
+// Valores padrão pra quem usa Block/IsoGrid sem montar <DayCycleControl />
+// (ele é quem normalmente define essas variáveis, via useEffect, ao montar).
+// Sem isso, o calc()/color-mix() abaixo referencia uma custom property
+// indefinida e a declaração inteira de `background` fica inválida — nenhuma
+// textura aparece. Inline style (setProperty do DayCycleControl) sempre
+// prevalece sobre este fallback quando o componente está montado.
+:root {
+    --sun-x: 0.5;
+    --sun-y: 1;
+    --sun-color: rgb(255, 220, 180);
+}
+
 .tile {
     position: relative;
     width: calc(var(--size) + 2px);
