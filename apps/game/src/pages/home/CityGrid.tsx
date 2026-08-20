@@ -44,7 +44,12 @@ function getGridIsoBounds(width: number, height: number, size: number) {
         width: maxX - minX + size,
         height: maxY - minY + size,
         offsetX: -minX,
-        offsetY: -minY + size * 2,
+        // Sem buffer extra: o tile plano (z=0) já tem a ponta do losango na
+        // própria borda superior da sua caixa (Block.scss — clip-path
+        // começa em "50% 0%"), então nenhum espaço a mais é necessário
+        // acima do primeiro tile. Se um dia houver conteúdo elevado (z > 0,
+        // prédios), revisitar com um buffer dimensionado pro z máximo real.
+        offsetY: -minY,
     };
 }
 
@@ -111,6 +116,27 @@ export function CityGrid({
     );
 
     useEffect(() => {
+        // O losango só toca o centro de cada lado da própria bounding box
+        // (topo/base/esquerda/direita), nunca os 4 cantos dela — por isso a
+        // posição de scroll padrão (0,0), que mostra o canto superior
+        // esquerdo da bounding box, não mostra tile nenhum. Centraliza a
+        // área visível no meio do mapa assim que ele monta (ou quando muda
+        // de tamanho, ex. zoom), pra aparecer conteúdo imediatamente em vez
+        // de exigir rolagem manual.
+        //
+        // `.iso-inner` (que carrega o conteúdo em si) começa deslocado de
+        // `bounds.offsetX`/`bounds.offsetY` dentro de `.iso-grid` (o
+        // container que rola) — é isso que traz o tile mais à esquerda para
+        // x=0 dentro do PRÓPRIO `.iso-inner`. Sem somar esse deslocamento
+        // aqui, o cálculo centraliza a rolagem em torno da caixa errada
+        // (como se `.iso-inner` começasse em x=0 de `.iso-grid`) e erra o
+        // centro visual do mapa por exatamente esse deslocamento.
+        const container = containerRef.current!;
+        container.scrollLeft = Math.max(0, bounds.offsetX + bounds.width / 2 - container.clientWidth / 2);
+        container.scrollTop = Math.max(0, bounds.offsetY + bounds.height / 2 - container.clientHeight / 2);
+    }, [bounds.offsetX, bounds.offsetY, bounds.width, bounds.height]);
+
+    useEffect(() => {
         // O ref já está anexado ao `<div>` quando este efeito roda (React
         // sempre comita refs antes de disparar effects) — a asserção evita
         // simular em teste um branch que não acontece de verdade.
@@ -142,7 +168,14 @@ export function CityGrid({
             <div
                 className="iso-inner"
                 style={{
-                    marginLeft: `${bounds.offsetX * 2}px`,
+                    // `offsetX` sozinho já traz o tile mais à esquerda (que
+                    // tem `left: minX`, negativo) pra x=0 dentro da área de
+                    // scroll. Dobrar esse valor (bug antigo, copiado de
+                    // IsoGrid#getIsoBounds) empurra o conteúdo `offsetX`
+                    // pixels a mais pra direita, sobrando um vão vazio do
+                    // mesmo tamanho nas duas pontas — visível como um espaço
+                    // enorme em volta do mapa antes de rolar até ele.
+                    marginLeft: `${bounds.offsetX}px`,
                     marginTop: `${bounds.offsetY}px`,
                     width: bounds.width,
                     height: bounds.height,

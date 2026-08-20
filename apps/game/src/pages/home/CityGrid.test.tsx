@@ -62,6 +62,23 @@ describe("CityGrid", () => {
         expect(container.querySelectorAll(".tile")).toHaveLength(0);
     });
 
+    it("centers the scroll position on mount, since the diamond shape only touches the middle of each bounding-box edge, never a corner", () => {
+        const { container } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+
+        // width=960/height=512/offsetX=288/offsetY=0 pra dimensions=20x10,
+        // tileSize=64 (mesma fórmula de getGridIsoBounds) — o centro do
+        // conteúdo, em coordenadas de `.iso-grid`, é offsetX + width/2 (não
+        // só width/2: `.iso-inner` começa deslocado de offsetX dentro de
+        // `.iso-grid`). jsdom não faz layout de verdade, então
+        // clientWidth/clientHeight ficam 0.
+        expect(grid.scrollLeft).toBe(768);
+        expect(grid.scrollTop).toBe(256);
+    });
+
     it("applies the given background color to the scroll container", () => {
         const { container } = render(
             <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
