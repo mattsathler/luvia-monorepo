@@ -16,6 +16,18 @@
     height: calc(var(--size) + 2px);
     transform: none;
 
+    // A div em si é um quadrado, mas a arte (e as .face abaixo) só ocupa um
+    // losango dentro dele — sem isso, cliques/hover nos cantos "vazios" do
+    // quadrado (fora do losango/hexágono desenhado) seriam capturados pela
+    // .tile mesmo sem nada visível ali. Mesmo contorno de .top (só losango,
+    // metade de cima) quando plano, ou de .top+.left+.right (hexágono,
+    // quadrado inteiro) quando isométrico.
+    clip-path: polygon(50% 0%, 100% 25%, 50% 50%, 0% 25%);
+
+    &.isometric {
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+
     .face {
         position: absolute;
         inset: 0;
@@ -65,4 +77,18 @@
     left: calc((var(--x) - var(--y)) * (var(--size) / 2));
     top: calc((var(--x) + var(--y)) * (var(--size) / 4) - var(--z) * (var(--size) / 2));
     z-index: calc(var(--x) + var(--y) + var(--z));
+}
+
+// Sinaliza que o tile é interativo (ver prop `onClick` de Block) — um leve
+// "pop" + brilho ao passar o mouse, pra deixar claro que dá pra clicar.
+.tile.clickable {
+    cursor: pointer;
+    transition: filter 0.12s ease, transform 0.12s ease;
+
+    &:hover,
+    &:focus-visible {
+        filter: brightness(1.15);
+        transform: scale(1.08);
+        z-index: 9999;
+    }
 }

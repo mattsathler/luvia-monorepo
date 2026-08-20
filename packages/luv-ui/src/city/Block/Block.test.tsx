@@ -1,5 +1,6 @@
-import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
 import { Block } from "./Block";
 
 describe("Block", () => {
@@ -32,5 +33,55 @@ describe("Block", () => {
         expect(tile.style.getPropertyValue("--z")).toBe("3");
         expect(container.querySelector(".face.left")).toBeInTheDocument();
         expect(container.querySelector(".face.right")).toBeInTheDocument();
+        expect(tile.className).toContain("isometric");
+    });
+
+    it("is not marked clickable and has no button semantics when onClick is not provided", () => {
+        const { container } = render(<Block texture="grass.png" />);
+
+        const tile = container.querySelector(".tile") as HTMLElement;
+        expect(tile.className).not.toContain("clickable");
+        expect(tile.className).not.toContain("isometric");
+        expect(tile).not.toHaveAttribute("role");
+        expect(tile).not.toHaveAttribute("tabindex");
+    });
+
+    it("calls onClick when clicked, and is marked clickable with button semantics", async () => {
+        const user = userEvent.setup();
+        const onClick = vi.fn();
+        render(<Block texture="grass.png" onClick={onClick} />);
+
+        const tile = screen.getByRole("button");
+        expect(tile.className).toContain("clickable");
+        expect(tile).toHaveAttribute("tabindex", "0");
+
+        await user.click(tile);
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("calls onClick on Enter or Space when focused", async () => {
+        const user = userEvent.setup();
+        const onClick = vi.fn();
+        render(<Block texture="grass.png" onClick={onClick} />);
+
+        const tile = screen.getByRole("button");
+        tile.focus();
+
+        await user.keyboard("{Enter}");
+        await user.keyboard(" ");
+
+        expect(onClick).toHaveBeenCalledTimes(2);
+    });
+
+    it("ignores other keys", async () => {
+        const user = userEvent.setup();
+        const onClick = vi.fn();
+        render(<Block texture="grass.png" onClick={onClick} />);
+
+        screen.getByRole("button").focus();
+        await user.keyboard("{Escape}");
+
+        expect(onClick).not.toHaveBeenCalled();
     });
 });

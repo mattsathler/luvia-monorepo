@@ -73,20 +73,11 @@ function CharacterCreateRoute() {
 }
 
 function PlayRoute() {
-    const navigate = useNavigate();
-    const { character, clearCharacter } = useCharacter();
+    const { character } = useCharacter();
 
     // Só renderiza dentro de RequireCharacter, que já garante um personagem
     // não nulo — a asserção evita repetir esse check aqui.
-    return (
-        <HomePage
-            character={character!}
-            onChangeCharacter={() => {
-                clearCharacter();
-                navigate("/characters");
-            }}
-        />
-    );
+    return <HomePage character={character!} />;
 }
 
 function AppRoutes() {

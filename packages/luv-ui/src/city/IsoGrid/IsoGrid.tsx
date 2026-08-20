@@ -28,7 +28,15 @@ function getIsoBounds(tiles: TileData[], size: number) {
 }
 
 
-export function IsoGrid(props: { tiles: TileData[], tileSize: number }) {
+type IsoGridProps = {
+    tiles: TileData[],
+    tileSize: number,
+    onTileClick?: (tile: TileData) => void,
+    /** Se omitido, todo tile é clicável quando `onTileClick` é passado. */
+    isTileClickable?: (tile: TileData) => boolean,
+}
+
+export function IsoGrid(props: IsoGridProps) {
     const { width, height, offsetX, offsetY } = getIsoBounds(props.tiles, props.tileSize);
 
     return (
@@ -43,10 +51,15 @@ export function IsoGrid(props: { tiles: TileData[], tileSize: number }) {
                     position: "relative",
                 }}
             >
-                {props.tiles.map((tile, i) => (
-                    <Block key={i} {...tile} size={props.tileSize} color={TILE_TYPES[tile.type as keyof typeof TILE_TYPES]?.color}
-                        texture={TILE_TYPES[tile.type as keyof typeof TILE_TYPES]?.texture} />
-                ))}
+                {props.tiles.map((tile, i) => {
+                    const clickable = Boolean(props.onTileClick) && (!props.isTileClickable || props.isTileClickable(tile));
+
+                    return (
+                        <Block key={i} {...tile} size={props.tileSize} color={TILE_TYPES[tile.type as keyof typeof TILE_TYPES]?.color}
+                            texture={TILE_TYPES[tile.type as keyof typeof TILE_TYPES]?.texture}
+                            onClick={clickable ? () => props.onTileClick!(tile) : undefined} />
+                    );
+                })}
             </div>
         </div>
     );

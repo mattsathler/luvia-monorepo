@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildCityTiles } from "./HomePage.controller";
+import { buildCityTiles, isTileClickable } from "./HomePage.controller";
 import type { City } from "../../lib/api";
 
 describe("buildCityTiles", () => {
@@ -38,5 +38,15 @@ describe("buildCityTiles", () => {
             { x: 0, y: 0, z: 0, type: "lot-mine" },
             { x: 1, y: 0, z: 0, type: "lot" },
         ]);
+    });
+});
+
+describe("isTileClickable", () => {
+    it.each(["road-r", "road-l", "road-i"] as const)("is false for road tiles (%s)", (type) => {
+        expect(isTileClickable({ x: 0, y: 0, z: 0, type })).toBe(false);
+    });
+
+    it.each(["grass", "ocean", "landmark", "lot", "lot-mine"] as const)("is true for non-road tiles (%s)", (type) => {
+        expect(isTileClickable({ x: 0, y: 0, z: 0, type })).toBe(true);
     });
 });

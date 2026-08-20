@@ -15,12 +15,17 @@ export function buildCityTiles(city: City, characterId: string): TileData[] {
     });
 }
 
+// Rua é só passagem, não tem informação própria pra consultar.
+export function isTileClickable(tile: TileData): boolean {
+    return !tile.type.startsWith("road");
+}
+
 type UseHomePageControllerParams = {
     character: Character;
 };
 
 export function useHomePageController({ character }: UseHomePageControllerParams) {
-    const { logout, accessToken } = useAuth();
+    const { accessToken } = useAuth();
     const [city, setCity] = useState<City | null>(null);
     const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -39,5 +44,12 @@ export function useHomePageController({ character }: UseHomePageControllerParams
 
     const tiles = useMemo(() => (city ? buildCityTiles(city, character.id) : null), [city, character.id]);
 
-    return { logout, tiles, loadError };
+    // Sem painel de informação ainda (vem numa próxima rodada de UI) — por
+    // enquanto só loga o tile clicado, já deixando a interação plugada.
+    function handleTileClick(tile: TileData) {
+        // eslint-disable-next-line no-console
+        console.log("Tile clicado:", tile);
+    }
+
+    return { tiles, loadError, handleTileClick };
 }

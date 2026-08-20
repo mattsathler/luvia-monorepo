@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
@@ -100,6 +100,25 @@ describe("App", () => {
         expect(await screen.findByRole("heading", { name: "Selecione seu personagem" })).toBeInTheDocument();
     });
 
+    it("redirects to login when visiting a protected route without a session", async () => {
+        window.history.pushState(null, "", "/play");
+
+        render(<App />);
+
+        expect(await screen.findByRole("heading", { name: "Entrar" })).toBeInTheDocument();
+    });
+
+    it("redirects to character selection when visiting /play without a character selected", async () => {
+        window.history.pushState(null, "", "/play");
+        setStoredToken("stored-token");
+        (api.authFetch as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true } as Response);
+        (api.listMyCharacters as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+        render(<App />);
+
+        expect(await screen.findByRole("heading", { name: "Selecione seu personagem" })).toBeInTheDocument();
+    });
+
     it("shows the character select page when there is a valid session", async () => {
         setStoredToken("stored-token");
         (api.authFetch as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true } as Response);
@@ -116,40 +135,13 @@ describe("App", () => {
         (api.listMyCharacters as ReturnType<typeof vi.fn>).mockResolvedValue([CHARACTER]);
         const user = userEvent.setup();
 
-        render(<App />);
+        const { container } = render(<App />);
         await user.click(await screen.findByRole("button", { name: "Ana Silva" }));
 
-        expect(await screen.findByText("Você está logado como Ana Silva.")).toBeInTheDocument();
-    });
-
-    it("returns to character selection when the player changes character", async () => {
-        setStoredToken("stored-token");
-        (api.authFetch as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true } as Response);
-        (api.listMyCharacters as ReturnType<typeof vi.fn>).mockResolvedValue([CHARACTER]);
-        const user = userEvent.setup();
-
-        render(<App />);
-        await user.click(await screen.findByRole("button", { name: "Ana Silva" }));
-        await screen.findByText("Você está logado como Ana Silva.");
-
-        await user.click(screen.getByRole("button", { name: "Voltar para seleção de personagens" }));
-
-        expect(await screen.findByRole("heading", { name: "Selecione seu personagem" })).toBeInTheDocument();
-    });
-
-    it("logs out and returns to the login page", async () => {
-        setStoredToken("stored-token");
-        (api.authFetch as ReturnType<typeof vi.fn>).mockResolvedValue({ ok: true } as Response);
-        (api.listMyCharacters as ReturnType<typeof vi.fn>).mockResolvedValue([CHARACTER]);
-        const user = userEvent.setup();
-
-        render(<App />);
-        await user.click(await screen.findByRole("button", { name: "Ana Silva" }));
-        await screen.findByText("Você está logado como Ana Silva.");
-
-        await user.click(screen.getByRole("button", { name: "Sair" }));
-
-        expect(await screen.findByRole("heading", { name: "Entrar" })).toBeInTheDocument();
+        // A home virou a cidade em tela cheia (ver docs/decisions/0025) — sem
+        // header/HUD por enquanto, então a evidência de "chegou na home" é o
+        // mapa renderizado, não mais um texto de boas-vindas.
+        await waitFor(() => expect(container.querySelectorAll(".tile")).toHaveLength(1));
     });
 
     it("navigates to the dedicated character creation page and back", async () => {
@@ -176,7 +168,7 @@ describe("App", () => {
         (api.updateAppearance as ReturnType<typeof vi.fn>).mockResolvedValue(CHARACTER);
         const user = userEvent.setup();
 
-        render(<App />);
+        const { container } = render(<App />);
         await user.click(await screen.findByRole("button", { name: "Criar novo personagem" }));
         await screen.findByRole("heading", { name: "Crie seu personagem" });
 
@@ -186,6 +178,6 @@ describe("App", () => {
 
         await user.click(screen.getByRole("button", { name: "Criar personagem" }));
 
-        expect(await screen.findByText("Você está logado como Ana Silva.")).toBeInTheDocument();
+        await waitFor(() => expect(container.querySelectorAll(".tile")).toHaveLength(1));
     });
 });
