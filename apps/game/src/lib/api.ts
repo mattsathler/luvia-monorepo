@@ -251,6 +251,26 @@ export async function getCurrentLot(accessToken: string, characterId: string): P
     return response.json();
 }
 
+export type WorldClock = {
+    day: number;
+    /** 0–24, fracionário — alimenta o ciclo dia/noite (ver docs/technical/relogio-do-mundo.md). */
+    hour: number;
+    /** ISO 8601 — instante real (do servidor) usado pra calcular `day`/`hour`, pra extrapolar localmente entre sincronizações. */
+    realTimestamp: string;
+};
+
+// Relógio do mundo é global e não depende de personagem/conta — rota pública,
+// sem token (ver docs/technical/api/world/endpoints.md).
+export async function getWorldClock(): Promise<WorldClock> {
+    const response = await fetch(`${API_URL}/world/clock`);
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
 export async function authFetch(path: string, accessToken: string, init: RequestInit = {}): Promise<Response> {
     const response = await fetch(`${API_URL}${path}`, {
         ...init,

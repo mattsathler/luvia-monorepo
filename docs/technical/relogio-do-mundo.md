@@ -2,7 +2,7 @@
 
 ## Status
 
-⏳ Pendente — design registrado (ver [[../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]]), nada implementado ainda. Ver [[../roadmap/03-cidade-e-lar/planos/08-relogio-do-mundo-e-ciclo-dia-noite]].
+✅ Implementado. Backend: `apps/api/src/world/` (bounded context novo, ver `WorldClock`/`GetWorldClockUseCase`/`WorldController`) + `GET /world/clock`. Frontend: `apps/game/src/pages/home/useWorldClockLighting.ts` (sincronização + extrapolação) + `world-clock-lighting.ts` (fórmula hora→CSS vars, duplicada de `DayCycleControl`), ligado em `HomePage.tsx`. Todos os "Pendente" abaixo foram fechados; ver [[../roadmap/03-cidade-e-lar/planos/08-relogio-do-mundo-e-ciclo-dia-noite]].
 
 ## Objetivo
 
@@ -34,7 +34,7 @@ Não existe job de tick nem estado incremental — qualquer leitura, a qualquer 
 
 ### Endpoint
 
-`GET /world/clock` (ou equivalente, no bounded context `city` ou um novo bounded context `world` — decisão de onde exatamente fica pendente, ver Observações), sem autenticação necessária (é global, não depende de personagem):
+`GET /world/clock`, no bounded context novo `world` (`apps/api/src/world/`, mesma estrutura DDD de `city`: `domain/entities` → `WorldClock`, `application/use-cases` → `GetOrGenerateWorldClockUseCase`/`GetWorldClockUseCase`, `infrastructure/persistence` → `WorldClockMongoRepository`/`world_clock`, `presentation` → `WorldController`), marcado `@Public()` — sem autenticação necessária, é global e não depende de personagem:
 
 ```json
 { "day": 47, "hour": 14.3, "realTimestamp": "2026-08-20T12:00:00.000Z" }
@@ -46,26 +46,31 @@ Não existe job de tick nem estado incremental — qualquer leitura, a qualquer 
 
 ### Sincronização e extrapolação no frontend
 
-O frontend busca `GET /world/clock` periodicamente (polling — intervalo exato **Pendente**, mesma natureza do intervalo de polling do simulation-tick). Entre duas sincronizações, em vez de mostrar a hora "parada" até a próxima resposta, extrapola localmente:
+`apps/game/src/pages/home/useWorldClockLighting.ts` busca `GET /world/clock` (`apps/game/src/lib/api.ts#getWorldClock`) a cada **5 minutos reais** (`SYNC_INTERVAL_MS`) — suficiente pra corrigir qualquer drift do relógio local sem gerar tráfego à toa. Entre duas sincronizações, em vez de mostrar a hora "parada" até a próxima resposta, um segundo timer (`EXTRAPOLATE_INTERVAL_MS`, a cada 30s reais) reaplica a iluminação extrapolando localmente (`world-clock-lighting.ts#extrapolateHour`):
 
 ```
 horaAtual = hora_sincronizada + (Date.now() - realTimestamp_sincronizado) em minutos * RATIO / 60
 ```
 
-Isso mantém a transição de iluminação suave (o sol se move continuamente) sem precisar rebuscar o backend a cada frame — o polling só existe pra recalibrar (corrigir drift do relógio local, ou refletir qualquer ajuste manual do epoch) periodicamente, não pra cada atualização visual.
+Isso mantém a transição de iluminação suave (o sol se move continuamente) sem precisar rebuscar o backend a cada frame — o polling só existe pra recalibrar (corrigir drift do relógio local, ou refletir qualquer ajuste manual do epoch) periodicamente, não pra cada atualização visual. Se a primeira sincronização falhar (ex.: backend fora do ar), a iluminação fica no fallback estático de `Block.scss` até a próxima tentativa — sem crashar.
 
 ### Ligação com a iluminação
 
-O valor de `hora` (sincronizado + extrapolado) é passado pro mesmo mecanismo que `DayCycleControl` já usa (`--sun-x`/`--sun-y`/`--sun-color` via `document.documentElement.style.setProperty`, ver `CycleControl.tsx`) — `apps/game` ganha sua própria fonte desses valores (vindo do relógio sincronizado), reaproveitando a fórmula existente; `apps/docs` continua com o slider manual como está, sem mudança (é só showcase de design system, não precisa saber do backend).
+`apps/game/src/pages/home/world-clock-lighting.ts#applySunLighting` **duplica de propósito** a fórmula de `DayCycleControl` (`--sun-x`/`--sun-y`/`--sun-color` via `document.documentElement.style.setProperty`) em vez de importar/mudar esse componente — mesmo espírito de LOWYS ([[lowys-carregamento-em-chunks]], "packages/luv-ui não mudou"): o design system continua sem saber de conceitos específicos do jogo. `DayCycleControl`/`apps/docs` não mudaram; `apps/game` ganhou sua própria fonte desses valores, chamada de dentro de `HomePage.tsx` via `useWorldClockLighting()`.
 
 ## Observações
 
-Pendente (decisões de implementação, não fechadas ainda):
+Resolvido nesta implementação:
 
-- Bounded context exato do endpoint: reaproveitar `city` (já é o contexto "global"/singleton, ver [[../decisions/0005-cidade-unica-persistente]]) ou criar um bounded context `world` dedicado.
-- Intervalo de polling do frontend.
-- Se `DayCycleControl` em si muda de assinatura (ex.: aceitar `hour` como prop controlada em vez de só estado interno via slider) ou se `apps/game` implementa seu próprio hook/componente que replica a mesma fórmula de conversão hora→CSS vars, deixando `DayCycleControl` intocado (mais alinhado à separação já usada em LOWYS, onde `apps/game` duplica fórmulas de `packages/luv-ui` em vez de forçar o design system a conhecer conceitos específicos do jogo — ver [[lowys-carregamento-em-chunks]], seção "packages/luv-ui não mudou").
-- Se o `day`/número do dia deve aparecer em alguma UI (calendário, HUD) nesta fase ou só a `hour` (pra iluminação) é consumida por enquanto.
+- Bounded context: `world`, dedicado (não dentro de `city`).
+- Intervalo de polling do frontend: 5 minutos reais (sincronização) + 30s reais (extrapolação/reaplicação visual).
+- `DayCycleControl` não muda — `apps/game` duplica a fórmula em `world-clock-lighting.ts`.
+- Nesta fase, só `hour` é consumida (iluminação); `day` é retornado pela API mas não aparece em nenhuma UI ainda.
+
+Ainda não definidos (**Pendente** — trade-offs de produto, não de implementação):
+
+- Se/quando `day` (número do dia) deve aparecer em alguma UI (calendário, HUD).
+- Onde e se o "instante em que o mundo começou" (o epoch, hoje implicitamente "a primeira vez que alguém chamou `GET /world/clock`") deveria ser uma data com significado de produto (ex.: lançamento do jogo) em vez de um acidente de quando o endpoint foi chamado pela primeira vez em produção.
 
 ## Referências
 

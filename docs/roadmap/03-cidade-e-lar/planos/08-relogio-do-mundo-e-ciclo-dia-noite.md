@@ -2,7 +2,7 @@
 
 ## Status
 
-⏳ Pendente — design fechado em [[../../../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]] e [[../../../technical/relogio-do-mundo]], nada implementado ainda.
+✅ Implementado. Backend: novo bounded context `apps/api/src/world/` + `GET /world/clock` (pública). Frontend: `apps/game/src/pages/home/useWorldClockLighting.ts` (polling de 5min + extrapolação local a cada 30s) e `world-clock-lighting.ts` (fórmula hora→CSS vars, duplicada de `DayCycleControl`), chamado de `HomePage.tsx`. Ver [[../../../technical/relogio-do-mundo]] pro design completo.
 
 ## Objetivo técnico
 

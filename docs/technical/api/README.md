@@ -21,6 +21,7 @@ Ver [[../../decisions/0017-documentar-todo-endpoint-na-api]]: **todo endpoint no
 | Account (autenticação) | [[account/endpoints]] |
 | Character | [[character/endpoints]] |
 | City | [[city/endpoints]] |
+| World (relógio do mundo) | [[world/endpoints]] |
 | Shared (health check) | [[shared/endpoints]] |
 
 ## Referências

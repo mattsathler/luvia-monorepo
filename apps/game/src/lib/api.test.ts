@@ -7,6 +7,7 @@ import {
     getCharacterLot,
     getCity,
     getCityChunk,
+    getWorldClock,
     listMyCharacters,
     listSkills,
     login,
@@ -326,5 +327,28 @@ describe("getCharacterLot", () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(409, { message: "Cidade cheia" })));
 
         await expect(getCharacterLot("token-123", "char-1")).rejects.toThrow("Cidade cheia");
+    });
+});
+
+describe("getWorldClock", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("returns the game's current day/hour/realTimestamp on success, without a token", async () => {
+        const body = { day: 47, hour: 14.3, realTimestamp: "2026-08-20T12:00:00.000Z" };
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
+        vi.stubGlobal("fetch", fetchMock);
+
+        const result = await getWorldClock();
+
+        expect(result).toEqual(body);
+        expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/world/clock"));
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(500, { message: "Erro ao carregar o relógio" })));
+
+        await expect(getWorldClock()).rejects.toThrow("Erro ao carregar o relógio");
     });
 });
