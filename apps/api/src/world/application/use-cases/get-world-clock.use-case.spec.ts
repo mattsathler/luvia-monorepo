@@ -1,6 +1,7 @@
 import { GetWorldClockUseCase } from './get-world-clock.use-case';
 import { GetOrGenerateWorldClockUseCase } from './get-or-generate-world-clock.use-case';
 import { WorldClock } from '../../domain/entities/world-clock.entity';
+import { currentWeather } from '../../domain/entities/weather.entity';
 
 describe('GetWorldClockUseCase', () => {
   function buildUseCase() {
@@ -11,7 +12,7 @@ describe('GetWorldClockUseCase', () => {
     return { useCase, getOrGenerateWorldClockUseCase };
   }
 
-  it('returns day/hour computed from the world clock, plus the real timestamp used', async () => {
+  it('returns day/hour/weekday/weather computed from the world clock, plus the real timestamp used', async () => {
     const { useCase, getOrGenerateWorldClockUseCase } = buildUseCase();
     const epoch = new Date('2026-01-01T00:00:00.000Z');
     getOrGenerateWorldClockUseCase.execute.mockResolvedValue(new WorldClock({ epoch }));
@@ -19,7 +20,7 @@ describe('GetWorldClockUseCase', () => {
 
     const result = await useCase.execute(now);
 
-    expect(result).toEqual({ day: 1, hour: 1, realTimestamp: now.toISOString() });
+    expect(result).toEqual({ day: 1, hour: 1, weekday: 0, weather: currentWeather(1), realTimestamp: now.toISOString() });
   });
 
   it('defaults `now` to the current time when not given', async () => {

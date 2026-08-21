@@ -26,6 +26,10 @@ O cliente não carrega nem renderiza a cidade inteira de uma vez — só o que e
 
 Existe um relógio de mundo único e global — a mesma data/hora de jogo pra todos os jogadores, ditada pelo backend, nunca pelo relógio do próprio dispositivo. O tempo de jogo corre num ritmo fixo de **96 minutos reais por dia de jogo (24h)**. Essa hora alimenta o ciclo dia/noite visual da cidade isométrica (posição do sol, tom de luz) — ver [[../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]] e [[../technical/relogio-do-mundo]].
 
+### Clima
+
+Luvia é uma cidade chuvosa (o próprio nome do jogo remete a "chuva") — chuva é o clima mais comum entre os três existentes (Ensolarado, Chuvoso, Neblina), não uma opção equiprovável. Clima determina a temperatura (Celsius) e muda uma vez por dia de jogo, igual pra todos os jogadores. Nesta fase é só cosmético (aparece na HUD, não afeta jogabilidade) e sem chuva visual ainda — ver [[../decisions/0029-clima-cosmetico-e-cidade-chuvosa]] e [[../technical/clima-e-temperatura]].
+
 ## Referências
 
 - [[lots-and-construction]]
@@ -34,5 +38,7 @@ Existe um relógio de mundo único e global — a mesma data/hora de jogo pra to
 - [[../decisions/0026-terreno-da-cidade-gerado-e-persistido]]
 - [[../decisions/0027-cidade-sem-borda-fixa-e-so-com-lagoa]]
 - [[../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]]
+- [[../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]
 - [[../technical/lowys-carregamento-em-chunks]]
 - [[../technical/relogio-do-mundo]]
+- [[../technical/clima-e-temperatura]]

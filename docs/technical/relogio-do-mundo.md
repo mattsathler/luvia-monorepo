@@ -37,39 +37,46 @@ Não existe job de tick nem estado incremental — qualquer leitura, a qualquer 
 `GET /world/clock`, no bounded context novo `world` (`apps/api/src/world/`, mesma estrutura DDD de `city`: `domain/entities` → `WorldClock`, `application/use-cases` → `GetOrGenerateWorldClockUseCase`/`GetWorldClockUseCase`, `infrastructure/persistence` → `WorldClockMongoRepository`/`world_clock`, `presentation` → `WorldController`), marcado `@Public()` — sem autenticação necessária, é global e não depende de personagem:
 
 ```json
-{ "day": 47, "hour": 14.3, "realTimestamp": "2026-08-20T12:00:00.000Z" }
+{ "day": 47, "hour": 14.3, "weekday": 4, "realTimestamp": "2026-08-20T12:00:00.000Z" }
 ```
 
 - `day`: número do dia de jogo (inteiro, começa em 1).
 - `hour`: hora do dia de jogo (`0`–`24`, fracionário) — alimenta `DayCycleControl` direto.
+- `weekday`: dia da semana de jogo (`0`–`6`, `(day - 1) % 7`) — semana de 7 dias sem relação com o calendário real; a API só devolve o índice, o nome ("Segunda-feira" etc.) é decidido no frontend (`WorldClockPanel.tsx#formatWeekday`).
 - `realTimestamp`: o instante real (do servidor) em que essa leitura foi calculada — necessário pro frontend saber quanto tempo real já passou desde a sincronização, pra extrapolar localmente (ver abaixo). Sem isso, o frontend teria que confiar no próprio relógio pra saber "quanto tempo passou", o que já é seguro (é só um delta local), mas ter o timestamp do servidor evita qualquer ambiguidade de fuso.
 
-### Sincronização e extrapolação no frontend
+### Sincronização (longa) + job local (curto)
 
-`apps/game/src/pages/home/useWorldClockLighting.ts` busca `GET /world/clock` (`apps/game/src/lib/api.ts#getWorldClock`) a cada **5 minutos reais** (`SYNC_INTERVAL_MS`) — suficiente pra corrigir qualquer drift do relógio local sem gerar tráfego à toa. Entre duas sincronizações, em vez de mostrar a hora "parada" até a próxima resposta, um segundo timer (`EXTRAPOLATE_INTERVAL_MS`, a cada 30s reais) reaplica a iluminação extrapolando localmente (`world-clock-lighting.ts#extrapolateHour`):
+`apps/game/src/pages/home/useWorldClock.ts` separa dois ritmos, de propósito:
+
+- **Sincronização com o backend** (`GET /world/clock`, via `apps/game/src/lib/api.ts#getWorldClock`) — só em períodos **longos**, a cada **15 minutos reais** (`SYNC_INTERVAL_MS`). Existe só pra corrigir qualquer drift do relógio local (ou refletir um ajuste manual do epoch) — não é o que move o ponteiro visualmente.
+- **Job local** (`TICK_INTERVAL_MS`) — roda a cada **1 minuto de jogo** (no ritmo de 15×, isso é `60_000 / GAME_MINUTES_PER_REAL_MINUTE` = **4 segundos reais**), recalculando a hora a partir da última sincronização (`world-clock-lighting.ts#extrapolateHour`):
 
 ```
 horaAtual = hora_sincronizada + (Date.now() - realTimestamp_sincronizado) em minutos * RATIO / 60
 ```
 
-Isso mantém a transição de iluminação suave (o sol se move continuamente) sem precisar rebuscar o backend a cada frame — o polling só existe pra recalibrar (corrigir drift do relógio local, ou refletir qualquer ajuste manual do epoch) periodicamente, não pra cada atualização visual. Se a primeira sincronização falhar (ex.: backend fora do ar), a iluminação fica no fallback estático de `Block.scss` até a próxima tentativa — sem crashar.
+Como o cálculo sempre parte do delta de tempo real decorrido (não de somar `+1 minuto` repetidamente ao valor anterior), o job local não acumula erro de arredondamento entre ticks nem depende de o `setInterval` disparar num intervalo perfeitamente exato — cada tick só faz o relógio "andar" o equivalente a 1 minuto de jogo. Isso mantém a transição de iluminação e o texto do relógio na HUD se movendo continuamente, minuto a minuto, sem precisar rebuscar o backend o tempo todo. Se a primeira sincronização falhar (ex.: backend fora do ar), o relógio fica em `null` (fallback estático de `Block.scss`/placeholder `--:--` na HUD) até a próxima tentativa.
 
-### Ligação com a iluminação
+### Ligação com a iluminação e a HUD
 
-`apps/game/src/pages/home/world-clock-lighting.ts#applySunLighting` **duplica de propósito** a fórmula de `DayCycleControl` (`--sun-x`/`--sun-y`/`--sun-color` via `document.documentElement.style.setProperty`) em vez de importar/mudar esse componente — mesmo espírito de LOWYS ([[lowys-carregamento-em-chunks]], "packages/luv-ui não mudou"): o design system continua sem saber de conceitos específicos do jogo. `DayCycleControl`/`apps/docs` não mudaram; `apps/game` ganhou sua própria fonte desses valores, chamada de dentro de `HomePage.tsx` via `useWorldClockLighting()`.
+`apps/game/src/pages/home/world-clock-lighting.ts#applySunLighting` **duplica de propósito** a fórmula de `DayCycleControl` (`--sun-x`/`--sun-y`/`--sun-color` via `document.documentElement.style.setProperty`) em vez de importar/mudar esse componente — mesmo espírito de LOWYS ([[lowys-carregamento-em-chunks]], "packages/luv-ui não mudou"): o design system continua sem saber de conceitos específicos do jogo. `DayCycleControl`/`apps/docs` não mudaram.
+
+`useWorldClock()` é a única fonte de dados (evita que cada consumidor sincronize por conta própria, duplicando chamadas): `HomePage.tsx` chama esse hook uma vez e deriva dele tanto `useWorldClockLighting(hour)` (efeito que só aplica as CSS vars) quanto as props `hour`/`weekday` passadas pra `HomeHud`/`WorldClockPanel` (exibição textual "Segunda-feira · 12:40"). `weekday` só atualiza na sincronização (15min) — só `hour` é extrapolada pelo job local, já que o dia da semana não muda rápido o bastante pra precisar disso.
 
 ## Observações
 
 Resolvido nesta implementação:
 
 - Bounded context: `world`, dedicado (não dentro de `city`).
-- Intervalo de polling do frontend: 5 minutos reais (sincronização) + 30s reais (extrapolação/reaplicação visual).
+- Sincronização com o backend: 15 minutos reais. Job local (avanço visual, minuto a minuto de jogo): 4 segundos reais (= 1 minuto de jogo).
 - `DayCycleControl` não muda — `apps/game` duplica a fórmula em `world-clock-lighting.ts`.
-- Nesta fase, só `hour` é consumida (iluminação); `day` é retornado pela API mas não aparece em nenhuma UI ainda.
+- `weekday` (0–6) é calculado no backend (`WorldClock#currentTime`) e exposto pela API — a API só devolve o índice, o frontend (`WorldClockPanel.tsx#formatWeekday`) decide o nome de cada um.
+- Painel de HUD (`apps/game/src/pages/home/hud/WorldClockPanel.tsx`, centralizado no topo via `HomeHud.tsx`) mostra `weekday` + `hour` sincronizados, com um ícone reservado pro clima — sem dado de clima inventado, já que não existe sistema de clima ainda.
 
 Ainda não definidos (**Pendente** — trade-offs de produto, não de implementação):
 
-- Se/quando `day` (número do dia) deve aparecer em alguma UI (calendário, HUD).
+- Se/quando `day` (número do dia corrido, distinto de `weekday`) deve aparecer em alguma UI (ex.: um calendário) — hoje só `hour`/`weekday` são exibidos.
 - Onde e se o "instante em que o mundo começou" (o epoch, hoje implicitamente "a primeira vez que alguém chamou `GET /world/clock`") deveria ser uma data com significado de produto (ex.: lançamento do jogo) em vez de um acidente de quando o endpoint foi chamado pela primeira vez em produção.
 
 ## Referências

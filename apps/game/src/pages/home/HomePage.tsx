@@ -2,6 +2,7 @@ import { CityGrid } from "./CityGrid";
 import { HomeHud } from "./hud/HomeHud";
 import type { Character } from "../../lib/api";
 import { isTileClickable, useHomePageController } from "./HomePage.controller";
+import { useWorldClock } from "./useWorldClock";
 import { useWorldClockLighting } from "./useWorldClockLighting";
 
 type HomePageProps = {
@@ -12,7 +13,8 @@ type HomePageProps = {
 // sobreposta a ele, como num jogo, em vez de empurrar o mapa pra baixo.
 export function HomePage({ character }: HomePageProps) {
     const { dimensions, currentLot, loadError, handleTileClick, accessToken, tileSize } = useHomePageController({ character });
-    useWorldClockLighting();
+    const worldClock = useWorldClock();
+    useWorldClockLighting(worldClock?.hour ?? null);
 
     return (
         <div className="pos-relative w-full h-screen hidden">
@@ -41,7 +43,13 @@ export function HomePage({ character }: HomePageProps) {
                         onTileClick={handleTileClick}
                         isTileClickable={isTileClickable}
                     />
-                    <HomeHud character={character} currentLot={currentLot} />
+                    <HomeHud
+                        character={character}
+                        currentLot={currentLot}
+                        hour={worldClock?.hour ?? null}
+                        weekday={worldClock?.weekday ?? null}
+                        weather={worldClock?.weather ?? null}
+                    />
                 </>
             )}
         </div>

@@ -1,0 +1,61 @@
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { HomeHud } from "./HomeHud";
+import type { Character } from "../../../lib/api";
+
+const CHARACTER: Character = {
+    id: "char-1",
+    accountId: "acc-1",
+    firstName: "Ana",
+    lastName: "Silva",
+    gender: "female",
+    skills: {},
+    happiness: 80,
+    energy: 40,
+    money: 2350,
+    fame: 1250,
+    activity: "idle",
+    activityEndsAt: null,
+    lastUpdatedAt: "2026-01-01T00:00:00.000Z",
+    appearance: {
+        skinTone: 3,
+        hairType: "liso-1",
+        eyeType: "redondo-1",
+        face: "default",
+        accessory: null,
+        top: "default",
+        pants: "default",
+        shoes: "default",
+        overlay: "default",
+    },
+};
+
+const CURRENT_LOT = { name: "Residência", x: 0, y: 0 };
+
+describe("HomeHud", () => {
+    it("renders the profile, world clock, and calendar panels", () => {
+        render(
+            <HomeHud
+                character={CHARACTER}
+                currentLot={CURRENT_LOT}
+                hour={14.5}
+                weekday={2}
+                weather={{ type: "rainy", temperature: 17 }}
+            />,
+        );
+
+        expect(screen.getByText("Ana Silva")).toBeInTheDocument();
+        expect(screen.getByText("14:30")).toBeInTheDocument();
+        expect(screen.getByText("Quarta-feira")).toBeInTheDocument();
+        expect(screen.getByText("17°C")).toBeInTheDocument();
+        expect(screen.getByText("Chuvoso")).toBeInTheDocument();
+        expect(screen.getByText("Descansando")).toBeInTheDocument();
+    });
+
+    it("shows the world clock placeholder while the hour/weekday/weather haven't synced yet", () => {
+        render(<HomeHud character={CHARACTER} currentLot={CURRENT_LOT} hour={null} weekday={null} weather={null} />);
+
+        expect(screen.getByText("--:--")).toBeInTheDocument();
+        expect(screen.getByText("--°C")).toBeInTheDocument();
+    });
+});

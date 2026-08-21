@@ -18,6 +18,7 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 6. [[planos/06-interacao-com-a-metropole]]
 7. [[planos/07-lowys-carregamento-em-chunks]]
 8. [[planos/08-relogio-do-mundo-e-ciclo-dia-noite]]
+9. [[planos/09-clima-e-temperatura]]
 
 ## Escopo
 
@@ -29,6 +30,7 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 - **Interação com a metrópole**: a cidade é navegável por inteiro, não só o próprio lote — lotes de outros jogadores são visíveis (com a personalização deles) e consultáveis (dono, nível), preparando o terreno pra ações sociais que a M05 adiciona por cima.
 - Navegação: jogador consegue ir da tela de vida (M02) pra cidade e voltar.
 - **Relógio do mundo e ciclo dia/noite**: o backend passa a ditar a data/hora do jogo (relógio único e global, 96 minutos reais por dia de jogo), sincronizada pelo frontend e usada pra alimentar a iluminação já implementada em `DayCycleControl`.
+- **Clima e temperatura**: clima (Ensolarado, Chuvoso, Neblina, com viés pra chuva — Luvia é uma cidade chuvosa) e temperatura (Celsius) determinísticos por dia de jogo, exibidos na HUD — só cosmético, sem chuva visual nem efeito de jogabilidade nesta fase.
 
 ## Fora do escopo
 
@@ -49,3 +51,4 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 - [[../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]
 - [[../../decisions/0009-ddd-como-arquitetura-principal]]
 - [[../../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]]
+- [[../../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]

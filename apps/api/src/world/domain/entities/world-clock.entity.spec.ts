@@ -1,4 +1,4 @@
-import { GAME_DAY_MINUTES, GAME_MINUTES_PER_REAL_MINUTE, WorldClock } from './world-clock.entity';
+import { GAME_DAY_MINUTES, GAME_MINUTES_PER_REAL_MINUTE, WEEKDAYS_PER_CYCLE, WorldClock } from './world-clock.entity';
 
 const EPOCH = new Date('2026-01-01T00:00:00.000Z');
 
@@ -18,31 +18,42 @@ describe('WorldClock', () => {
     expect(clock.epoch).toBe(EPOCH);
   });
 
-  it('currentTime() is day 1, hour 0 exactly at the epoch', () => {
+  it('currentTime() is day 1, hour 0, weekday 0 exactly at the epoch', () => {
     const clock = new WorldClock({ epoch: EPOCH });
 
-    expect(clock.currentTime(EPOCH)).toEqual({ day: 1, hour: 0 });
+    expect(clock.currentTime(EPOCH)).toEqual({ day: 1, hour: 0, weekday: 0 });
   });
 
   it('currentTime() advances one game hour per 4 real minutes (ratio de 15x)', () => {
     const clock = new WorldClock({ epoch: EPOCH });
     const fourRealMinutesLater = new Date(EPOCH.getTime() + 4 * 60_000);
 
-    expect(clock.currentTime(fourRealMinutesLater)).toEqual({ day: 1, hour: 1 });
+    expect(clock.currentTime(fourRealMinutesLater)).toEqual({ day: 1, hour: 1, weekday: 0 });
   });
 
-  it('currentTime() rolls over to day 2 after exactly 96 real minutes (1 game day)', () => {
+  it('currentTime() rolls over to day 2, weekday 1 after exactly 96 real minutes (1 game day)', () => {
     const clock = new WorldClock({ epoch: EPOCH });
     const oneGameDayLater = new Date(EPOCH.getTime() + 96 * 60_000);
 
-    expect(clock.currentTime(oneGameDayLater)).toEqual({ day: 2, hour: 0 });
+    expect(clock.currentTime(oneGameDayLater)).toEqual({ day: 2, hour: 0, weekday: 1 });
   });
 
   it('currentTime() keeps rolling over across multiple game days', () => {
     const clock = new WorldClock({ epoch: EPOCH });
     const threeGameDaysAndAHalfLater = new Date(EPOCH.getTime() + 96 * 3.5 * 60_000);
 
-    expect(clock.currentTime(threeGameDaysAndAHalfLater)).toEqual({ day: 4, hour: 12 });
+    expect(clock.currentTime(threeGameDaysAndAHalfLater)).toEqual({ day: 4, hour: 12, weekday: 3 });
+  });
+
+  it('currentTime() wraps weekday back to 0 after a full 7-day cycle', () => {
+    const clock = new WorldClock({ epoch: EPOCH });
+    const sevenGameDaysLater = new Date(EPOCH.getTime() + 96 * 7 * 60_000);
+
+    expect(clock.currentTime(sevenGameDaysLater)).toEqual({ day: 8, hour: 0, weekday: 0 });
+  });
+
+  it('WEEKDAYS_PER_CYCLE is a 7-day week', () => {
+    expect(WEEKDAYS_PER_CYCLE).toBe(7);
   });
 
   it('is fully deterministic: same epoch and now always produce the same result', () => {

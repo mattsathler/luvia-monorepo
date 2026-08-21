@@ -2,7 +2,7 @@
 
 ## Status
 
-✅ Implementado. Backend: novo bounded context `apps/api/src/world/` + `GET /world/clock` (pública). Frontend: `apps/game/src/pages/home/useWorldClockLighting.ts` (polling de 5min + extrapolação local a cada 30s) e `world-clock-lighting.ts` (fórmula hora→CSS vars, duplicada de `DayCycleControl`), chamado de `HomePage.tsx`. Ver [[../../../technical/relogio-do-mundo]] pro design completo.
+✅ Implementado. Backend: novo bounded context `apps/api/src/world/` + `GET /world/clock` (pública). Frontend: `apps/game/src/pages/home/useWorldClock.ts` (sincroniza com o backend a cada 15min reais; job local avança a hora minuto a minuto de jogo, a cada 4s reais), `useWorldClockLighting.ts` (aplica a iluminação) e `world-clock-lighting.ts` (fórmula hora→CSS vars, duplicada de `DayCycleControl`), chamados de `HomePage.tsx`. HUD centralizada (`hud/WorldClockPanel.tsx`) mostra a hora sincronizada + placeholder de clima. Ver [[../../../technical/relogio-do-mundo]] pro design completo.
 
 ## Objetivo técnico
 

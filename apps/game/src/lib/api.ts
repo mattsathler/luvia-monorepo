@@ -251,11 +251,23 @@ export async function getCurrentLot(accessToken: string, characterId: string): P
     return response.json();
 }
 
+export type WeatherType = "sunny" | "rainy" | "foggy";
+
+export type Weather = {
+    type: WeatherType;
+    /** Celsius, inteiro. */
+    temperature: number;
+};
+
 export type WorldClock = {
     day: number;
     /** 0–24, fracionário — alimenta o ciclo dia/noite (ver docs/technical/relogio-do-mundo.md). */
     hour: number;
-    /** ISO 8601 — instante real (do servidor) usado pra calcular `day`/`hour`, pra extrapolar localmente entre sincronizações. */
+    /** 0–6, `(day - 1) % 7` — semana de jogo sem relação com o calendário real. Nome/label de cada valor é decidido aqui no frontend. */
+    weekday: number;
+    /** Só cosmético nesta fase, não afeta jogabilidade (ver docs/technical/clima-e-temperatura.md). */
+    weather: Weather;
+    /** ISO 8601 — instante real (do servidor) usado pra calcular `day`/`hour`/`weekday`, pra extrapolar localmente entre sincronizações. */
     realTimestamp: string;
 };
 

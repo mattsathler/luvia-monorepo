@@ -5,6 +5,9 @@
 export const GAME_MINUTES_PER_REAL_MINUTE = 15;
 export const GAME_DAY_MINUTES = 24 * 60;
 
+/** Semana de jogo de 7 dias, sem relação com o calendário real — o dia 1 (epoch) é sempre `weekday` 0. */
+export const WEEKDAYS_PER_CYCLE = 7;
+
 export type WorldClockProps = {
   epoch: Date;
 };
@@ -12,6 +15,8 @@ export type WorldClockProps = {
 export type WorldTime = {
   day: number;
   hour: number;
+  /** 0–6, `(day - 1) % WEEKDAYS_PER_CYCLE` — o dia 1 do jogo é sempre 0. Frontend decide o nome/label de cada valor. */
+  weekday: number;
 };
 
 /**
@@ -32,13 +37,14 @@ export class WorldClock {
     return new WorldClock({ epoch: now });
   }
 
-  /** `day` começa em 1; `hour` é fracionário, 0–24 (formato esperado por DayCycleControl). */
+  /** `day` começa em 1; `hour` é fracionário, 0–24 (formato esperado por DayCycleControl); `weekday` é 0–6. */
   currentTime(now: Date): WorldTime {
     const realMinutesElapsed = (now.getTime() - this.epoch.getTime()) / 60_000;
     const gameMinutesElapsed = realMinutesElapsed * GAME_MINUTES_PER_REAL_MINUTE;
     const day = Math.floor(gameMinutesElapsed / GAME_DAY_MINUTES) + 1;
     const hour = (gameMinutesElapsed % GAME_DAY_MINUTES) / 60;
+    const weekday = (day - 1) % WEEKDAYS_PER_CYCLE;
 
-    return { day, hour };
+    return { day, hour, weekday };
   }
 }

@@ -28,8 +28,13 @@ vi.mock("./CityGrid", () => ({
     ),
 }));
 
-// useWorldClockLighting tem cobertura própria (ver useWorldClockLighting.test.ts)
-// — aqui só interessa que a HomePage a chama, sem rodar fetch/timers de verdade.
+// useWorldClock/useWorldClockLighting têm cobertura própria (ver
+// useWorldClock.test.ts/useWorldClockLighting.test.ts) — aqui só interessa
+// que a HomePage os chama, sem rodar fetch/timers de verdade.
+vi.mock("./useWorldClock", () => ({
+    useWorldClock: vi.fn(() => null),
+}));
+
 vi.mock("./useWorldClockLighting", () => ({
     useWorldClockLighting: vi.fn(),
 }));

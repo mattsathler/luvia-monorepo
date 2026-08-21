@@ -28,46 +28,43 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
     }
 
     return (
-        <div className="card p-16 mr-24 gap-8 items-center border-border w-320">
-            <div className="w-full p-8 text-center d-flex flex-col gap-8 pointer-events-auto">
-                <span>Atividade atual</span>
-                <LuvDivider />
-                <div className="card flat border-1 border-border border-8 w-full d-flex justify-between p-8 px-16 items-center h-72">
-                    <div className="d-flex flex-row gap-16 items-center">
-                        <LuvIcon name="chair" className="text-game-green"></LuvIcon>
-                        <LuvDivider orientation="vertical" className="bg-border"></LuvDivider>
-                        <div className="d-flex flex-col items-start">
-                            <span>{activityLabel}</span>
-                            <div className="d-flex items-center justify-center gap-4 text-text">
-                                <LuvIcon name="location_on" size={12} className="text-game-green" />
-                                <span className="text-placeholder text-size-12">{currentLot.name}</span>
-                            </div>
+        <div className="card d-flex flex-col mr-24 gap-16 p-16 items-center border-border w-320">
+            <div className="card flat border-1 border-border border-8 w-full d-flex justify-between p-8 px-16 items-center h-72">
+                <div className="d-flex flex-row gap-16 items-center">
+                    <LuvIcon name="chair" className="text-game-green"></LuvIcon>
+                    <LuvDivider orientation="vertical" className="bg-border"></LuvDivider>
+                    <div className="d-flex flex-col items-start">
+                        <span>{activityLabel}</span>
+                        <div className="d-flex items-center justify-center gap-4 text-text">
+                            <LuvIcon name="location_on" size={12} className="text-game-green" />
+                            <span className="text-placeholder text-size-12">{currentLot.name}</span>
                         </div>
                     </div>
-
-                    {!isIdle && (
-                        <button
-                            type="button"
-                            className="circle icon border-text w-16 h-16"
-                            aria-label="Cancelar atividade"
-                            onClick={handleCancelActivity}
-                        >
-                            <LuvIcon name="close" className="text-size-12" />
-                        </button>
-                    )}
                 </div>
 
-                <LuvDivider />
+                {!isIdle && (
+                    <button
+                        type="button"
+                        className="circle icon border-text w-16 h-16"
+                        aria-label="Cancelar atividade"
+                        onClick={handleCancelActivity}
+                    >
+                        <LuvIcon name="close" className="text-size-12" />
+                    </button>
+                )}
+            </div>
 
-                <button className="outline w-full border-placeholder--force d-flex items-center gap-12 ">
-                    <LuvIcon name="add" className="text-placeholder"></LuvIcon>
-                        <LuvDivider orientation="vertical" className=""></LuvDivider>
-                            <span className="text-placeholder">Adicionar atividade</span>
-                        <div className="">
-                        </div>
-                </button>
+            <LuvDivider />
 
-                {/* <div className="card flat border-1 border-dashed border-border border-8 w-full d-flex justify-between p-8 items-center">
+            <button className="outline w-full border-placeholder--force d-flex items-center gap-12 ">
+                <LuvIcon name="add" className="text-placeholder"></LuvIcon>
+                <LuvDivider orientation="vertical" className=""></LuvDivider>
+                <span className="text-placeholder">Adicionar atividade</span>
+                <div className="">
+                </div>
+            </button>
+
+            {/* <div className="card flat border-1 border-dashed border-border border-8 w-full d-flex justify-between p-8 items-center">
                     <div className="d-flex flex-row gap-16 items-center">
                         <LuvIcon name="add" className="text-placeholder"></LuvIcon>
                         <LuvDivider orientation="vertical" className="bg-border"></LuvDivider>
@@ -76,7 +73,6 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
                         </div>
                     </div>
                 </div> */}
-            </div>
         </div>
     );
 }

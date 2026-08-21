@@ -336,7 +336,13 @@ describe("getWorldClock", () => {
     });
 
     it("returns the game's current day/hour/realTimestamp on success, without a token", async () => {
-        const body = { day: 47, hour: 14.3, realTimestamp: "2026-08-20T12:00:00.000Z" };
+        const body = {
+            day: 47,
+            hour: 14.3,
+            weekday: 4,
+            weather: { type: "rainy", temperature: 17 },
+            realTimestamp: "2026-08-20T12:00:00.000Z",
+        };
         const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
         vi.stubGlobal("fetch", fetchMock);
 
