@@ -38,9 +38,12 @@ export function LuvDropdownCard({ title, children, defaultOpen = true, className
                 </button>
             </div>
 
-            <div className={`dropdown-card-collapse ${isOpen ? "" : "dropdown-card-collapse--closed"} mt-16`}>
-                <div className={["dropdown-card-body", bodyClassName].filter(Boolean).join(" ")}>{children}</div>
+            <div className={`dropdown-card-collapse ${isOpen ? "" : "dropdown-card-collapse--closed"}`}>
+                {isOpen ?
+                    <div className={["dropdown-card-body", "pt-16", bodyClassName].filter(Boolean).join(" ")}>{children}</div>
+                    : <></>
+                }
             </div>
-        </div>
+        </div >
     );
 }

@@ -3,6 +3,7 @@ import type { CurrentLot } from "../HomePage.controller";
 import { ProfilePanel } from "./ProfilePanel";
 import { WorldClockPanel } from "./WorldClockPanel";
 import { NavigationPanel } from "./NavigationPanel";
+import { CalendarPanel } from "./CalendarPanel";
 
 type HomeHudProps = {
     character: Character;
@@ -23,7 +24,7 @@ type HomeHudProps = {
 // total, não só entre os outros dois painéis (que têm larguras diferentes).
 export function HomeHud({ character, currentLot, hour, weekday, weather }: HomeHudProps) {
     return (
-        <div className="pos-absolute top left w-full h-full pointer-events-none p-16 z-index-top">
+        <div className="pos-absolute top left w-full h-full pointer-events-none p-12 z-index-top">
             <div className="d-grid grid-cols-3 items-start w-full">
                 <div className="d-flex">
                     <ProfilePanel character={character} />
@@ -32,14 +33,11 @@ export function HomeHud({ character, currentLot, hour, weekday, weather }: HomeH
                 <div className="d-flex justify-center">
                     <WorldClockPanel hour={hour} weekday={weekday} weather={weather} />
                 </div>
-
-                <div className="d-flex justify-end">
-                    {/* <CalendarPanel character={character} currentLot={currentLot} /> */}
-                </div>
             </div>
 
-            <div className="pos-absolute bottom left w-full d-flex justify-center pointer-events-none">
-                <NavigationPanel character={character} currentLot={currentLot}/>
+            <div className="pos-absolute bottom left w-full d-flex justify-center pointer-events-none mb-24">
+                {/* <NavigationPanel character={character} currentLot={currentLot}/> */}
+                <CalendarPanel character={character} currentLot={currentLot} />
             </div>
         </div>
     );

@@ -37,13 +37,16 @@ describe("Player", () => {
 
         render(<Player layers={{ shoes: "0", pants: "0", tops: "0", body_types: "2", faces: "0" }} />);
 
-        expect(useComposedCharacterPreview).toHaveBeenCalledWith([
-            getLayerSrc("body_types", "2"),
-            getLayerSrc("faces", "0"),
-            getLayerSrc("tops", "0"),
-            getLayerSrc("pants", "0"),
-            getLayerSrc("shoes", "0"),
-        ]);
+        expect(useComposedCharacterPreview).toHaveBeenCalledWith(
+            [
+                getLayerSrc("body_types", "2"),
+                getLayerSrc("faces", "0"),
+                getLayerSrc("tops", "0"),
+                getLayerSrc("pants", "0"),
+                getLayerSrc("shoes", "0"),
+            ],
+            undefined,
+        );
     });
 
     it("skips categories that were not provided", () => {
@@ -51,7 +54,7 @@ describe("Player", () => {
 
         render(<Player layers={{ body_types: "0" }} />);
 
-        expect(useComposedCharacterPreview).toHaveBeenCalledWith([getLayerSrc("body_types", "0")]);
+        expect(useComposedCharacterPreview).toHaveBeenCalledWith([getLayerSrc("body_types", "0")], undefined);
     });
 
     it("skips a provided id that does not resolve to a known asset", () => {
@@ -59,6 +62,17 @@ describe("Player", () => {
 
         render(<Player layers={{ body_types: "99" }} />);
 
-        expect(useComposedCharacterPreview).toHaveBeenCalledWith([]);
+        expect(useComposedCharacterPreview).toHaveBeenCalledWith([], undefined);
+    });
+
+    it("restricts the composed region to head+neck when part is \"head\"", () => {
+        (useComposedCharacterPreview as ReturnType<typeof vi.fn>).mockReturnValue(null);
+
+        render(<Player layers={{ body_types: "0" }} part="head" />);
+
+        expect(useComposedCharacterPreview).toHaveBeenCalledWith(
+            [getLayerSrc("body_types", "0")],
+            { minXFrac: 0, minYFrac: 0.08, maxXFrac: 1, maxYFrac: 0.53 },
+        );
     });
 });

@@ -9,16 +9,35 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 
 type BoundingBox = { minX: number; minY: number; maxX: number; maxY: number };
 
-function contentBoundingBox(context: CanvasRenderingContext2D, width: number, height: number): BoundingBox | null {
+/**
+ * Retângulo em frações (0..1) do canvas fixo — ver
+ * docs/decisions/0020-assets-de-personagem-em-canvas-fixo-com-blank-area.md.
+ * Como toda peça nasce ancorada no mesmo canvas, um recorte por fração
+ * (em vez de pixels absolutos) funciona igual pra qualquer resolução de
+ * asset, sem precisar saber o tamanho exato em pixels.
+ */
+export type CanvasRegion = { minXFrac: number; minYFrac: number; maxXFrac: number; maxYFrac: number };
+
+function regionToBounds(region: CanvasRegion, width: number, height: number): BoundingBox {
+    return {
+        minX: Math.max(0, Math.floor(region.minXFrac * width)),
+        minY: Math.max(0, Math.floor(region.minYFrac * height)),
+        maxX: Math.min(width - 1, Math.ceil(region.maxXFrac * width) - 1),
+        maxY: Math.min(height - 1, Math.ceil(region.maxYFrac * height) - 1),
+    };
+}
+
+function contentBoundingBox(context: CanvasRenderingContext2D, width: number, height: number, searchBounds?: BoundingBox): BoundingBox | null {
     const { data } = context.getImageData(0, 0, width, height);
+    const bounds = searchBounds ?? { minX: 0, minY: 0, maxX: width - 1, maxY: height - 1 };
 
     let minX = width;
     let minY = height;
     let maxX = -1;
     let maxY = -1;
 
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
+    for (let y = bounds.minY; y <= bounds.maxY; y++) {
+        for (let x = bounds.minX; x <= bounds.maxX; x++) {
             const alpha = data[(y * width + x) * 4 + 3];
             if (alpha > 0) {
                 if (x < minX) minX = x;
@@ -56,8 +75,12 @@ function cropToBoundingBox(source: HTMLCanvasElement, box: BoundingBox): string 
  * nascem no mesmo canvas fixo (ver docs/decisions/0020-...), desenhá-las
  * todas em `(0,0)` já as alinha corretamente; só o recorte final precisa de
  * cálculo. Usado para a prévia ao vivo do personagem.
+ *
+ * `region`, se informado, restringe o recorte a uma fração do canvas fixo
+ * (ex.: só a cabeça) antes de apertar pro conteúdo real — ver `CanvasRegion`
+ * e os presets em `Player.tsx`.
  */
-export async function composeAndTrimLayers(sources: string[]): Promise<string> {
+export async function composeAndTrimLayers(sources: string[], region?: CanvasRegion): Promise<string> {
     if (sources.length === 0) {
         throw new Error("composeAndTrimLayers requires at least one layer");
     }
@@ -81,7 +104,8 @@ export async function composeAndTrimLayers(sources: string[]): Promise<string> {
         context.drawImage(image, 0, 0);
     }
 
-    const box = contentBoundingBox(context, width, height);
+    const searchBounds = region ? regionToBounds(region, width, height) : undefined;
+    const box = contentBoundingBox(context, width, height, searchBounds);
     if (!box) {
         return fallback;
     }

@@ -28,51 +28,28 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
     }
 
     return (
-        <LuvDropdownCard title="Atividade" className="mr-24" bodyClassName="d-flex flex-col gap-16 w-full">
-            <div className="card flat border-1 border-border border-8 w-full d-flex justify-between p-8 px-16 items-center h-72">
-                <div className="d-flex flex-row gap-16 items-center">
-                    <LuvIcon name="chair" className="text-game-green"></LuvIcon>
-                    <LuvDivider orientation="vertical" className="bg-border"></LuvDivider>
-                    <div className="d-flex flex-col items-start">
-                        <span>{activityLabel}</span>
-                        <div className="d-flex items-center justify-center gap-4 text-text">
-                            <LuvIcon name="location_on" size={12} className="text-game-green" />
-                            <span className="text-placeholder text-size-12">{currentLot.name}</span>
-                        </div>
+        <div className="d-flex flex-col card border-1 border-16 justify-between items-center py-4 px-16">
+            <div className="d-flex flex-row gap-16 items-center">
+                <LuvIcon name="chair" size={20} className="text-game-green"></LuvIcon>
+                <div className="d-flex flex-col items-start">
+                    <span>{activityLabel}</span>
+                    <div className="d-flex items-center justify-center gap-4 text-text">
+                        <LuvIcon name="location_on" size={12} className="text-game-green" />
+                        <span className="text-placeholder text-size-12">{currentLot.name}</span>
                     </div>
                 </div>
-
-                {!isIdle && (
-                    <button
-                        type="button"
-                        className="circle icon border-text w-16 h-16"
-                        aria-label="Cancelar atividade"
-                        onClick={handleCancelActivity}
-                    >
-                        <LuvIcon name="close" className="text-size-12" />
-                    </button>
-                )}
             </div>
 
-            {/* <LuvDivider />
-
-            <button className="outline w-full border-placeholder--force d-flex items-center gap-12 ">
-                <LuvIcon name="add" className="text-placeholder"></LuvIcon>
-                <LuvDivider orientation="vertical" className=""></LuvDivider>
-                <span className="text-placeholder">Adicionar atividade</span>
-                <div className="">
-                </div>
-            </button> */}
-
-            {/* <div className="card flat border-1 border-dashed border-border border-8 w-full d-flex justify-between p-8 items-center">
-                    <div className="d-flex flex-row gap-16 items-center">
-                        <LuvIcon name="add" className="text-placeholder"></LuvIcon>
-                        <LuvDivider orientation="vertical" className="bg-border"></LuvDivider>
-                        <div className="d-flex flex-col items-start">
-                            <span className="text-placeholder">Adicionar atividade</span>
-                        </div>
-                    </div>
-                </div> */}
-        </LuvDropdownCard>
+            {!isIdle && (
+                <button
+                    type="button"
+                    className="circle icon border-text w-16 h-16"
+                    aria-label="Cancelar atividade"
+                    onClick={handleCancelActivity}
+                >
+                    <LuvIcon name="close" className="text-size-12" />
+                </button>
+            )}
+        </div>
     );
 }

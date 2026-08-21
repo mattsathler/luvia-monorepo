@@ -105,6 +105,33 @@ describe("composeAndTrimLayers", () => {
         expect(result).toBe("data:image/png;base64,trimmed");
     });
 
+    it("restricts the crop to the given region, ignoring content outside it", async () => {
+        // Canvas 4x4 com dois blocos opacos: um em y=0 (fora da região) e um
+        // em y=3 (dentro dela) — a região deve enxergar só o segundo.
+        const width = 4;
+        const height = 4;
+        const data = new Uint8ClampedArray(width * height * 4);
+        const setAlpha = (x: number, y: number, alpha: number) => {
+            data[(y * width + x) * 4 + 3] = alpha;
+        };
+        setAlpha(0, 0, 255);
+        setAlpha(1, 3, 255);
+        setAlpha(2, 3, 255);
+
+        stubImages([new FakeImage(width, height)]);
+
+        const sourceContext = fakeContext({ data, width, height });
+        const sourceCanvas = fakeCanvas(sourceContext);
+        const trimmedContext = fakeContext({ data, width, height });
+        const trimmedCanvas = fakeCanvas(trimmedContext);
+        stubCanvases([sourceCanvas, trimmedCanvas]);
+
+        const result = await composeAndTrimLayers(["body.png"], { minXFrac: 0, minYFrac: 0.5, maxXFrac: 1, maxYFrac: 1 });
+
+        expect(result).toBe("data:image/png;base64,trimmed");
+        expect(trimmedContext.drawImage).toHaveBeenCalledWith(sourceCanvas, 1, 3, 2, 1, 0, 0, 2, 1);
+    });
+
     it("returns the last layer's src when the composite is fully transparent", async () => {
         const width = 2;
         const height = 2;

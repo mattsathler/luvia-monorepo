@@ -20,7 +20,17 @@ describe("useComposedCharacterPreview", () => {
         expect(result.current).toBeNull();
 
         await waitFor(() => expect(result.current).toBe("data:image/png;base64,composed"));
-        expect(composeAndTrimLayers).toHaveBeenCalledWith(["body.png", "face.png"]);
+        expect(composeAndTrimLayers).toHaveBeenCalledWith(["body.png", "face.png"], undefined);
+    });
+
+    it("forwards the region to composeAndTrimLayers", async () => {
+        (composeAndTrimLayers as ReturnType<typeof vi.fn>).mockResolvedValue("data:image/png;base64,composed");
+        const region = { minXFrac: 0, minYFrac: 0.08, maxXFrac: 1, maxYFrac: 0.53 };
+
+        const { result } = renderHook(() => useComposedCharacterPreview(["body.png"], region));
+
+        await waitFor(() => expect(result.current).toBe("data:image/png;base64,composed"));
+        expect(composeAndTrimLayers).toHaveBeenCalledWith(["body.png"], region);
     });
 
     it("returns null when composing fails", async () => {

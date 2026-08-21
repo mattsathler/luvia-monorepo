@@ -1,5 +1,6 @@
 import { useComposedCharacterPreview } from "../../lib/useComposedCharacterPreview";
 import { getLayerSrc } from "../../lib/character-assets";
+import type { CanvasRegion } from "../../lib/image-trim";
 
 /**
  * Ordem de empilhamento (de baixo pra cima) das categorias de
@@ -13,8 +14,30 @@ export const LAYER_ORDER = ["body_types", "faces", "hair_types", "tops", "pants"
 export type LayerCategory = (typeof LAYER_ORDER)[number];
 export type PlayerLayers = Partial<Record<LayerCategory, string>>;
 
+export type PlayerPart = "full" | "head";
+
+// Recortes fixos do canvas do personagem (frações 0..1) — todo PNG de peça
+// nasce ancorado no mesmo canvas fixo (ver
+// docs/decisions/0020-assets-de-personagem-em-canvas-fixo-com-blank-area.md),
+// então uma janela fixa em fração serve pra qualquer resolução de asset.
+// `head` mede da franja do cabelo até logo abaixo do pescoço (medido nos
+// PNGs atuais: cabeça ~14–50% da altura do canvas) e usa a largura toda pra
+// não cortar cabelo largo nas laterais — o recorte final aperta pro
+// conteúdo real de qualquer forma.
+const PLAYER_PART_REGIONS: Record<PlayerPart, CanvasRegion | undefined> = {
+    full: undefined,
+    head: { minXFrac: 0, minYFrac: 0.08, maxXFrac: 1, maxYFrac: 0.53 },
+};
+
 type PlayerProps = {
     layers: PlayerLayers;
+    /**
+     * Qual parte do personagem mostrar. `"head"` corta só cabeça/pescoço —
+     * pensado pra avatares pequenos (ex.: `ProfilePanel` na HUD). `"full"`
+     * (padrão) mostra o corpo inteiro, pra telas de detalhe do jogador.
+     * @default "full"
+     */
+    part?: PlayerPart;
 };
 
 /**
@@ -24,7 +47,7 @@ type PlayerProps = {
  * tanto para a prévia ao vivo da criação de personagem quanto para exibir os
  * detalhes de um jogador específico em qualquer outro lugar do jogo.
  */
-export function Player({ layers }: PlayerProps) {
+export function Player({ layers, part = "full" }: PlayerProps) {
     const sources = LAYER_ORDER.flatMap((category) => {
         const id = layers[category];
         if (id === undefined) {
@@ -35,7 +58,7 @@ export function Player({ layers }: PlayerProps) {
         return src ? [src] : [];
     });
 
-    const composed = useComposedCharacterPreview(sources);
+    const composed = useComposedCharacterPreview(sources, PLAYER_PART_REGIONS[part]);
 
     return composed ? (
         <img src={composed} alt="Personagem" className="w-auto h-auto h-full margin-center animate-breathe" />

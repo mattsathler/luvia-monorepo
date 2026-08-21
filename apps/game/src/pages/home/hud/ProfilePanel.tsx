@@ -15,42 +15,31 @@ type ProfilePanelProps = {
 export function ProfilePanel({ character }: ProfilePanelProps) {
     return (
         <LuvDropdownCard
-            title="Perfil"
-            className="border-border py-16 pl-0 pr-24 max-w-480"
-            bodyClassName="d-grid grid-cols-2 gap-8 items-center"
+            title={`${character.firstName} ${character.lastName}`}
+            className="p-16 border-16"
+            bodyClassName="d-flex gap-8 items-center"
         >
-            <div className="h-128 bg-transparent">
-                <Player layers={characterToPlayerLayers(character)} />
-            </div>
+            <div className="d-flex gap-8">
 
-            <div className="d-flex flex-col gap-8 pointer-events-auto">
-                <div className="d-flex gap-16 items-center">
-
-                    <div className="d-flex flex-col gap-4 flex-1-1">
-                        <strong className="text-text text-size-20">
-                            {character.firstName} {character.lastName}
-                        </strong>
-                    </div>
+                <div className="w-72 bg-transparent">
+                    <Player layers={characterToPlayerLayers(character)} part="head" />
                 </div>
-
-                <LuvDivider></LuvDivider>
-
-                <div className="d-flex flex-col gap-8">
+            </div>
+            <div className="d-flex flex-col gap-4 pointer-events-auto">
+                <div className="d-flex flex-col gap-4">
                     <LuvStatBar icon="sentiment_satisfied" label="Felicidade" value={character.happiness} max={MAX_STAT} color="game-green" />
                     <LuvStatBar icon="bolt" label="Energia" value={character.energy} max={MAX_STAT} color="game-yellow" />
                 </div>
 
-                <LuvDivider></LuvDivider>
 
-                <div className="d-flex items-center gap-8 text-text">
-                    <span className="d-flex items-center gap-4">
-                        <LuvIcon name="payments" size={20} className="text-game-green contour" />
-                        <strong>{character.money}</strong>
+                <div className="d-grid grid-cols-2 items-center text-text">
+                    <span className="d-flex items-center gap-4 justify-center items-center">
+                        <LuvIcon name="payments" size={16} className="text-money" />
+                        <span>{character.money}</span>
                     </span>
-
-                    <span className="d-flex items-center gap-4">
-                        <LuvIcon name="star" size={16} className="text-game-yellow contour" />
-                        <strong>{character.fame}</strong>
+                    <span className="d-flex items-center gap-4 justify-center items-center">
+                        <LuvIcon name="paid" size={16} className="text-cash" />
+                        <span>{character.fame}</span>
                     </span>
                 </div>
             </div>

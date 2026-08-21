@@ -55,9 +55,11 @@ type WorldClockPanelProps = {
 
 export function WorldClockPanel({ hour, weekday, weather }: WorldClockPanelProps) {
     return (
-        <div className="card border-border py-8 d-flex gap items-center pointer-events-auto">
-            <div className="d-flex items-center gap-16">
-                <LuvIcon name={weather === null ? "cloud" : WEATHER_ICONS[weather.type]} className={weather ? 'text-game-' + WEATHER_COLORS[weather.type] : "placeholder"} />
+        <div className="card border-16 p-8 px-16 d-flex gap-8 items-center pointer-events-auto">
+            <div className="pr-8">
+                <LuvIcon name={weather === null ? "cloud" : WEATHER_ICONS[weather.type]} size={32} className={weather ? 'text-game-' + WEATHER_COLORS[weather.type] : "placeholder"} />
+            </div>
+            <div className="d-flex items-center gap-8">
                 <div className="d-flex flex-col items-start">
                     <div className="d-flex gap-8 items-center">
                         <span className="text-text">{weather === null ? "--°C" : `${weather.temperature}°C`}</span>
@@ -68,12 +70,12 @@ export function WorldClockPanel({ hour, weekday, weather }: WorldClockPanelProps
                 </div>
             </div>
 
-            <LuvDivider orientation="vertical" className="bg-border" />
+            <LuvDivider orientation="vertical" className="bg-placeholder" />
 
-            <div className="d-flex items-center gap-16 w-90">
-                <LuvIcon name="schedule" className="text-text" />
+            <div className="d-flex items-center gap-8">
+                <LuvIcon name="schedule" size={20} className="text-text" />
                 <div className="d-flex flex-col items-start">
-                    <strong className="text-text text-size-20">{hour === null ? "--:--" : formatGameTime(hour)}</strong>
+                    <strong className="text-text text-size-16">{hour === null ? "--:--" : formatGameTime(hour)}</strong>
                 </div>
             </div>
         </div>

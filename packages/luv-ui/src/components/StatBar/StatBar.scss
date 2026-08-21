@@ -7,7 +7,7 @@
 
 .luv-stat-bar-header {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 8px;
     color: var(--text);
@@ -17,15 +17,13 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    font-size: 0.8rem;
     font-weight: 600;
-    text-transform: uppercase;
     opacity: 0.8;
 }
 
 .luv-stat-bar-value {
-    font-size: 0.8rem;
     opacity: 0.7;
+    font-size: 10px;
     white-space: nowrap;
 }
 

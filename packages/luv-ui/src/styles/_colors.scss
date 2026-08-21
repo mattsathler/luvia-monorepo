@@ -40,7 +40,9 @@ $theme-light: (
     success-alpha: #6BE3A133,
     warn-alpha: #FFC86B33,
     error-alpha: #FF6B7A33,
-    border: #e8e8e8,
+    border: #909090,
+    money: #49765e,
+    cash: #9c8a4e
 );
 
 // ========== DARK THEME ==========
@@ -123,6 +125,8 @@ $color-keys: (
     warn-alpha: var-color(warn-alpha),
     error-alpha: var-color(error-alpha),
     border: var-color(border),
+    cash: var-color(cash),
+    money: var-color(money),
 );
 
 // ==========================
