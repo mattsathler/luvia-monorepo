@@ -110,12 +110,24 @@ $vh-scale: (
     min-height: 100%;
 }
 
+.min-h-full--force {
+    min-height: 100% !important;
+}
+
 .min-w-full {
     min-width: 100%;
 }
 
+.min-w-full--force {
+    min-width: 100% !important;
+}
+
 .min-h-screen {
     min-height: 100dvh;
+}
+
+.min-h-screen--force {
+    min-height: 100dvh !important;
 }
 
 @each $key, $value in $vw-scale {
@@ -158,8 +170,16 @@ $vh-scale: (
     max-height: 50%;
 }
 
+.max-h-50-p--force {
+    max-height: 50% !important;
+}
+
 .max-w-50-p {
     max-width: 50%;
+}
+
+.max-w-50-p--force {
+    max-width: 50% !important;
 }
 
 .w-auto {
@@ -190,6 +210,10 @@ $vh-scale: (
     .border-#{$name} {
         border: 2px solid $value
     }
+
+    .border-#{$name}--force {
+        border: 2px solid $value !important;
+    }
 }
 
 @each $key, $value in $space-scale {
@@ -200,6 +224,14 @@ $vh-scale: (
 
 .border-transparent {
     border: 2px solid transparent !important;
+}
+
+.border-dashed {
+    border-style: dashed;
+}
+
+.border-dashed--force {
+    border-style: dashed !important;
 }
 
 // ==========================
@@ -427,6 +459,10 @@ $vh-scale: (
     text-wrap: wrap;
 }
 
+.text-wrap--force {
+    text-wrap: wrap !important;
+}
+
 @each $key, $value in $space-scale {
     .text-size-#{$key} {
         font-size: $value !important;
@@ -457,16 +493,32 @@ $vh-scale: (
     left: 0;
 }
 
+.left--force {
+    left: 0 !important;
+}
+
 .right {
     right: 0;
+}
+
+.right--force {
+    right: 0 !important;
 }
 
 .top {
     top: 0;
 }
 
+.top--force {
+    top: 0 !important;
+}
+
 .bottom {
     bottom: 0;
+}
+
+.bottom--force {
+    bottom: 0 !important;
 }
 
 // ==========================
@@ -500,6 +552,10 @@ $vh-scale: (
     border-radius: 0;
 }
 
+.no-round--force {
+    border-radius: 0 !important;
+}
+
 .rounded {
     border-radius: 8px !important;
 }
@@ -528,6 +584,10 @@ $vh-scale: (
     cursor: default;
 }
 
+.cursor-normal--force {
+    cursor: default !important;
+}
+
 .cursor-pointer {
     cursor: pointer !important;
 }
@@ -541,58 +601,116 @@ $vh-scale: (
     white-space: nowrap;
 }
 
+.text-nowrap--force {
+    text-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
 .hidden {
     overflow: hidden;
+}
+
+.hidden--force {
+    overflow: hidden !important;
 }
 
 .hidden-x {
     overflow-x: hidden;
 }
 
+.hidden-x--force {
+    overflow-x: hidden !important;
+}
+
 .hidden-y {
     overflow-y: hidden;
+}
+
+.hidden-y--force {
+    overflow-y: hidden !important;
 }
 
 .scroll {
     overflow: scroll;
 }
 
+.scroll--force {
+    overflow: scroll !important;
+}
+
 .scroll-y {
     overflow-y: auto;
+}
+
+.scroll-y--force {
+    overflow-y: auto !important;
 }
 
 .scroll-x {
     overflow-x: auto;
 }
 
+.scroll-x--force {
+    overflow-x: auto !important;
+}
+
 .scroll-auto {
     overflow: auto;
+}
+
+.scroll-auto--force {
+    overflow: auto !important;
 }
 
 .z-index-top {
     z-index: 9999;
 }
 
+.z-index-top--force {
+    z-index: 9999 !important;
+}
+
 .transition-slow {
     transition: all 0.5s ease;
+}
+
+.transition-slow--force {
+    transition: all 0.5s ease !important;
 }
 
 .contour {
     filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
 }
 
+.contour--force {
+    filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black) !important;
+}
+
 .object-contain {
     object-fit: contain;
+}
+
+.object-contain--force {
+    object-fit: contain !important;
 }
 
 .margin-center {
     margin: 0 auto;
 }
 
+.margin-center--force {
+    margin: 0 auto !important;
+}
+
 @each $key, $value in $space-scale {
     .gap-#{$key} {
         grid-row-gap: $value;
         grid-column-gap: $value;
+    }
+
+    .gap-#{$key}--force {
+        grid-row-gap: $value !important;
+        grid-column-gap: $value !important;
     }
 }
 
@@ -612,6 +730,10 @@ $vh-scale: (
     .wrap-medium {
         flex-direction: column;
     }
+
+    .wrap-medium--force {
+        flex-direction: column !important;
+    }
 }
 
 @media screen and (max-width: 456px) {
@@ -622,10 +744,21 @@ $vh-scale: (
             text-overflow: ellipsis;
             max-width: $value;
         }
+
+        .text-ellipsis-#{$key}--force {
+            overflow: hidden !important;
+            white-space: nowrap !important;
+            text-overflow: ellipsis !important;
+            max-width: $value !important;
+        }
     }
 
     .wrap-tiny {
         flex-direction: column;
+    }
+
+    .wrap-tiny--force {
+        flex-direction: column !important;
     }
 }
 
@@ -649,6 +782,11 @@ $vh-scale: (
 .animate-breathe {
     transform-origin: bottom;
     animation: breathe 3s ease-in-out infinite;
+}
+
+.animate-breathe--force {
+    transform-origin: bottom !important;
+    animation: breathe 3s ease-in-out infinite !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
