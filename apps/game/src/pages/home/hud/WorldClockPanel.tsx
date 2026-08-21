@@ -36,6 +36,12 @@ const WEATHER_ICONS: Record<WeatherType, string> = {
     foggy: "cloud",
 };
 
+const WEATHER_COLORS: Record<string, string> = {
+    sunny: "yellow",
+    rainy: "blue",
+    foggy: "grey"
+}
+
 export function formatWeather(weather: Weather): string {
     return WEATHER_LABELS[weather.type];
 }
@@ -49,22 +55,25 @@ type WorldClockPanelProps = {
 
 export function WorldClockPanel({ hour, weekday, weather }: WorldClockPanelProps) {
     return (
-        <div className="card border-border py-8 px-24 d-flex gap items-center pointer-events-auto">
-            <div className="d-flex items-center gap-8">
-                <LuvIcon name={weather === null ? "cloud" : WEATHER_ICONS[weather.type]} className="text-placeholder" />
+        <div className="card border-border py-8 d-flex gap items-center pointer-events-auto">
+            <div className="d-flex items-center gap-16">
+                <LuvIcon name={weather === null ? "cloud" : WEATHER_ICONS[weather.type]} className={weather ? 'text-game-' + WEATHER_COLORS[weather.type] : "placeholder"} />
                 <div className="d-flex flex-col items-start">
-                    <strong className="text-text text-size-20">{weather === null ? "--°C" : `${weather.temperature}°C`}</strong>
-                    <span className="text-placeholder text-size-12">{weather === null ? "" : formatWeather(weather)}</span>
+                    <div className="d-flex gap-8 items-center">
+                        <span className="text-text">{weather === null ? "--°C" : `${weather.temperature}°C`}</span>
+                        ·
+                        <span className="text-text">{weather === null ? "" : formatWeather(weather)}</span>
+                    </div>
+                    <span className="text-placeholder text-size-12">{weekday === null ? "" : formatWeekday(weekday)}</span>
                 </div>
             </div>
 
             <LuvDivider orientation="vertical" className="bg-border" />
 
-            <div className="d-flex items-center gap-8">
+            <div className="d-flex items-center gap-16 w-90">
                 <LuvIcon name="schedule" className="text-text" />
                 <div className="d-flex flex-col items-start">
                     <strong className="text-text text-size-20">{hour === null ? "--:--" : formatGameTime(hour)}</strong>
-                    <span className="text-placeholder text-size-12">{weekday === null ? "" : formatWeekday(weekday)}</span>
                 </div>
             </div>
         </div>
