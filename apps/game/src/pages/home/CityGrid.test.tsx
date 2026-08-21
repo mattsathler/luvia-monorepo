@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CityGrid } from "./CityGrid";
@@ -33,6 +33,19 @@ class FakeIntersectionObserver {
     trigger(target: Element, isIntersecting: boolean) {
         this.callback([{ target, isIntersecting } as IntersectionObserverEntry], this as unknown as IntersectionObserver);
     }
+}
+
+// jsdom não implementa o construtor `PointerEvent` (só `Event`), então
+// `fireEvent.pointerDown/Move/Up` do RTL cai pro `Event` genérico, que
+// ignora `pointerId`/`clientX`/`clientY`/`button` do init dict — o handler
+// do componente lê essas props como `undefined` e descarta o gesto. Monta
+// o evento na mão e atribui essas props diretamente nele (React lê do
+// evento nativo, não recria os valores), simulando o que um `PointerEvent`
+// de verdade daria.
+function firePointerEvent(target: Element, type: string, init: { pointerId: number; clientX: number; clientY: number; button?: number }) {
+    const event = new Event(type, { bubbles: true, cancelable: true });
+    Object.assign(event, { button: 0, ...init });
+    fireEvent(target, event);
 }
 
 function targetFor(chunkX: number, chunkY: number): Element {
@@ -190,6 +203,110 @@ describe("CityGrid", () => {
         await user.click(buttons[0]);
 
         expect(onTileClick).toHaveBeenCalledWith(expect.objectContaining({ x: 0, y: 0 }));
+    });
+
+    it("hides the native scrollbar and disables native touch panning, since scrolling happens via drag", () => {
+        const { container } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+
+        expect(grid).toHaveClass("no-scrollbar");
+        expect(grid).toHaveClass("touch-none");
+    });
+
+    it("pans the map by dragging the pointer past the movement threshold", () => {
+        const { container } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+        const startScrollLeft = grid.scrollLeft;
+        const startScrollTop = grid.scrollTop;
+
+        firePointerEvent(grid, "pointerdown", { pointerId: 1, button: 0, clientX: 200, clientY: 200 });
+        firePointerEvent(grid, "pointermove", { pointerId: 1, clientX: 170, clientY: 220 });
+
+        expect(grid.scrollLeft).toBe(startScrollLeft + 30);
+        expect(grid.scrollTop).toBe(startScrollTop - 20);
+        expect(grid).toHaveClass("cursor-grabbing");
+
+        firePointerEvent(grid, "pointerup", { pointerId: 1, clientX: 170, clientY: 220 });
+
+        expect(grid).toHaveClass("cursor-grab");
+    });
+
+    it("stops panning once the pointer is released, even though the mouse keeps the same pointerId across gestures", () => {
+        // Bug real: como o mouse (ao contrário do touch) reusa o mesmo
+        // pointerId entre gestos separados, um `pointermove` sem o botão
+        // pressionado (o usuário só passou o cursor por cima do mapa depois
+        // de soltar) tinha o mesmo `pointerId` do arrasto anterior e era
+        // lido como sua continuação, arrastando o mapa sozinho.
+        const { container } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+
+        firePointerEvent(grid, "pointerdown", { pointerId: 1, button: 0, clientX: 200, clientY: 200 });
+        firePointerEvent(grid, "pointermove", { pointerId: 1, clientX: 170, clientY: 220 });
+        firePointerEvent(grid, "pointerup", { pointerId: 1, clientX: 170, clientY: 220 });
+
+        const scrollLeftAfterRelease = grid.scrollLeft;
+        const scrollTopAfterRelease = grid.scrollTop;
+
+        firePointerEvent(grid, "pointermove", { pointerId: 1, clientX: 100, clientY: 260 });
+
+        expect(grid.scrollLeft).toBe(scrollLeftAfterRelease);
+        expect(grid.scrollTop).toBe(scrollTopAfterRelease);
+    });
+
+    it("ignores pointer moves under the drag threshold, so a shaky click does not scroll the map", () => {
+        const { container } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+        const startScrollLeft = grid.scrollLeft;
+        const startScrollTop = grid.scrollTop;
+
+        firePointerEvent(grid, "pointerdown", { pointerId: 1, button: 0, clientX: 200, clientY: 200 });
+        firePointerEvent(grid, "pointermove", { pointerId: 1, clientX: 202, clientY: 199 });
+
+        expect(grid.scrollLeft).toBe(startScrollLeft);
+        expect(grid.scrollTop).toBe(startScrollTop);
+        expect(grid).not.toHaveClass("cursor-grabbing");
+    });
+
+    it("swallows the click that follows a real drag, so it does not select the tile underneath", async () => {
+        (getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
+            tiles: [{ x: 0, y: 0, type: "grass" }],
+            lots: [],
+        });
+        const onTileClick = vi.fn();
+
+        const { container } = render(
+            <CityGrid
+                dimensions={dimensions}
+                tileSize={64}
+                backgroundColor="#7bc96f"
+                accessToken="token-123"
+                characterId="char-1"
+                onTileClick={onTileClick}
+            />,
+        );
+
+        act(() => FakeIntersectionObserver.instances[0].trigger(targetFor(0, 0), true));
+        const button = await screen.findByRole("button");
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+
+        firePointerEvent(grid, "pointerdown", { pointerId: 1, button: 0, clientX: 200, clientY: 200 });
+        firePointerEvent(grid, "pointermove", { pointerId: 1, clientX: 170, clientY: 220 });
+        firePointerEvent(grid, "pointerup", { pointerId: 1, clientX: 170, clientY: 220 });
+        fireEvent.click(button);
+
+        expect(onTileClick).not.toHaveBeenCalled();
     });
 
     it("disconnects the observer on unmount", () => {

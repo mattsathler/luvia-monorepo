@@ -1,10 +1,30 @@
 import { useEffect, useMemo, useRef } from "react";
+import type { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
 import { Block, TILE_TYPES } from "luv-ui";
 import type { TileData } from "luv-ui";
 import { CHUNK_SIZE, useCityGridController } from "./CityGrid.controller";
 
 /** ~1 chunk de buffer em todas as direções — ver docs/technical/lowys-carregamento-em-chunks.md. */
 const PREFETCH_MARGIN = "640px";
+
+/**
+ * Distância mínima (px) que o ponteiro precisa se mover, a partir do
+ * pointerdown, pra um gesto virar "arrastar o mapa" em vez de "clicar num
+ * tile" — sem isso, todo clique (mesmo parado) dispararia um `scrollLeft`/
+ * `scrollTop` de ~0px, e um tremor de mão de 1-2px num clique real seria
+ * interpretado como arrasto e engoliria o clique do tile.
+ */
+const DRAG_THRESHOLD_PX = 6;
+
+type DragState = {
+    pointerId: number;
+    startX: number;
+    startY: number;
+    startScrollLeft: number;
+    startScrollTop: number;
+    /** Só vira `true` depois que o movimento passa de `DRAG_THRESHOLD_PX` — é o que diferencia arrasto de clique. */
+    dragged: boolean;
+};
 
 function isoCornersBoundingBox(corners: { x: number; y: number }[], size: number) {
     let minX = Infinity;
@@ -109,6 +129,9 @@ export function CityGrid({
 
     const containerRef = useRef<HTMLDivElement>(null);
     const placeholderRefs = useRef(new Map<string, HTMLDivElement>());
+    const dragRef = useRef<DragState | null>(null);
+    /** Sobrevive um tick além de `dragRef` — só existe pro `click` pós-arrasto (ver `endDrag`/`handleClickCapture`). */
+    const wasDraggedRef = useRef(false);
 
     const bounds = useMemo(
         () => getGridIsoBounds(dimensions.width, dimensions.height, tileSize),
@@ -163,8 +186,95 @@ export function CityGrid({
         return () => observer.disconnect();
     }, [chunkCoords, onChunkEnter, onChunkLeave]);
 
+    // Rolagem por clique-e-arraste, como num app de mapas — a barra de
+    // rolagem nativa fica escondida (`no-scrollbar`) e `touch-none` desliga
+    // o pan por toque nativo do navegador, pra não competir com o
+    // `scrollLeft`/`scrollTop` que este handler seta na mão. Pointer events
+    // cobrem mouse e touch com o mesmo código.
+    function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+        const container = containerRef.current;
+        if (!container || event.button !== 0) {
+            return;
+        }
+
+        dragRef.current = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            startScrollLeft: container.scrollLeft,
+            startScrollTop: container.scrollTop,
+            dragged: false,
+        };
+        container.setPointerCapture?.(event.pointerId);
+    }
+
+    function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+        const drag = dragRef.current;
+        const container = containerRef.current;
+        if (!drag || !container || drag.pointerId !== event.pointerId) {
+            return;
+        }
+
+        const dx = event.clientX - drag.startX;
+        const dy = event.clientY - drag.startY;
+
+        if (!drag.dragged) {
+            if (Math.hypot(dx, dy) < DRAG_THRESHOLD_PX) {
+                return;
+            }
+            drag.dragged = true;
+            container.classList.remove("cursor-grab");
+            container.classList.add("cursor-grabbing");
+        }
+
+        container.scrollLeft = drag.startScrollLeft - dx;
+        container.scrollTop = drag.startScrollTop - dy;
+    }
+
+    function endDrag(event: ReactPointerEvent<HTMLDivElement>) {
+        const drag = dragRef.current;
+        const container = containerRef.current;
+        if (!drag || drag.pointerId !== event.pointerId) {
+            return;
+        }
+
+        // `wasDragged` sobrevive pro `handleClickCapture` (que roda a
+        // seguir, no `click` que o navegador dispara depois do
+        // pointerup) — mas `dragRef.current` em si precisa ser limpo já
+        // aqui: o `pointerId` do mouse não muda entre gestos (ao
+        // contrário do touch, que gera um novo por toque), então sem
+        // isso um `pointermove` de simplesmente passar o cursor sobre o
+        // mapa (sem o botão pressionado) bate o mesmo `pointerId` do
+        // arrasto anterior e é lido como sua continuação — o mapa
+        // continua "arrastando" sozinho depois que o mouse já soltou.
+        wasDraggedRef.current = drag.dragged;
+        dragRef.current = null;
+
+        container?.releasePointerCapture?.(event.pointerId);
+        container?.classList.remove("cursor-grabbing");
+        container?.classList.add("cursor-grab");
+    }
+
+    // Impede que o clique disparado pelo navegador logo após um arrasto
+    // (pointerup -> click, mesmo destino) chegue ao `onClick` do tile.
+    function handleClickCapture(event: ReactMouseEvent<HTMLDivElement>) {
+        if (wasDraggedRef.current) {
+            wasDraggedRef.current = false;
+            event.stopPropagation();
+        }
+    }
+
     return (
-        <div ref={containerRef} className="iso-grid scroll-auto h-full w-full" style={{ backgroundColor }}>
+        <div
+            ref={containerRef}
+            className="iso-grid scroll-auto no-scrollbar touch-none cursor-grab h-full w-full"
+            style={{ backgroundColor }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            onClickCapture={handleClickCapture}
+        >
             <div
                 className="iso-inner"
                 style={{

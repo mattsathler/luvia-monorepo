@@ -604,6 +604,22 @@ $vh-scale: (
     cursor: pointer !important;
 }
 
+.cursor-grab {
+    cursor: grab;
+}
+
+.cursor-grab--force {
+    cursor: grab !important;
+}
+
+.cursor-grabbing {
+    cursor: grabbing;
+}
+
+.cursor-grabbing--force {
+    cursor: grabbing !important;
+}
+
 .gap {
     gap: 24px !important;
 }
@@ -672,6 +688,29 @@ $vh-scale: (
 
 .scroll-auto--force {
     overflow: auto !important;
+}
+
+// Esconde a barra de rolagem em todos os navegadores sem impedir a rolagem
+// em si — pensado pro mapa da cidade (CityGrid), que rola por
+// clique-e-arraste como um app de mapas, então a barra é só ruído visual.
+.no-scrollbar {
+    scrollbar-width: none; // Firefox
+
+    &::-webkit-scrollbar {
+        display: none; // Chrome, Safari e navegadores mobile baseados em WebKit/Blink
+    }
+}
+
+// Desliga os gestos de pan/zoom nativos do navegador num elemento (ex.:
+// arrastar pra rolar via touch) — necessário quando JS assume o controle do
+// gesto (ex.: pan por pointer events), senão o scroll nativo do touch e o
+// scroll programático competem e travam o movimento.
+.touch-none {
+    touch-action: none;
+}
+
+.touch-none--force {
+    touch-action: none !important;
 }
 
 .z-index-top {

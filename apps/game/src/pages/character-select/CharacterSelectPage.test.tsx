@@ -75,14 +75,17 @@ describe("CharacterSelectPage", () => {
 
         const card = await screen.findByRole("button", { name: "Ana Silva" });
         expect(within(card).getByAltText("Personagem")).toHaveAttribute("src", "data:image/png;base64,composed");
-        expect(useComposedCharacterPreview).toHaveBeenCalledWith([
-            getLayerSrc("body_types", "3"),
-            getLayerSrc("faces", "0"),
-            getLayerSrc("tops", "0"),
-            getLayerSrc("pants", "0"),
-            getLayerSrc("shoes", "0"),
-            getLayerSrc("overlays", "0"),
-        ]);
+        expect(useComposedCharacterPreview).toHaveBeenCalledWith(
+            [
+                getLayerSrc("body_types", "3"),
+                getLayerSrc("faces", "0"),
+                getLayerSrc("tops", "0"),
+                getLayerSrc("pants", "0"),
+                getLayerSrc("shoes", "0"),
+                getLayerSrc("overlays", "0"),
+            ],
+            undefined,
+        );
     });
 
     it("selects a character when clicked", async () => {
