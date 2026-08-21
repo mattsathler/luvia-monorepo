@@ -22,6 +22,10 @@ A cidade é uma grade completa, não só lotes: grama, ruas (que se conectam for
 
 O cliente não carrega nem renderiza a cidade inteira de uma vez — só o que está (ou pode ficar, com uma margem pequena) visível pro jogador, carregando o resto sob demanda conforme ele rola a tela (sistema **LOWYS** — ver [[../technical/lowys-carregamento-em-chunks]]).
 
+### Tempo e iluminação
+
+Existe um relógio de mundo único e global — a mesma data/hora de jogo pra todos os jogadores, ditada pelo backend, nunca pelo relógio do próprio dispositivo. O tempo de jogo corre num ritmo fixo de **96 minutos reais por dia de jogo (24h)**. Essa hora alimenta o ciclo dia/noite visual da cidade isométrica (posição do sol, tom de luz) — ver [[../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]] e [[../technical/relogio-do-mundo]].
+
 ## Referências
 
 - [[lots-and-construction]]
@@ -29,4 +33,6 @@ O cliente não carrega nem renderiza a cidade inteira de uma vez — só o que e
 - [[../decisions/0005-cidade-unica-persistente]]
 - [[../decisions/0026-terreno-da-cidade-gerado-e-persistido]]
 - [[../decisions/0027-cidade-sem-borda-fixa-e-so-com-lagoa]]
+- [[../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]]
 - [[../technical/lowys-carregamento-em-chunks]]
+- [[../technical/relogio-do-mundo]]
