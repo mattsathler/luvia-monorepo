@@ -1,4 +1,4 @@
-import { LuvDivider, LuvIcon, LuvStatBar } from "luv-ui";
+import { LuvDivider, LuvDropdownCard, LuvIcon, LuvStatBar } from "luv-ui";
 import type { Character } from "../../../lib/api";
 import { Player } from "../../../components/Player/Player";
 import { characterToPlayerLayers } from "../../../components/Player/characterToPlayerLayers";
@@ -14,7 +14,11 @@ type ProfilePanelProps = {
 
 export function ProfilePanel({ character }: ProfilePanelProps) {
     return (
-        <div className="card border-border py-16 pl-0 pr-24 d-grid grid-cols-2 max-w-480 gap-8 items-center">
+        <LuvDropdownCard
+            title="Perfil"
+            className="border-border py-16 pl-0 pr-24 max-w-480"
+            bodyClassName="d-grid grid-cols-2 gap-8 items-center"
+        >
             <div className="h-128 bg-transparent">
                 <Player layers={characterToPlayerLayers(character)} />
             </div>
@@ -50,6 +54,6 @@ export function ProfilePanel({ character }: ProfilePanelProps) {
                     </span>
                 </div>
             </div>
-        </div>
+        </LuvDropdownCard>
     );
 }

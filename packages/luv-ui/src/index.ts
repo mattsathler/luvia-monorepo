@@ -28,6 +28,8 @@ export type { LuvInputProps } from './components/Input/LuvInput';
 export { default as luviaLogo } from './assets/img/luvia-logo-big.png?inline';
 export { LuvModal } from './components/Dialog/LuvModal';
 export type { LuvModalProps, LuvModalVariant } from './components/Dialog/LuvModal';
+export { LuvDropdownCard } from './components/DropdownCard/LuvDropdownCard';
+export type { LuvDropdownCardProps } from './components/DropdownCard/LuvDropdownCard';
 export { LuvIcon } from './components/Icon/LuvIcon';
 export type { LuvIconProps } from './components/Icon/LuvIcon';
 export { LuvStepper, useLuvStepper } from './components/Stepper/LuvStepper';

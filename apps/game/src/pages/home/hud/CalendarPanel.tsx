@@ -1,4 +1,4 @@
-import { LuvDivider, LuvIcon } from "luv-ui";
+import { LuvDivider, LuvDropdownCard, LuvIcon } from "luv-ui";
 import type { Character } from "../../../lib/api";
 import type { CurrentLot } from "../HomePage.controller";
 
@@ -28,7 +28,7 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
     }
 
     return (
-        <div className="d-flex flex-col mr-24 gap-16 w-full">
+        <LuvDropdownCard title="Atividade" className="mr-24" bodyClassName="d-flex flex-col gap-16 w-full">
             <div className="card flat border-1 border-border border-8 w-full d-flex justify-between p-8 px-16 items-center h-72">
                 <div className="d-flex flex-row gap-16 items-center">
                     <LuvIcon name="chair" className="text-game-green"></LuvIcon>
@@ -73,6 +73,6 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
                         </div>
                     </div>
                 </div> */}
-        </div>
+        </LuvDropdownCard>
     );
 }

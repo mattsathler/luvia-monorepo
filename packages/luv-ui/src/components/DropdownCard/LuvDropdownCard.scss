@@ -1,0 +1,43 @@
+.dropdown-card-header {
+    min-height: 24px;
+}
+
+.dropdown-card-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+
+    .luv-icon {
+        transition: transform 0.25s ease;
+    }
+}
+
+// Sem estado próprio no CSS — o ícone gira conforme `aria-expanded`, que o
+// componente já mantém em sincronia com o estado real (sem duplicar lógica
+// de aberto/fechado numa classe à parte).
+.dropdown-card-toggle[aria-expanded="false"] .luv-icon {
+    transform: rotate(-90deg);
+}
+
+// Truque de grid pra animar até a altura real do conteúdo sem medir em JS
+// (`1fr` anima suavemente até `0fr`) — a única forma de animar "auto height"
+// só com CSS. `.dropdown-card-body` precisa do `overflow: hidden` pra
+// realmente encolher a zero durante a transição, já que a altura intrínseca
+// do item de grid não encolhe sozinha.
+.dropdown-card-collapse {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 0.25s ease, opacity 0.2s ease;
+}
+
+.dropdown-card-collapse--closed {
+    grid-template-rows: 0fr;
+    opacity: 0;
+}
+
+.dropdown-card-body {
+    overflow: hidden;
+    min-height: 0;
+}

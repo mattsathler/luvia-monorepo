@@ -1,7 +1,6 @@
 import type { Character, Weather } from "../../../lib/api";
 import type { CurrentLot } from "../HomePage.controller";
 import { ProfilePanel } from "./ProfilePanel";
-import { CalendarPanel } from "./CalendarPanel";
 import { WorldClockPanel } from "./WorldClockPanel";
 import { NavigationPanel } from "./NavigationPanel";
 
