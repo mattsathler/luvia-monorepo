@@ -1,3 +1,16 @@
 .iso-grid {
     position: relative;
+
+    // Mesma fórmula de sombreamento de `.tile .top` (Block.scss) — o fundo
+    // por baixo/ao redor da grade é visualmente o mesmo chão dos tiles, só
+    // sem textura; sem acompanhar a mesma curva de `--sun-y`, ficaria com um
+    // tom descasado do topo dos tiles assim que o sol se move (ver
+    // apps/game/src/pages/home/world-clock-lighting.ts, que já aplica
+    // `--sun-y` globalmente). Recebe a cor via `--color` (mesmo padrão de
+    // `Block` — ver Block.tsx), não `background-color` direto, senão essa
+    // regra não teria como escurecer a cor recebida. Duplicado de propósito
+    // — se a fórmula do `.top` mudar, esta precisa acompanhar.
+    background: color-mix(in srgb,
+            var(--color, transparent),
+            black calc(60% * ((1 - var(--sun-y)) + 0.3 * var(--sun-y))));
 }

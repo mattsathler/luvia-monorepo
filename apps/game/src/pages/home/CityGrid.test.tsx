@@ -92,12 +92,12 @@ describe("CityGrid", () => {
         expect(grid.scrollTop).toBe(256);
     });
 
-    it("applies the given background color to the scroll container", () => {
+    it("exposes the given background color via --color, so IsoGrid.scss can shade it by sun position like the tiles", () => {
         const { container } = render(
             <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
         );
 
-        expect((container.querySelector(".iso-grid") as HTMLElement).style.backgroundColor).toBe("rgb(123, 201, 111)");
+        expect((container.querySelector(".iso-grid") as HTMLElement).style.getPropertyValue("--color")).toBe("#7bc96f");
     });
 
     it("observes with the shared IntersectionObserver rooted at the scroll container", () => {

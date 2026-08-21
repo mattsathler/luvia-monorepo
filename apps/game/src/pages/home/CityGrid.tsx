@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import type { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
+import type { CSSProperties, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
 import { Block, TILE_TYPES } from "luv-ui";
 import type { TileData } from "luv-ui";
 import { CHUNK_SIZE, useCityGridController } from "./CityGrid.controller";
@@ -268,7 +268,12 @@ export function CityGrid({
         <div
             ref={containerRef}
             className="iso-grid scroll-auto no-scrollbar touch-none cursor-grab h-full w-full"
-            style={{ backgroundColor }}
+            // `--color`, não `backgroundColor` direto — é assim que `Block`
+            // (packages/luv-ui) já recebe cor pra poder escurecer com
+            // `--sun-y` via `color-mix()` (ver IsoGrid.scss); `backgroundColor`
+            // ignoraria a posição do sol e ficaria com um verde fixo, sem
+            // acompanhar o mesmo ciclo dia/noite dos tiles.
+            style={{ "--color": backgroundColor } as CSSProperties}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={endDrag}
