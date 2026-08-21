@@ -1,4 +1,4 @@
-import 'material-icons/iconfont/filled.css';
+import 'material-symbols/outlined.css';
 import './components/components.scss';
 import './styles/_helpers.scss';
 import './styles/_reset.scss';

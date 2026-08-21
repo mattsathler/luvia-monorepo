@@ -3,6 +3,7 @@ import type { CurrentLot } from "../HomePage.controller";
 import { ProfilePanel } from "./ProfilePanel";
 import { CalendarPanel } from "./CalendarPanel";
 import { WorldClockPanel } from "./WorldClockPanel";
+import { NavigationPanel } from "./NavigationPanel";
 
 type HomeHudProps = {
     character: Character;
@@ -34,8 +35,12 @@ export function HomeHud({ character, currentLot, hour, weekday, weather }: HomeH
                 </div>
 
                 <div className="d-flex justify-end">
-                    <CalendarPanel character={character} currentLot={currentLot} />
+                    {/* <CalendarPanel character={character} currentLot={currentLot} /> */}
                 </div>
+            </div>
+
+            <div className="pos-absolute bottom left w-full d-flex justify-center pointer-events-none">
+                <NavigationPanel character={character} currentLot={currentLot}/>
             </div>
         </div>
     );

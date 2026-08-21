@@ -8,7 +8,7 @@ describe("LuvIcon", () => {
             render(<LuvIcon name="arrow_back_ios_new" />);
 
             const icon = screen.getByText("arrow_back_ios_new");
-            expect(icon).toHaveClass("material-icons");
+            expect(icon).toHaveClass("material-symbols-outlined");
             expect(icon).toHaveAttribute("aria-hidden", "true");
         });
 
@@ -16,7 +16,7 @@ describe("LuvIcon", () => {
             render(<LuvIcon name="add" className="text-primary" />);
 
             const icon = screen.getByText("add");
-            expect(icon).toHaveClass("material-icons", "luv-icon", "text-primary");
+            expect(icon).toHaveClass("material-symbols-outlined", "luv-icon", "text-primary");
         });
     });
 
@@ -27,7 +27,7 @@ describe("LuvIcon", () => {
             const icon = container.querySelector(".luv-icon-svg");
             expect(icon).toBeInTheDocument();
             expect(icon).toHaveAttribute("aria-hidden", "true");
-            expect(icon).not.toHaveClass("material-icons");
+            expect(icon).not.toHaveClass("material-symbols-outlined");
             expect(icon?.querySelector("svg")).toBeInTheDocument();
         });
 

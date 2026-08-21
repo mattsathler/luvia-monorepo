@@ -12,7 +12,7 @@ export type LuvIconProps = HTMLAttributes<HTMLSpanElement> & {
 //
 // `name` primeiro tenta bater com um SVG do luv-icons (nossos ícones
 // próprios, injetados via dangerouslySetInnerHTML); se não achar, cai pro
-// Material Icons (ligadura de texto via fonte), pra nomes como
+// Material Symbols (ligadura de texto via fonte), pra nomes como
 // "arrow_back_ios_new" que não têm equivalente no luv-icons.
 export function LuvIcon({ name, className, size, ...rest }: LuvIconProps) {
     const svg = (icons as Record<string, string>)[name];
@@ -30,7 +30,7 @@ export function LuvIcon({ name, className, size, ...rest }: LuvIconProps) {
     }
 
     return (
-        <span className={["material-icons", "luv-icon", className].filter(Boolean).join(" ")} aria-hidden="true" style={{ fontSize: size }} {...rest}>
+        <span className={["material-symbols-outlined", "luv-icon", className].filter(Boolean).join(" ")} aria-hidden="true" style={{ fontSize: size }} {...rest}>
             {name}
         </span>
     );

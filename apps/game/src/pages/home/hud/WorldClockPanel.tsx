@@ -32,7 +32,7 @@ const WEATHER_LABELS: Record<WeatherType, string> = {
 
 const WEATHER_ICONS: Record<WeatherType, string> = {
     sunny: "wb_sunny",
-    rainy: "grain",
+    rainy: "rainy",
     foggy: "cloud",
 };
 

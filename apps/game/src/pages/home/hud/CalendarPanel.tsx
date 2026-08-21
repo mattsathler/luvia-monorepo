@@ -28,7 +28,7 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
     }
 
     return (
-        <div className="card d-flex flex-col mr-24 gap-16 p-16 items-center border-border w-320">
+        <div className="d-flex flex-col mr-24 gap-16 w-full">
             <div className="card flat border-1 border-border border-8 w-full d-flex justify-between p-8 px-16 items-center h-72">
                 <div className="d-flex flex-row gap-16 items-center">
                     <LuvIcon name="chair" className="text-game-green"></LuvIcon>
@@ -54,7 +54,7 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
                 )}
             </div>
 
-            <LuvDivider />
+            {/* <LuvDivider />
 
             <button className="outline w-full border-placeholder--force d-flex items-center gap-12 ">
                 <LuvIcon name="add" className="text-placeholder"></LuvIcon>
@@ -62,7 +62,7 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
                 <span className="text-placeholder">Adicionar atividade</span>
                 <div className="">
                 </div>
-            </button>
+            </button> */}
 
             {/* <div className="card flat border-1 border-dashed border-border border-8 w-full d-flex justify-between p-8 items-center">
                     <div className="d-flex flex-row gap-16 items-center">

@@ -20,6 +20,10 @@
     border: 1px solid var(--placeholder);
 }
 
+@mixin card-translucid {
+    background-color: color-mix(in srgb, var(--surface) 50%, transparent);
+}
+
 @mixin card-variant($color) {
     background-color: var(--#{$color}) !important;
 }
@@ -34,6 +38,10 @@
 
 .card.outline {
     @include card-outline;
+}
+
+.card.translucid {
+    @include card-translucid;
 }
 
 @each $name, $value in colors.$color-keys {
