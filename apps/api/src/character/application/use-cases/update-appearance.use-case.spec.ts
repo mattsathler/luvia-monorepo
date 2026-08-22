@@ -15,6 +15,7 @@ function repositoryWith(character: Character | null): jest.Mocked<CharacterRepos
     findById: jest.fn(async (_id: string) => character),
     findByAccountId: jest.fn(),
     trySave: jest.fn(),
+    findByIds: jest.fn(),
     findStaleBatch: jest.fn(),
   };
 }

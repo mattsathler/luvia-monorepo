@@ -31,6 +31,7 @@ describe('RecomputeCharacterUseCase', () => {
       findById: jest.fn(async (_id: string) => character),
       findByAccountId: jest.fn(),
       trySave: jest.fn(async (updated: Character, _expected: Date) => updated),
+      findByIds: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 
@@ -57,6 +58,7 @@ describe('RecomputeCharacterUseCase', () => {
         .mockResolvedValueOnce(alreadyUpdated),
       findByAccountId: jest.fn(),
       trySave: jest.fn(async (_character: Character, _expected: Date) => null),
+      findByIds: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 
@@ -75,6 +77,7 @@ describe('RecomputeCharacterUseCase', () => {
       findById: jest.fn().mockResolvedValueOnce(character).mockResolvedValueOnce(null),
       findByAccountId: jest.fn(),
       trySave: jest.fn(async (_character: Character, _expected: Date) => null),
+      findByIds: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 
@@ -90,6 +93,7 @@ describe('RecomputeCharacterUseCase', () => {
       findById: jest.fn(async (_id: string) => null),
       findByAccountId: jest.fn(),
       trySave: jest.fn(),
+      findByIds: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 
@@ -106,6 +110,7 @@ describe('RecomputeCharacterUseCase', () => {
       findById: jest.fn(async (_id: string) => character),
       findByAccountId: jest.fn(),
       trySave: jest.fn(),
+      findByIds: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 

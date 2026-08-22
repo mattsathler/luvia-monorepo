@@ -11,6 +11,7 @@ describe('GetCurrentLotUseCase', () => {
       save: jest.fn(),
       findById: jest.fn(),
       findByAccountId: jest.fn(),
+      findByIds: jest.fn(),
       trySave: jest.fn(),
       findStaleBatch: jest.fn(),
     } as unknown as jest.Mocked<CharacterRepository>;

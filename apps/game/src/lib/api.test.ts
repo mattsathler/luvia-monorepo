@@ -12,6 +12,7 @@ import {
     listSkills,
     login,
     register,
+    searchLots,
     setUnauthorizedHandler,
     updateAppearance,
     type AppearanceUpdate,
@@ -327,6 +328,41 @@ describe("getCharacterLot", () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(409, { message: "Cidade cheia" })));
 
         await expect(getCharacterLot("token-123", "char-1")).rejects.toThrow("Cidade cheia");
+    });
+});
+
+describe("searchLots", () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+    });
+
+    it("returns matching lots without a query param", async () => {
+        const body = [{ lotId: "lot-1", typeName: "Residência", ownerName: "Ana Silva", x: 3, y: 4 }];
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, body));
+        vi.stubGlobal("fetch", fetchMock);
+
+        const result = await searchLots("token-123");
+
+        expect(result).toEqual(body);
+        expect(fetchMock).toHaveBeenCalledWith(expect.stringMatching(/\/city\/lots$/), expect.anything());
+    });
+
+    it("appends the query param, URL-encoded, when given", async () => {
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, []));
+        vi.stubGlobal("fetch", fetchMock);
+
+        await searchLots("token-123", "ana & bia");
+
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining("/city/lots?q=ana%20%26%20bia"),
+            expect.anything(),
+        );
+    });
+
+    it("throws ApiError with the server message on failure", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(500, { message: "Erro ao buscar lotes" })));
+
+        await expect(searchLots("token-123")).rejects.toThrow("Erro ao buscar lotes");
     });
 });
 

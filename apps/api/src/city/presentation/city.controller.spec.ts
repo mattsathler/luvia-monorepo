@@ -3,6 +3,7 @@ import { GetCityUseCase } from '../application/use-cases/get-city.use-case';
 import { GetCityChunkUseCase } from '../application/use-cases/get-city-chunk.use-case';
 import { GetCharacterLotUseCase } from '../application/use-cases/get-character-lot.use-case';
 import { GetCurrentLotUseCase } from '../application/use-cases/get-current-lot.use-case';
+import { SearchLotsUseCase } from '../application/use-cases/search-lots.use-case';
 
 describe('CityController', () => {
   function buildController() {
@@ -10,10 +11,17 @@ describe('CityController', () => {
     const getCityChunkUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCityChunkUseCase>;
     const getCharacterLotUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCharacterLotUseCase>;
     const getCurrentLotUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCurrentLotUseCase>;
+    const searchLotsUseCase = { execute: jest.fn() } as unknown as jest.Mocked<SearchLotsUseCase>;
 
-    const controller = new CityController(getCityUseCase, getCityChunkUseCase, getCharacterLotUseCase, getCurrentLotUseCase);
+    const controller = new CityController(
+      getCityUseCase,
+      getCityChunkUseCase,
+      getCharacterLotUseCase,
+      getCurrentLotUseCase,
+      searchLotsUseCase,
+    );
 
-    return { controller, getCityUseCase, getCityChunkUseCase, getCharacterLotUseCase, getCurrentLotUseCase };
+    return { controller, getCityUseCase, getCityChunkUseCase, getCharacterLotUseCase, getCurrentLotUseCase, searchLotsUseCase };
   }
 
   it('getCity() delegates to GetCityUseCase', () => {
@@ -54,5 +62,24 @@ describe('CityController', () => {
 
     expect(getCurrentLotUseCase.execute).toHaveBeenCalledWith('char-1');
     expect(result).resolves.toBe('current-lot');
+  });
+
+  it('searchLots() delegates to SearchLotsUseCase with the query param', () => {
+    const { controller, searchLotsUseCase } = buildController();
+    searchLotsUseCase.execute.mockResolvedValue('results' as never);
+
+    const result = controller.searchLots('ana');
+
+    expect(searchLotsUseCase.execute).toHaveBeenCalledWith('ana');
+    expect(result).resolves.toBe('results');
+  });
+
+  it('searchLots() works without a query param', () => {
+    const { controller, searchLotsUseCase } = buildController();
+    searchLotsUseCase.execute.mockResolvedValue('results' as never);
+
+    controller.searchLots();
+
+    expect(searchLotsUseCase.execute).toHaveBeenCalledWith(undefined);
   });
 });

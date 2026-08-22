@@ -232,6 +232,28 @@ export async function getCharacterLot(accessToken: string, characterId: string):
     return response.json();
 }
 
+export type LotSearchResult = {
+    lotId: string;
+    typeName: string;
+    ownerName: string;
+    x: number;
+    y: number;
+};
+
+// Ponto de navegação rápida do jogador (ícone de mapa na HUD) — busca em
+// todos os lotes da cidade por dono ou tipo. `query` vazio/omitido devolve a
+// lista inteira, sem filtro.
+export async function searchLots(accessToken: string, query?: string): Promise<LotSearchResult[]> {
+    const suffix = query ? `?q=${encodeURIComponent(query)}` : "";
+    const response = await authFetch(`/city/lots${suffix}`, accessToken);
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
 export type CurrentLot = {
     name: string;
     x: number;

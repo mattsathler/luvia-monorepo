@@ -12,6 +12,12 @@ export interface CharacterRepository {
   findByAccountId(accountId: string): Promise<Character[]>;
 
   /**
+   * Busca em lote por id — usado por SearchLotsUseCase (city) pra resolver o
+   * nome do dono de cada lote com uma única consulta, em vez de uma por lote.
+   */
+  findByIds(ids: string[]): Promise<Character[]>;
+
+  /**
    * Salva um Character recomputado apenas se ninguém mais o atualizou desde
    * `expectedLastUpdatedAt` (concorrência otimista). Retorna `null` se outro
    * processo (tick em lote ou outro recompute) já processou esse intervalo —

@@ -1,7 +1,19 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { HomeHud } from "./HomeHud";
+import { useAuth } from "../../../auth/AuthContext";
 import type { Character } from "../../../lib/api";
+
+vi.mock("../../../auth/AuthContext", () => ({
+    useAuth: vi.fn(),
+}));
+
+vi.mock("../../../lib/api", async () => {
+    const actual = await vi.importActual<typeof import("../../../lib/api")>("../../../lib/api");
+    return { ...actual, searchLots: vi.fn(() => new Promise(() => {})) };
+});
+
+(useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: "token-123" });
 
 const CHARACTER: Character = {
     id: "char-1",

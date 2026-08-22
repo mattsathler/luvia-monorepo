@@ -44,6 +44,11 @@ export class CharacterMongoRepository implements CharacterRepository {
     return documents.map((document) => this.toDomain(document));
   }
 
+  async findByIds(ids: string[]): Promise<Character[]> {
+    const documents = await this.model.find({ characterId: { $in: ids } }).exec();
+    return documents.map((document) => this.toDomain(document));
+  }
+
   async findStaleBatch(olderThan: Date, limit: number, skip: number): Promise<Character[]> {
     const documents = await this.model
       .find({ lastUpdatedAt: { $lt: olderThan } })

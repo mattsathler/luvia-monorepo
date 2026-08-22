@@ -1,8 +1,9 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { GetCharacterLotUseCase } from '../application/use-cases/get-character-lot.use-case';
 import { GetCityChunkUseCase } from '../application/use-cases/get-city-chunk.use-case';
 import { GetCityUseCase } from '../application/use-cases/get-city.use-case';
 import { GetCurrentLotUseCase } from '../application/use-cases/get-current-lot.use-case';
+import { SearchLotsUseCase } from '../application/use-cases/search-lots.use-case';
 
 @Controller('city')
 export class CityController {
@@ -11,6 +12,7 @@ export class CityController {
     private readonly getCityChunkUseCase: GetCityChunkUseCase,
     private readonly getCharacterLotUseCase: GetCharacterLotUseCase,
     private readonly getCurrentLotUseCase: GetCurrentLotUseCase,
+    private readonly searchLotsUseCase: SearchLotsUseCase,
   ) {}
 
   @Get()
@@ -24,6 +26,14 @@ export class CityController {
   @Get('chunks/:x/:y')
   getCityChunk(@Param('x', ParseIntPipe) x: number, @Param('y', ParseIntPipe) y: number) {
     return this.getCityChunkUseCase.execute(x, y);
+  }
+
+  // Precisa vir antes de `lots/:characterId` — `GET /city/lots` (sem
+  // segmento extra) não colidiria de qualquer forma com uma rota que exige
+  // `:characterId`, mas mantém a mesma convenção de ordem do resto do arquivo.
+  @Get('lots')
+  searchLots(@Query('q') query?: string) {
+    return this.searchLotsUseCase.execute(query);
   }
 
   @Get('lots/:characterId')

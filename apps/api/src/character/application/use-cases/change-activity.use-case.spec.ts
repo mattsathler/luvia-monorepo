@@ -35,6 +35,7 @@ describe('ChangeActivityUseCase', () => {
       findById: jest.fn(),
       findByAccountId: jest.fn(),
       trySave: jest.fn(),
+      findByIds: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 
@@ -59,6 +60,7 @@ describe('ChangeActivityUseCase', () => {
       findById: jest.fn(),
       findByAccountId: jest.fn(),
       trySave: jest.fn(),
+      findByIds: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 

@@ -6,6 +6,7 @@ import { GetCityChunkUseCase } from './application/use-cases/get-city-chunk.use-
 import { GetCityUseCase } from './application/use-cases/get-city.use-case';
 import { GetCurrentLotUseCase } from './application/use-cases/get-current-lot.use-case';
 import { GetOrGenerateCityMapUseCase } from './application/use-cases/get-or-generate-city-map.use-case';
+import { SearchLotsUseCase } from './application/use-cases/search-lots.use-case';
 import { CITY_MAP_REPOSITORY } from './domain/repositories/city-map.repository';
 import { LOT_REPOSITORY } from './domain/repositories/lot.repository';
 import { CityMapMongoRepository } from './infrastructure/persistence/city-map.mongo.repository';
@@ -28,6 +29,7 @@ import { CityController } from './presentation/city.controller';
     GetCityChunkUseCase,
     GetCharacterLotUseCase,
     GetCurrentLotUseCase,
+    SearchLotsUseCase,
     GetOrGenerateCityMapUseCase,
     { provide: LOT_REPOSITORY, useClass: LotMongoRepository },
     { provide: CITY_MAP_REPOSITORY, useClass: CityMapMongoRepository },

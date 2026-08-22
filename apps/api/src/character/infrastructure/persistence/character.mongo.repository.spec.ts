@@ -134,6 +134,19 @@ describe('CharacterMongoRepository', () => {
     expect(result[0]).toBeInstanceOf(Character);
   });
 
+  it('findByIds() maps every document matching the given ids', async () => {
+    const { repository, model } = buildRepository();
+    (model.find as jest.Mock).mockReturnValue(
+      queryMock([characterDocument({ characterId: 'char-1' }), characterDocument({ characterId: 'char-2' })]),
+    );
+
+    const result = await repository.findByIds(['char-1', 'char-2']);
+
+    expect(model.find).toHaveBeenCalledWith({ characterId: { $in: ['char-1', 'char-2'] } });
+    expect(result).toHaveLength(2);
+    expect(result[0]).toBeInstanceOf(Character);
+  });
+
   it('findStaleBatch() sorts, paginates, and maps the resulting documents', async () => {
     const { repository, model } = buildRepository();
     const query = queryMock([characterDocument()]);

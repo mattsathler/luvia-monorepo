@@ -30,6 +30,7 @@ describe('ListMyCharactersUseCase', () => {
       findById: jest.fn(),
       findByAccountId: jest.fn(async (_accountId: string) => characters),
       trySave: jest.fn(),
+      findByIds: jest.fn(),
       findStaleBatch: jest.fn(),
     };
 

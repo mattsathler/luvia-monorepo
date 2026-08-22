@@ -21,6 +21,7 @@ function buildRepository(): jest.Mocked<CharacterRepository> {
     findById: jest.fn(),
     findByAccountId: jest.fn(),
     trySave: jest.fn(),
+    findByIds: jest.fn(),
     findStaleBatch: jest.fn(),
   };
 }
