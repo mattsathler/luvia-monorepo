@@ -27,8 +27,8 @@ Luvia é desenvolvido por uma pessoa só, em ritmo não-linear (dias cheios de c
 | # | Milestone | Status | Estimativa |
 | --- | --- | --- | --- |
 | [01](01-fundacao-e-personagem/descricao.md) | Fundação & Personagem | ✅ Concluída | 01–19 ago (real) |
-| [02](02-loop-de-vida-wryd/descricao.md) | Loop de Vida (WRYD) — **MVP** | ⏳ Planejada | 1–2 semanas |
-| [03](03-cidade-e-lar/descricao.md) | Cidade & Lar | ⏳ Planejada | 2–3 semanas |
+| [02](02-loop-de-vida-wryd/descricao.md) | Loop de Vida (WRYD) — **MVP** | 🔄 Em andamento | 1–2 semanas |
+| [03](03-cidade-e-lar/descricao.md) | Cidade & Lar | 🔄 Em andamento | 2–3 semanas |
 | [04](04-clima-e-produtividade/descricao.md) | Clima & Produtividade | ⏳ Planejada | 1 semana |
 | [05](05-fama-e-eventos/descricao.md) | Fama & Eventos | ⏳ Planejada | 1–2 semanas |
 | [06](06-relacionamentos-e-social/descricao.md) | Relacionamentos & Social | ⏳ Planejada | 2–3 semanas |

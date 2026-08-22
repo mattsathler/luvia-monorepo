@@ -2,7 +2,7 @@
 
 ## Status
 
-⏳ Pendente
+⏳ Pendente — parcialmente coberto pelo plano 02: Fama já aparece em `ProfilePanel.tsx`, mas hoje lado a lado com dinheiro, como mais um número com ícone — sem o destaque visual próprio de "indicador de progresso" que este plano pede.
 
 ## Objetivo técnico
 

@@ -6,7 +6,7 @@ A criação de personagem (ver [[0019-personagem-montado-em-camadas-com-rig-2d]]
 
 ## Decisão
 
-Não existe mais alocação inicial de pontos de skill na criação de personagem. Todo personagem nasce com nível 0 em todas as skills (mapa `skills` vazio). Skills só crescem jogando — hoje isso significa exclusivamente a atividade "Estudar" (ainda não implementada, ver [[../roadmap/02-loop-de-vida-wryd/planos/04-atividade-estudar]]).
+Não existe mais alocação inicial de pontos de skill na criação de personagem. Todo personagem nasce com nível 0 em todas as skills (mapa `skills` vazio). Skills só crescem jogando — a atividade "Estudar" foi descartada como mecanismo (ver [[../game-design/skills-and-study]]); hoje o caminho mais concreto é a eficiência de trabalho em empregos públicos, que depende das skills do cargo (ver [[../roadmap/02-loop-de-vida-wryd/planos/04-empregos-publicos-e-hierarquia-de-cargos]]).
 
 ## Justificativa
 

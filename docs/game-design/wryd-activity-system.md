@@ -10,9 +10,9 @@ O jogo é organizado em torno do sistema **WRYD** ("What are you doing?"): o jog
 
 O personagem permanece nessa atividade até o jogador trocá-la. A cada tick de simulação (ver [[../technical/simulation-tick]]), o backend atualiza o estado do personagem de acordo com a atividade atual:
 
-- Estudando → aumenta habilidade (ver [[skills-and-study]]).
 - Descansando → diminui cansaço / aumenta energia (ver [[character-needs]]).
-- Trabalhando → gera dinheiro (ver [[jobs]]).
+- Trabalhando → gera dinheiro, numa taxa que depende da eficiência do personagem no cargo atual (ver [[jobs]]).
+- Estudando → aumenta habilidade (ver [[skills-and-study]]) — mecanismo ainda a redesenhar, descartado o desenho anterior; não é o próximo marco.
 - Participando de um evento → aumenta Fama, relacionamentos ou habilidades (ver [[events]]).
 
 ### Atividade padrão: Ocioso

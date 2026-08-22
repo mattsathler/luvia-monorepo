@@ -6,31 +6,33 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 
 ## Status
 
-⏳ Planejada. Escopo revisado depois da primeira versão: a descrição original não cobria personalização de lote nem navegação pela cidade como um todo — só posse + evolução mecânica do próprio lote. Planos 04 e 06 fecham essa lacuna.
+🔄 Em andamento. Escopo revisado depois da primeira versão: a descrição original não cobria personalização de lote nem navegação pela cidade como um todo — só posse + evolução mecânica do próprio lote. Planos 04 e 06 fecham essa lacuna. Boa parte já implementada, em geral fora da ordem numérica dos planos (relógio do mundo, clima e LOWYS chegaram antes de personalização/evolução de lote) — faltam planos 04 e 05 por completo, e o 06 está parcial.
 
 ## Planos
 
-1. [[planos/01-cidade-isometrica-no-jogo]]
-2. [[planos/02-bounded-context-de-lote]]
-3. [[planos/03-lote-residencial-do-jogador]]
-4. [[planos/04-personalizacao-de-lote]]
-5. [[planos/05-evolucao-do-lote]]
-6. [[planos/06-interacao-com-a-metropole]]
-7. [[planos/07-lowys-carregamento-em-chunks]]
-8. [[planos/08-relogio-do-mundo-e-ciclo-dia-noite]]
-9. [[planos/09-clima-e-temperatura]]
+1. [[planos/01-cidade-isometrica-no-jogo]] — 🚧 Em andamento
+2. [[planos/02-bounded-context-de-lote]] — ✅ Feito
+3. [[planos/03-lote-residencial-do-jogador]] — 🚧 Em andamento
+4. [[planos/04-personalizacao-de-lote]] — ⏳ Pendente
+5. [[planos/05-evolucao-do-lote]] — ⏳ Pendente
+6. [[planos/06-interacao-com-a-metropole]] — 🚧 Em andamento
+7. [[planos/07-lowys-carregamento-em-chunks]] — ✅ Feito
+8. [[planos/08-relogio-do-mundo-e-ciclo-dia-noite]] — ✅ Feito
+9. [[planos/09-clima-e-temperatura]] — ✅ Feito
+10. [[planos/10-bairros-e-expansao-do-mundo]] — ⏳ Pendente
 
 ## Escopo
 
-- **Cidade no jogo**: hoje `IsoGrid`/`Block`/`DayCycleControl` (grid isométrico, blocos, ciclo dia/noite) só existem como showcase em `apps/docs` — passam a ser usados de verdade numa tela de cidade em `apps/game`.
-- **Bounded context de lote no backend**: persistência de lotes, dono, tipo, posição na grade.
-- **Lote residencial**: todo personagem recebe (ou reivindica) 1 lote residencial (ver [[../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]) — sem lote comercial/industrial ainda, esses vêm na M07 junto com empresas.
-- **Personalização de lote**: catálogo fechado de aparência (fachada, telhado etc.), visível na cidade.
-- **Evolução do lote**: melhorias mecânicas pré-definidas (não construção manual livre — ver [[../../game-design/lots-and-construction]]).
-- **Interação com a metrópole**: a cidade é navegável por inteiro, não só o próprio lote — lotes de outros jogadores são visíveis (com a personalização deles) e consultáveis (dono, nível), preparando o terreno pra ações sociais que a M06 adiciona por cima.
-- Navegação: jogador consegue ir da tela de vida (M02) pra cidade e voltar.
-- **Relógio do mundo e ciclo dia/noite**: o backend passa a ditar a data/hora do jogo (relógio único e global, 96 minutos reais por dia de jogo), sincronizada pelo frontend e usada pra alimentar a iluminação já implementada em `DayCycleControl`.
-- **Clima e temperatura**: clima (Ensolarado, Chuvoso, Neblina, com viés pra chuva — Luvia é uma cidade chuvosa) e temperatura (Celsius) determinísticos por dia de jogo, exibidos na HUD — só cosmético, sem chuva visual nem efeito de jogabilidade nesta fase.
+- **Cidade no jogo**: hoje `IsoGrid`/`Block`/`DayCycleControl` (grid isométrico, blocos, ciclo dia/noite) só existem como showcase em `apps/docs` — passam a ser usados de verdade numa tela de cidade em `apps/game`. ✅ Feito — a própria Home é a cidade (ver [[../../decisions/0025-home-e-a-tela-da-cidade]]), não uma tela separada como o texto original previa.
+- **Bounded context de lote no backend**: persistência de lotes, dono, tipo, posição na grade. ✅ Feito (`apps/api/src/city/`).
+- **Lote residencial**: todo personagem recebe (ou reivindica) 1 lote residencial (ver [[../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]) — sem lote comercial/industrial ainda, esses vêm na M07 junto com empresas. ✅ Feito.
+- **Personalização de lote**: catálogo fechado de aparência (fachada, telhado etc.), visível na cidade. ⏳ Pendente.
+- **Evolução do lote**: melhorias mecânicas pré-definidas (não construção manual livre — ver [[../../game-design/lots-and-construction]]). ⏳ Pendente.
+- **Interação com a metrópole**: a cidade é navegável por inteiro, não só o próprio lote — lotes de outros jogadores são visíveis (com a personalização deles) e consultáveis (dono, nível), preparando o terreno pra ações sociais que a M06 adiciona por cima. 🚧 Parcial — pan/zoom pela cidade inteira e lotes alheios visíveis/distinguíveis já existem, mais uma busca de lotes (`MapSearchPanel`/`GET /city/lots`); falta personalização visível e "nível" (dependem dos planos 04/05).
+- ~~Navegação: jogador consegue ir da tela de vida (M02) pra cidade e voltar.~~ Não se aplica mais — a M02 não tem tela separada, a Home já é a cidade.
+- **Relógio do mundo e ciclo dia/noite**: o backend passa a ditar a data/hora do jogo (relógio único e global, 96 minutos reais por dia de jogo), sincronizada pelo frontend e usada pra alimentar a iluminação já implementada em `DayCycleControl`. ✅ Feito.
+- **Clima e temperatura**: clima (Ensolarado, Chuvoso, Neblina, com viés pra chuva — Luvia é uma cidade chuvosa) e temperatura (Celsius) determinísticos por dia de jogo, exibidos na HUD. ✅ Feito — inicialmente só cosmético (ver [[../../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]), decisão parcialmente revogada pela M04 (Clima & Produtividade), que dá efeito de jogabilidade a isso.
+- **Bairros e expansão do mundo** (novo, plano 10): Luvia não é só uma cidade, é um mundo — vagas residenciais finitas eventualmente lotam. O mundo passa a crescer sob demanda em unidades de Bairro, cada uma replicando os prédios públicos obrigatórios (ver [[../../game-design/jobs]]). Distância até o trabalho reduz eficiência de verdade, mas ninguém sai em desvantagem sistêmica por isso — todo Bairro tem os mesmos prédios, então a opção de distância 0 sempre existe — ver [[../../decisions/0031-bairros-expansao-do-mundo-sob-demanda]]. ⏳ Pendente.
 
 ## Fora do escopo
 
@@ -52,3 +54,5 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 - [[../../decisions/0009-ddd-como-arquitetura-principal]]
 - [[../../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]]
 - [[../../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]
+- [[../../decisions/0031-bairros-expansao-do-mundo-sob-demanda]]
+- [[../../technical/bairros-e-expansao-do-mundo]]

@@ -16,7 +16,7 @@ Todo personagem passa a ter um lugar físico na cidade — o lote residencial �
 
 ## Onde no código
 
-- `apps/api/src/lot/` (plano 02)
+- `apps/api/src/city/` (plano 02)
 - `apps/game/src/pages/city/`
 
 ## Depende de

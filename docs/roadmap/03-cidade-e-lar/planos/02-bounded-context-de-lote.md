@@ -17,7 +17,7 @@ Modelar o lote como entidade persistida — posição na grade, tipo, dono — s
 
 ## Onde no código
 
-- Novo: `apps/api/src/lot/` (domain/application/infrastructure/presentation)
+- Novo: `apps/api/src/city/` (domain/application/infrastructure/presentation)
 
 ## Depende de
 

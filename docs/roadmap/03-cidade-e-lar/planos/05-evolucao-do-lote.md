@@ -16,7 +16,7 @@ Dar ao lote uma progressão funcional simples — melhorias pré-definidas, não
 
 ## Onde no código
 
-- `apps/api/src/lot/`
+- `apps/api/src/city/`
 - `apps/game/src/pages/city/`
 
 ## Depende de

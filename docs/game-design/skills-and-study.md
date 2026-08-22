@@ -8,6 +8,8 @@ Definir como o jogador desenvolve habilidades.
 
 Todo personagem nasce com nível 0 em todas as habilidades — não existe alocação inicial de pontos na criação (ver [[../decisions/0024-personagem-nasce-sem-skills]]). O jogador pode estudar. Estudar aumenta habilidades.
 
+**O mecanismo de "Estudar" precisa de refino antes de ser implementado** — a ideia original (jogador escolhe "Estudar" como atividade, feito em casa, ganha pontos de skill passivamente) foi descartada por ser rasa demais (bastaria clicar e esperar). O desenho anterior dessa atividade (que existia como plano da M02) foi removido do roadmap — ver [[../roadmap/02-loop-de-vida-wryd/descricao]]. Um novo desenho fica pendente; o próximo marco grande do jogo é Trabalho (ver [[jobs]]), não Estudo.
+
 Habilidades permitem:
 
 - melhores empregos

@@ -17,7 +17,7 @@ Diferente da evolução mecânica (plano 05 — melhorias funcionais pré-defini
 
 ## Onde no código
 
-- `apps/api/src/lot/domain/entities/lot.entity.ts` (campo de aparência)
+- `apps/api/src/city/domain/entities/lot.entity.ts` (campo de aparência)
 - `apps/game/src/pages/city/`
 
 ## Depende de
