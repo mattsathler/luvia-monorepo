@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import type { TileData } from "luv-ui";
-import { getCityChunk, type CityChunk } from "../../lib/api";
+import { getCityChunk, type CityChunk, type Lot } from "../../lib/api";
 
 /**
  * Ver docs/technical/lowys-carregamento-em-chunks.md — LOWYS (Load Only What
@@ -36,6 +36,11 @@ export function useCityGridController({ dimensions, accessToken, characterId }: 
     // Cache que nunca expira dentro da sessão — sair da janela de render não
     // esquece o chunk, só tira o DOM dele.
     const cacheRef = useRef(new Map<string, TileData[]>());
+    // Lotes por posição, na íntegra (id/characterId/type) — `TileData` só
+    // carrega o tipo visual do tile ("lot"/"lot-mine"), então quem precisa
+    // do lote de verdade por trás de um clique (ver `getLotAt`) usa este
+    // cache à parte, alimentado no mesmo `loadChunk`.
+    const lotsByPositionRef = useRef(new Map<string, Lot>());
     const [mountedKeys, setMountedKeys] = useState<Set<string>>(new Set());
     // O cache vive num ref (não dispara re-render sozinho) — este contador
     // força um re-render depois que um fetch resolve e escreve nele.
@@ -65,6 +70,9 @@ export function useCityGridController({ dimensions, accessToken, characterId }: 
             try {
                 const chunk = await getCityChunk(accessToken, chunkX, chunkY);
                 cacheRef.current.set(key, buildChunkTiles(chunk, characterId));
+                chunk.lots.forEach((lot) => {
+                    lotsByPositionRef.current.set(`${lot.x}:${lot.y}`, lot);
+                });
                 setVersion((v) => v + 1);
             } catch {
                 // Não cacheia nada — na próxima vez que o chunk entrar na
@@ -104,6 +112,11 @@ export function useCityGridController({ dimensions, accessToken, characterId }: 
         [],
     );
 
+    const getLotAt = useCallback(
+        (x: number, y: number) => lotsByPositionRef.current.get(`${x}:${y}`),
+        [],
+    );
+
     const tiles = useMemo(() => {
         const result: TileData[] = [];
         mountedKeys.forEach((key) => {
@@ -128,5 +141,5 @@ export function useCityGridController({ dimensions, accessToken, characterId }: 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mountedKeys, version]);
 
-    return { chunkCoords, tiles, onChunkEnter, onChunkLeave, isChunkLoaded, loadChunk };
+    return { chunkCoords, tiles, onChunkEnter, onChunkLeave, isChunkLoaded, loadChunk, getLotAt };
 }

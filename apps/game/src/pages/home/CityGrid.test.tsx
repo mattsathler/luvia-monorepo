@@ -206,7 +206,7 @@ describe("CityGrid", () => {
 
         await user.click(buttons[0]);
 
-        expect(onTileClick).toHaveBeenCalledWith(expect.objectContaining({ x: 0, y: 0 }));
+        expect(onTileClick).toHaveBeenCalledWith(expect.objectContaining({ x: 0, y: 0 }), undefined);
     });
 
     it("hides the native scrollbar and disables native touch panning, since scrolling happens via drag", () => {

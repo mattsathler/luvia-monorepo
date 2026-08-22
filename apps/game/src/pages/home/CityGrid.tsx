@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import type { CSSProperties, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
 import { Block, TILE_TYPES } from "luv-ui";
 import type { TileData } from "luv-ui";
+import type { Lot } from "../../lib/api";
 import { CHUNK_SIZE, useCityGridController } from "./CityGrid.controller";
 
 /** ~1 chunk de buffer em todas as direções — ver docs/technical/lowys-carregamento-em-chunks.md. */
@@ -106,7 +107,7 @@ type CityGridProps = {
     backgroundColor: string;
     accessToken: string;
     characterId: string;
-    onTileClick?: (tile: TileData) => void;
+    onTileClick?: (tile: TileData, lot?: Lot) => void;
     isTileClickable?: (tile: TileData) => boolean;
     /** Lote pra centralizar a rolagem assim que definido/trocado (ex.: clique num resultado do MapSearchPanel, ou `?x=&y=` na URL) — `null`/omitido não move o mapa. */
     targetLot?: { x: number; y: number } | null;
@@ -130,7 +131,7 @@ export function CityGrid({
     isTileClickable,
     targetLot,
 }: CityGridProps) {
-    const { chunkCoords, tiles, onChunkEnter, onChunkLeave, isChunkLoaded, loadChunk } = useCityGridController({
+    const { chunkCoords, tiles, onChunkEnter, onChunkLeave, isChunkLoaded, loadChunk, getLotAt } = useCityGridController({
         dimensions,
         accessToken,
         characterId,
@@ -387,7 +388,7 @@ export function CityGrid({
                             size={tileSize}
                             color={TILE_TYPES[tile.type as keyof typeof TILE_TYPES]?.color}
                             texture={TILE_TYPES[tile.type as keyof typeof TILE_TYPES]?.texture}
-                            onClick={clickable ? () => onTileClick!(tile) : undefined}
+                            onClick={clickable ? () => onTileClick!(tile, getLotAt(tile.x, tile.y)) : undefined}
                         />
                     );
                 })}

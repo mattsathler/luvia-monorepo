@@ -1,6 +1,7 @@
 import { LuvSpinner } from "luv-ui";
 import { CityGrid } from "./CityGrid";
 import { HomeHud } from "./hud/HomeHud";
+import { LotDetailModal } from "./LotDetailModal";
 import type { Character } from "../../lib/api";
 import { isTileClickable, useHomePageController } from "./HomePage.controller";
 import { useWorldClock } from "./useWorldClock";
@@ -15,7 +16,8 @@ type HomePageProps = {
 // O mapa ocupa a tela inteira — qualquer UI futura (HUD, painéis) fica
 // sobreposta a ele, como num jogo, em vez de empurrar o mapa pra baixo.
 export function HomePage({ character, targetLot = null }: HomePageProps) {
-    const { dimensions, currentLot, loadError, handleTileClick, accessToken, tileSize } = useHomePageController({ character });
+    const { dimensions, currentLot, loadError, handleTileClick, selectedLot, closeLotModal, accessToken, tileSize } =
+        useHomePageController({ character });
     const worldClock = useWorldClock();
     useWorldClockLighting(worldClock?.hour ?? null);
 
@@ -53,6 +55,12 @@ export function HomePage({ character, targetLot = null }: HomePageProps) {
                         hour={worldClock?.hour ?? null}
                         weekday={worldClock?.weekday ?? null}
                         weather={worldClock?.weather ?? null}
+                    />
+                    <LotDetailModal
+                        lot={selectedLot}
+                        accessToken={accessToken}
+                        currentCharacter={character}
+                        onClose={closeLotModal}
                     />
                 </>
             )}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { TileData } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
-import { getCity, getCurrentLot, type Character, type City, type CurrentLot } from "../../lib/api";
+import { getCity, getCurrentLot, type Character, type City, type CurrentLot, type Lot } from "../../lib/api";
 import { getStoredTileSize, setStoredTileSize } from "./city-zoom-storage";
 
 export type { CurrentLot } from "../../lib/api";
@@ -38,6 +38,7 @@ export function useHomePageController({ character }: UseHomePageControllerParams
     const [currentLot, setCurrentLot] = useState<CurrentLot | null>(null);
     const [loadError, setLoadError] = useState<string | null>(null);
     const [tileSize, setTileSize] = useState(() => clampTileSize(getStoredTileSize() ?? DEFAULT_TILE_SIZE));
+    const [selectedLot, setSelectedLot] = useState<Lot | null>(null);
 
     useEffect(() => {
         if (!accessToken) {
@@ -60,11 +61,16 @@ export function useHomePageController({ character }: UseHomePageControllerParams
             .catch(() => setLoadError("Não foi possível carregar a cidade. Tente novamente."));
     }, [accessToken, character.id]);
 
-    // Sem painel de informação ainda (vem numa próxima rodada de UI) — por
-    // enquanto só loga o tile clicado, já deixando a interação plugada.
-    function handleTileClick(tile: TileData) {
-        // eslint-disable-next-line no-console
-        console.log("Tile clicado:", tile);
+    // Só lotes têm informação pra mostrar — clique em terreno livre não faz
+    // nada (rua já é filtrada antes, em `isTileClickable`).
+    function handleTileClick(_tile: TileData, lot?: Lot) {
+        if (lot) {
+            setSelectedLot(lot);
+        }
+    }
+
+    function closeLotModal() {
+        setSelectedLot(null);
     }
 
     function zoomIn() {
@@ -88,6 +94,8 @@ export function useHomePageController({ character }: UseHomePageControllerParams
         currentLot,
         loadError,
         handleTileClick,
+        selectedLot,
+        closeLotModal,
         accessToken,
         tileSize,
         zoomIn,

@@ -10,7 +10,7 @@ import {
 } from "./HomePage.controller";
 import { useAuth } from "../../auth/AuthContext";
 import { getStoredTileSize } from "./city-zoom-storage";
-import { getCity, getCurrentLot, type Character } from "../../lib/api";
+import { getCity, getCurrentLot, type Character, type Lot } from "../../lib/api";
 
 vi.mock("../../auth/AuthContext", () => ({
     useAuth: vi.fn(),
@@ -38,16 +38,42 @@ describe("isTileClickable", () => {
 });
 
 describe("useHomePageController handleTileClick", () => {
-    it("logs the clicked tile (no info panel built yet)", () => {
+    beforeEach(() => {
         (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: null });
-        const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    });
 
+    it("does nothing when the clicked tile has no lot", () => {
         const { result } = renderHook(() => useHomePageController({ character: CHARACTER }));
-        result.current.handleTileClick({ x: 1, y: 2, z: 0, type: "grass" });
+        act(() => {
+            result.current.handleTileClick({ x: 1, y: 2, z: 0, type: "grass" });
+        });
 
-        expect(logSpy).toHaveBeenCalledWith("Tile clicado:", { x: 1, y: 2, z: 0, type: "grass" });
+        expect(result.current.selectedLot).toBeNull();
+    });
 
-        logSpy.mockRestore();
+    it("selects the lot when the clicked tile has one", () => {
+        const lot: Lot = { id: "lot-1", characterId: "char-2", type: "residential", x: 1, y: 2 };
+        const { result } = renderHook(() => useHomePageController({ character: CHARACTER }));
+
+        act(() => {
+            result.current.handleTileClick({ x: 1, y: 2, z: 0, type: "lot" }, lot);
+        });
+
+        expect(result.current.selectedLot).toEqual(lot);
+    });
+
+    it("closeLotModal clears the selected lot", () => {
+        const lot: Lot = { id: "lot-1", characterId: "char-2", type: "residential", x: 1, y: 2 };
+        const { result } = renderHook(() => useHomePageController({ character: CHARACTER }));
+
+        act(() => {
+            result.current.handleTileClick({ x: 1, y: 2, z: 0, type: "lot" }, lot);
+        });
+        act(() => {
+            result.current.closeLotModal();
+        });
+
+        expect(result.current.selectedLot).toBeNull();
     });
 });
 

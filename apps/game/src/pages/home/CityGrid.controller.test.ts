@@ -199,4 +199,22 @@ describe("useCityGridController", () => {
         await waitFor(() => expect(result.current.tiles).toHaveLength(1));
         expect(getCityChunk).toHaveBeenCalledTimes(2);
     });
+
+    it("getLotAt returns the full lot behind a position once its chunk has loaded", async () => {
+        const lot = { id: "lot-1", characterId: "char-2", type: "residential" as const, x: 0, y: 0 };
+        (getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
+            tiles: [{ x: 0, y: 0, type: "grass" }],
+            lots: [lot],
+        });
+
+        const { result } = setup();
+
+        expect(result.current.getLotAt(0, 0)).toBeUndefined();
+
+        act(() => result.current.onChunkEnter(0, 0));
+        await waitFor(() => expect(result.current.tiles).toHaveLength(1));
+
+        expect(result.current.getLotAt(0, 0)).toEqual(lot);
+        expect(result.current.getLotAt(1, 1)).toBeUndefined();
+    });
 });

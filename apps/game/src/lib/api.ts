@@ -170,6 +170,16 @@ export async function updateAppearance(accessToken: string, characterId: string,
     return response.json();
 }
 
+export async function getCharacter(accessToken: string, characterId: string): Promise<Character> {
+    const response = await authFetch(`/characters/${characterId}`, accessToken);
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
 export type LotType = "residential";
 
 export type Lot = {
