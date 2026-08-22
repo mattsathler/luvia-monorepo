@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../auth/AuthContext";
 import { searchLots, type Character, type LotSearchResult } from "../../../lib/api";
 
@@ -16,6 +17,7 @@ const DEBOUNCE_MS = 250;
  */
 export function useMapSearchPanelController(character: Character) {
     const { accessToken } = useAuth();
+    const navigate = useNavigate();
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<LotSearchResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -36,13 +38,14 @@ export function useMapSearchPanelController(character: Character) {
         return () => clearTimeout(timeout);
     }, [accessToken, query, character.id]);
 
-    // Navegar até o lote (centralizar o mapa nele) depende do sistema de
-    // pan/zoom pela cidade toda, ainda pendente (ver
-    // docs/roadmap/03-cidade-e-lar/planos/06-interacao-com-a-metropole.md) —
-    // o clique já fica plugado, só loga por enquanto.
+    // Muda a URL pra `/play?lot=&x=&y=` — o próprio HomePage (via CityGrid)
+    // reage a `x`/`y` mudando e centraliza o mapa no lote (ver App.tsx e
+    // CityGrid.tsx#targetLot). `lot` (o id) não é usado na navegação em si,
+    // só acompanha pra a URL fazer sentido e ser compartilhável por link.
+    // `replace: true` — trocar de lote na busca não deveria empilhar
+    // histórico, é uma troca de posição, não uma nova página.
     function handleSelectLot(lot: LotSearchResult) {
-        // eslint-disable-next-line no-console
-        console.log("Navegar até o lote:", lot);
+        navigate(`/play?lot=${lot.lotId}&x=${lot.x}&y=${lot.y}`, { replace: true });
     }
 
     return { query, setQuery, results, isLoading, handleSelectLot };

@@ -95,6 +95,15 @@ export function useCityGridController({ dimensions, accessToken, characterId }: 
         });
     }, []);
 
+    // Usado pra decidir, na navegação até um lote (ver CityGrid.tsx), se o
+    // chunk alvo já está pronto (só rolar até ele) ou precisa ser buscado
+    // primeiro — o cache é a mesma fonte de verdade que `loadChunk` já usa
+    // pra evitar refetch.
+    const isChunkLoaded = useCallback(
+        (chunkX: number, chunkY: number) => cacheRef.current.has(chunkKey(chunkX, chunkY)),
+        [],
+    );
+
     const tiles = useMemo(() => {
         const result: TileData[] = [];
         mountedKeys.forEach((key) => {
@@ -119,5 +128,5 @@ export function useCityGridController({ dimensions, accessToken, characterId }: 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mountedKeys, version]);
 
-    return { chunkCoords, tiles, onChunkEnter, onChunkLeave };
+    return { chunkCoords, tiles, onChunkEnter, onChunkLeave, isChunkLoaded, loadChunk };
 }

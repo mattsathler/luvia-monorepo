@@ -62,6 +62,10 @@ describe("CityGrid", () => {
         vi.clearAllMocks();
         FakeIntersectionObserver.instances = [];
         vi.stubGlobal("IntersectionObserver", FakeIntersectionObserver);
+        // jsdom não implementa `Element#scrollTo` — sem isso, o efeito de
+        // navegação até `targetLot` (CityGrid.tsx) lança ao chamar
+        // `container.scrollTo(...)`, mesmo em testes que não mexem com ele.
+        Element.prototype.scrollTo = vi.fn();
     });
 
     const dimensions = { width: 20, height: 10 }; // 2x1 chunks (CHUNK_SIZE = 10)
@@ -307,6 +311,109 @@ describe("CityGrid", () => {
         fireEvent.click(button);
 
         expect(onTileClick).not.toHaveBeenCalled();
+    });
+
+    it("smoothly scrolls to a targetLot whose chunk is already loaded, without refetching", async () => {
+        (getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
+            tiles: [{ x: 0, y: 0, type: "grass" }],
+            lots: [],
+        });
+
+        const { container, rerender } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+        );
+
+        act(() => FakeIntersectionObserver.instances[0].trigger(targetFor(0, 0), true));
+        await waitFor(() => expect(container.querySelectorAll(".tile")).toHaveLength(1));
+        (getCityChunk as ReturnType<typeof vi.fn>).mockClear();
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+        const scrollToSpy = vi.fn();
+        grid.scrollTo = scrollToSpy;
+
+        rerender(
+            <CityGrid
+                dimensions={dimensions}
+                tileSize={64}
+                backgroundColor="#7bc96f"
+                accessToken="token-123"
+                characterId="char-1"
+                targetLot={{ x: 2, y: 1 }}
+            />,
+        );
+
+        await waitFor(() => expect(scrollToSpy).toHaveBeenCalledTimes(1));
+        expect(scrollToSpy).toHaveBeenCalledWith(expect.objectContaining({ behavior: "smooth" }));
+        expect(getCityChunk).not.toHaveBeenCalled();
+    });
+
+    it("fetches the chunk first, then jumps (no animation) to a targetLot in an unloaded chunk", async () => {
+        (getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
+            tiles: [{ x: 12, y: 3, type: "grass" }],
+            lots: [],
+        });
+
+        const { container, rerender } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+        const scrollToSpy = vi.fn();
+        grid.scrollTo = scrollToSpy;
+
+        rerender(
+            <CityGrid
+                dimensions={dimensions}
+                tileSize={64}
+                backgroundColor="#7bc96f"
+                accessToken="token-123"
+                characterId="char-1"
+                targetLot={{ x: 12, y: 3 }}
+            />,
+        );
+
+        await waitFor(() => expect(getCityChunk).toHaveBeenCalledWith("token-123", 1, 0));
+        await waitFor(() => expect(scrollToSpy).toHaveBeenCalledTimes(1));
+        expect(scrollToSpy).toHaveBeenCalledWith(expect.objectContaining({ behavior: "auto" }));
+        await waitFor(() => expect(container.querySelectorAll(".tile")).toHaveLength(1));
+    });
+
+    it("does not re-navigate to the same targetLot on an unrelated re-render", async () => {
+        (getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
+            tiles: [{ x: 0, y: 0, type: "grass" }],
+            lots: [],
+        });
+
+        const { container, rerender } = render(
+            <CityGrid
+                dimensions={dimensions}
+                tileSize={64}
+                backgroundColor="#7bc96f"
+                accessToken="token-123"
+                characterId="char-1"
+                targetLot={{ x: 0, y: 0 }}
+            />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+        await waitFor(() => expect(getCityChunk).toHaveBeenCalledTimes(1));
+
+        const scrollToSpy = vi.fn();
+        grid.scrollTo = scrollToSpy;
+
+        rerender(
+            <CityGrid
+                dimensions={dimensions}
+                tileSize={64}
+                backgroundColor="#7bc96f"
+                accessToken="token-123"
+                characterId="char-1"
+                targetLot={{ x: 0, y: 0 }}
+                onTileClick={vi.fn()}
+            />,
+        );
+
+        expect(scrollToSpy).not.toHaveBeenCalled();
     });
 
     it("disconnects the observer on unmount", () => {

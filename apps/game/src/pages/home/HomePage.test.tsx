@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { HomePage } from "./HomePage";
 import { useAuth } from "../../auth/AuthContext";
@@ -68,6 +69,16 @@ const CHARACTER: Character = {
 
 const CITY: City = { width: 40, height: 40, backgroundColor: "#7bc96f" };
 
+// HomeHud (renderizado dentro de HomePage, sem mock) inclui o
+// MapSearchPanel, que usa `useNavigate` — precisa de um Router por perto.
+function renderHomePage(props: Parameters<typeof HomePage>[0]) {
+    return render(
+        <MemoryRouter>
+            <HomePage {...props} />
+        </MemoryRouter>,
+    );
+}
+
 describe("HomePage", () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -82,13 +93,13 @@ describe("HomePage", () => {
     });
 
     it("shows a loading state before the city's dimensions arrive", () => {
-        render(<HomePage character={CHARACTER} />);
+        renderHomePage({ character: CHARACTER });
 
         expect(screen.getByText("Carregando cidade...")).toBeInTheDocument();
     });
 
     it("resolves the character's current lot, then renders CityGrid full-screen with the right props", async () => {
-        render(<HomePage character={CHARACTER} />);
+        renderHomePage({ character: CHARACTER });
 
         const cityGrid = await screen.findByTestId("city-grid");
 
@@ -103,10 +114,19 @@ describe("HomePage", () => {
         expect(props.characterId).toBe("char-1");
     });
 
+    it("passes targetLot through to CityGrid, so it can center the map on it", async () => {
+        renderHomePage({ character: CHARACTER, targetLot: { x: 5, y: 8 } });
+
+        const cityGrid = await screen.findByTestId("city-grid");
+        const props = JSON.parse(cityGrid.getAttribute("data-props")!);
+
+        expect(props.targetLot).toEqual({ x: 5, y: 8 });
+    });
+
     it("does not fetch the city when there is no access token", () => {
         (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: null });
 
-        render(<HomePage character={CHARACTER} />);
+        renderHomePage({ character: CHARACTER });
 
         expect(getCurrentLot).not.toHaveBeenCalled();
         expect(getCity).not.toHaveBeenCalled();
@@ -115,7 +135,7 @@ describe("HomePage", () => {
     it("shows an error state when the city fails to load", async () => {
         (getCurrentLot as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network error"));
 
-        render(<HomePage character={CHARACTER} />);
+        renderHomePage({ character: CHARACTER });
 
         expect(await screen.findByText("Não foi possível carregar a cidade. Tente novamente.")).toBeInTheDocument();
     });

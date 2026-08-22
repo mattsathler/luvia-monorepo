@@ -93,6 +93,12 @@ function getChunkPixelBox(chunkX: number, chunkY: number, gridWidth: number, gri
     return { left: minX, top: minY, width: maxX - minX + size, height: maxY - minY + size };
 }
 
+/** Mesma fórmula de `getChunkPixelBox`, pra um único tile em vez de um chunk inteiro — usado pra centralizar a rolagem num lote (ver `useEffect` de `targetLot`). */
+function getTilePixelBox(x: number, y: number, size: number) {
+    const { minX, minY } = isoCornersBoundingBox([{ x, y }], size);
+    return { left: minX, top: minY, width: size, height: size };
+}
+
 type CityGridProps = {
     dimensions: { width: number; height: number };
     tileSize: number;
@@ -102,6 +108,8 @@ type CityGridProps = {
     characterId: string;
     onTileClick?: (tile: TileData) => void;
     isTileClickable?: (tile: TileData) => boolean;
+    /** Lote pra centralizar a rolagem assim que definido/trocado (ex.: clique num resultado do MapSearchPanel, ou `?x=&y=` na URL) — `null`/omitido não move o mapa. */
+    targetLot?: { x: number; y: number } | null;
 };
 
 /**
@@ -120,8 +128,9 @@ export function CityGrid({
     characterId,
     onTileClick,
     isTileClickable,
+    targetLot,
 }: CityGridProps) {
-    const { chunkCoords, tiles, onChunkEnter, onChunkLeave } = useCityGridController({
+    const { chunkCoords, tiles, onChunkEnter, onChunkLeave, isChunkLoaded, loadChunk } = useCityGridController({
         dimensions,
         accessToken,
         characterId,
@@ -132,6 +141,8 @@ export function CityGrid({
     const dragRef = useRef<DragState | null>(null);
     /** Sobrevive um tick além de `dragRef` — só existe pro `click` pós-arrasto (ver `endDrag`/`handleClickCapture`). */
     const wasDraggedRef = useRef(false);
+    /** Evita renavegar pro mesmo lote a cada re-render (ex.: zoom) — só o *lote* muda o alvo, não o tamanho do tile. */
+    const lastTargetKeyRef = useRef<string | null>(null);
 
     const bounds = useMemo(
         () => getGridIsoBounds(dimensions.width, dimensions.height, tileSize),
@@ -158,6 +169,54 @@ export function CityGrid({
         container.scrollLeft = Math.max(0, bounds.offsetX + bounds.width / 2 - container.clientWidth / 2);
         container.scrollTop = Math.max(0, bounds.offsetY + bounds.height / 2 - container.clientHeight / 2);
     }, [bounds.offsetX, bounds.offsetY, bounds.width, bounds.height]);
+
+    useEffect(() => {
+        // Navega até `targetLot` (clique num resultado do MapSearchPanel, ou
+        // `?x=&y=` na URL ao abrir um link compartilhado) — uma vez por lote
+        // (`lastTargetKeyRef`), não a cada re-render (ex.: zoom mudando
+        // `tileSize`, que também está nas deps pra recalcular a posição caso
+        // o efeito rode antes do zoom estabilizar).
+        if (!targetLot) {
+            return;
+        }
+
+        const container = containerRef.current;
+        if (!container) {
+            return;
+        }
+
+        const targetKey = `${targetLot.x}:${targetLot.y}`;
+        if (lastTargetKeyRef.current === targetKey) {
+            return;
+        }
+        lastTargetKeyRef.current = targetKey;
+
+        const chunkX = Math.floor(targetLot.x / CHUNK_SIZE);
+        const chunkY = Math.floor(targetLot.y / CHUNK_SIZE);
+        const wasAlreadyLoaded = isChunkLoaded(chunkX, chunkY);
+
+        function scrollToTarget() {
+            const box = getTilePixelBox(targetLot!.x, targetLot!.y, tileSize);
+            const left = Math.max(0, bounds.offsetX + box.left + box.width / 2 - container!.clientWidth / 2);
+            const top = Math.max(0, bounds.offsetY + box.top + box.height / 2 - container!.clientHeight / 2);
+            // Chunk já carregado (lote próximo/já visitado): anima a
+            // rolagem, é rápido e dá pro jogador acompanhar o trajeto no
+            // mapa. Chunk novo (precisou do endpoint): pula direto — animar
+            // uma rolagem longa sobre território ainda vazio só atrasa sem
+            // ajudar, e a própria busca já introduz uma pausa perceptível.
+            container!.scrollTo({ left, top, behavior: wasAlreadyLoaded ? "smooth" : "auto" });
+        }
+
+        if (wasAlreadyLoaded) {
+            onChunkEnter(chunkX, chunkY);
+            scrollToTarget();
+        } else {
+            loadChunk(chunkX, chunkY).then(() => {
+                onChunkEnter(chunkX, chunkY);
+                scrollToTarget();
+            });
+        }
+    }, [targetLot, tileSize, bounds.offsetX, bounds.offsetY, isChunkLoaded, loadChunk, onChunkEnter]);
 
     useEffect(() => {
         // O ref já está anexado ao `<div>` quando este efeito roda (React

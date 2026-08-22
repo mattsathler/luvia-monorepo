@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MapSearchPanel } from "./MapSearchPanel";
 import { useAuth } from "../../../auth/AuthContext";
@@ -17,6 +18,18 @@ vi.mock("../../../lib/api", async () => {
 const DEBOUNCE_MS = 250;
 const CHARACTER = { id: "char-1" } as Character;
 
+// `handleSelectLot` (MapSearchPanel.controller.ts) usa `useNavigate`, que
+// exige um Router por perto — sem ele, todo `render(<MapSearchPanel />)`
+// abaixo lançaria em runtime, mesmo nos testes que nunca chegam a clicar
+// num resultado.
+function renderPanel(character: Character) {
+    return render(
+        <MemoryRouter>
+            <MapSearchPanel character={character} />
+        </MemoryRouter>,
+    );
+}
+
 describe("MapSearchPanel", () => {
     beforeEach(() => {
         vi.useFakeTimers({ shouldAdvanceTime: true });
@@ -31,7 +44,7 @@ describe("MapSearchPanel", () => {
     it("starts closed, showing only the map trigger", () => {
         (searchLots as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
 
-        render(<MapSearchPanel character={CHARACTER} />);
+        renderPanel(CHARACTER);
 
         expect(screen.getByRole("button", { name: "Buscar lotes" })).toBeInTheDocument();
         expect(screen.queryByPlaceholderText("Buscar lote")).not.toBeInTheDocument();
@@ -43,7 +56,7 @@ describe("MapSearchPanel", () => {
         ]);
         const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
-        render(<MapSearchPanel character={CHARACTER} />);
+        renderPanel(CHARACTER);
         await user.click(screen.getByRole("button", { name: "Buscar lotes" }));
 
         await act(async () => {
@@ -63,7 +76,7 @@ describe("MapSearchPanel", () => {
         ]);
         const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
-        render(<MapSearchPanel character={CHARACTER} />);
+        renderPanel(CHARACTER);
         await user.click(screen.getByRole("button", { name: "Buscar lotes" }));
 
         await act(async () => {
@@ -81,7 +94,7 @@ describe("MapSearchPanel", () => {
         ]);
         const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
-        render(<MapSearchPanel character={CHARACTER} />);
+        renderPanel(CHARACTER);
         await user.click(screen.getByRole("button", { name: "Buscar lotes" }));
 
         await act(async () => {
@@ -98,7 +111,7 @@ describe("MapSearchPanel", () => {
         (searchLots as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
-        render(<MapSearchPanel character={CHARACTER} />);
+        renderPanel(CHARACTER);
         await user.click(screen.getByRole("button", { name: "Buscar lotes" }));
 
         await act(async () => {
@@ -114,7 +127,7 @@ describe("MapSearchPanel", () => {
         (searchLots as ReturnType<typeof vi.fn>).mockResolvedValue([]);
         const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
-        render(<MapSearchPanel character={CHARACTER} />);
+        renderPanel(CHARACTER);
         await user.click(screen.getByRole("button", { name: "Buscar lotes" }));
         await act(async () => {
             vi.advanceTimersByTime(DEBOUNCE_MS);
@@ -131,14 +144,33 @@ describe("MapSearchPanel", () => {
         expect(searchLots).toHaveBeenLastCalledWith("token-123", "ana", "char-1");
     });
 
-    it("logs the selected lot when a result is clicked", async () => {
+    it("navigates to /play with the lot id and coordinates in the URL when a result is clicked", async () => {
         (searchLots as ReturnType<typeof vi.fn>).mockResolvedValue([
             { lotId: "lot-1", typeName: "Residência", ownerName: "Ana Silva", x: 3, y: 5, distanceBlocks: 5 },
         ]);
-        const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
         const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
-        render(<MapSearchPanel character={CHARACTER} />);
+        let observedSearch = "";
+        function LocationProbe() {
+            observedSearch = useLocation().search;
+            return null;
+        }
+
+        render(
+            <MemoryRouter initialEntries={["/play"]}>
+                <Routes>
+                    <Route
+                        path="/play"
+                        element={
+                            <>
+                                <MapSearchPanel character={CHARACTER} />
+                                <LocationProbe />
+                            </>
+                        }
+                    />
+                </Routes>
+            </MemoryRouter>,
+        );
         await user.click(screen.getByRole("button", { name: "Buscar lotes" }));
         await act(async () => {
             vi.advanceTimersByTime(DEBOUNCE_MS);
@@ -148,11 +180,6 @@ describe("MapSearchPanel", () => {
 
         await user.click(screen.getByText("Ana Silva"));
 
-        expect(logSpy).toHaveBeenCalledWith(
-            "Navegar até o lote:",
-            expect.objectContaining({ lotId: "lot-1", ownerName: "Ana Silva" }),
-        );
-
-        logSpy.mockRestore();
+        expect(observedSearch).toBe("?lot=lot-1&x=3&y=5");
     });
 });

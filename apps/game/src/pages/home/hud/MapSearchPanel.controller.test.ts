@@ -4,6 +4,12 @@ import { useMapSearchPanelController } from "./MapSearchPanel.controller";
 import { useAuth } from "../../../auth/AuthContext";
 import { searchLots, type Character } from "../../../lib/api";
 
+const navigateMock = vi.fn();
+
+vi.mock("react-router-dom", () => ({
+    useNavigate: () => navigateMock,
+}));
+
 vi.mock("../../../auth/AuthContext", () => ({
     useAuth: vi.fn(),
 }));
@@ -115,16 +121,13 @@ describe("useMapSearchPanelController", () => {
         expect(result.current.isLoading).toBe(false);
     });
 
-    it("handleSelectLot logs the selected lot (navigation not wired yet)", () => {
+    it("handleSelectLot navigates to /play with the lot id and coordinates in the URL, replacing history", () => {
         (searchLots as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
-        const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
         const { result } = renderHook(() => useMapSearchPanelController(CHARACTER));
         const lot = { lotId: "lot-1", typeName: "Residência", ownerName: "Ana Silva", x: 3, y: 5, distanceBlocks: 5 };
         result.current.handleSelectLot(lot);
 
-        expect(logSpy).toHaveBeenCalledWith("Navegar até o lote:", lot);
-
-        logSpy.mockRestore();
+        expect(navigateMock).toHaveBeenCalledWith("/play?lot=lot-1&x=3&y=5", { replace: true });
     });
 });

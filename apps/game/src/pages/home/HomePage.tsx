@@ -8,11 +8,13 @@ import { useWorldClockLighting } from "./useWorldClockLighting";
 
 type HomePageProps = {
     character: Character;
+    /** Lote pra centralizar o mapa nele ao entrar — vem de `?x=&y=` na URL (ver App.tsx), ex.: link compartilhado ou clique no MapSearchPanel. */
+    targetLot?: { x: number; y: number } | null;
 };
 
 // O mapa ocupa a tela inteira — qualquer UI futura (HUD, painéis) fica
 // sobreposta a ele, como num jogo, em vez de empurrar o mapa pra baixo.
-export function HomePage({ character }: HomePageProps) {
+export function HomePage({ character, targetLot = null }: HomePageProps) {
     const { dimensions, currentLot, loadError, handleTileClick, accessToken, tileSize } = useHomePageController({ character });
     const worldClock = useWorldClock();
     useWorldClockLighting(worldClock?.hour ?? null);
@@ -43,6 +45,7 @@ export function HomePage({ character }: HomePageProps) {
                         characterId={character.id}
                         onTileClick={handleTileClick}
                         isTileClickable={isTileClickable}
+                        targetLot={targetLot}
                     />
                     <HomeHud
                         character={character}

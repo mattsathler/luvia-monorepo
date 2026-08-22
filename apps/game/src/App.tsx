@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
 import { LuvSpinner, SnackbarProvider } from "luv-ui";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import { CharacterProvider, useCharacter } from "./character/CharacterContext";
@@ -74,10 +75,24 @@ function CharacterCreateRoute() {
 
 function PlayRoute() {
     const { character } = useCharacter();
+    const [searchParams] = useSearchParams();
+
+    // `?x=&y=` (setado pelo MapSearchPanel ao selecionar um lote, ou colado
+    // à mão num link compartilhado — ver MapSearchPanel.controller.ts) —
+    // `lot` (o id) só acompanha pro link fazer sentido pra quem lê a URL, a
+    // navegação em si usa as coordenadas direto, sem round-trip extra pra
+    // resolver id -> posição.
+    const targetLot = useMemo(() => {
+        const x = Number(searchParams.get("x"));
+        const y = Number(searchParams.get("y"));
+        return Number.isFinite(x) && Number.isFinite(y) && searchParams.has("x") && searchParams.has("y")
+            ? { x, y }
+            : null;
+    }, [searchParams]);
 
     // Só renderiza dentro de RequireCharacter, que já garante um personagem
     // não nulo — a asserção evita repetir esse check aqui.
-    return <HomePage character={character!} />;
+    return <HomePage character={character!} targetLot={targetLot} />;
 }
 
 function AppRoutes() {

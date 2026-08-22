@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { HomeHud } from "./HomeHud";
 import { useAuth } from "../../../auth/AuthContext";
@@ -47,13 +48,15 @@ const CURRENT_LOT = { name: "Residência", x: 0, y: 0 };
 describe("HomeHud", () => {
     it("renders the profile, world clock, and calendar panels", () => {
         render(
-            <HomeHud
-                character={CHARACTER}
-                currentLot={CURRENT_LOT}
-                hour={14.5}
-                weekday={2}
-                weather={{ type: "rainy", temperature: 17 }}
-            />,
+            <MemoryRouter>
+                <HomeHud
+                    character={CHARACTER}
+                    currentLot={CURRENT_LOT}
+                    hour={14.5}
+                    weekday={2}
+                    weather={{ type: "rainy", temperature: 17 }}
+                />
+            </MemoryRouter>,
         );
 
         expect(screen.getByText("Ana Silva")).toBeInTheDocument();
@@ -65,7 +68,11 @@ describe("HomeHud", () => {
     });
 
     it("shows the world clock placeholder while the hour/weekday/weather haven't synced yet", () => {
-        render(<HomeHud character={CHARACTER} currentLot={CURRENT_LOT} hour={null} weekday={null} weather={null} />);
+        render(
+            <MemoryRouter>
+                <HomeHud character={CHARACTER} currentLot={CURRENT_LOT} hour={null} weekday={null} weather={null} />
+            </MemoryRouter>,
+        );
 
         expect(screen.getByText("--:--")).toBeInTheDocument();
         expect(screen.getByText("--°C")).toBeInTheDocument();
