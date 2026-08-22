@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { SnackbarProvider } from "luv-ui";
+import { LuvSpinner, SnackbarProvider } from "luv-ui";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import { CharacterProvider, useCharacter } from "./character/CharacterContext";
 import { LoginPage } from "./pages/login/LoginPage";
@@ -86,7 +86,7 @@ function AppRoutes() {
     if (isValidating) {
         return (
             <div className="d-flex flex-col items-center justify-center w-full h-full max-w-640">
-                <span className="text-text">Carregando...</span>
+                <LuvSpinner label="Carregando..." />
             </div>
         );
     }

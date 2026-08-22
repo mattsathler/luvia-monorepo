@@ -1,4 +1,4 @@
-import { LuvDivider, LuvExpandableBox, LuvIcon, LuvInput } from "luv-ui";
+import { LuvDivider, LuvEmptyState, LuvExpandableBox, LuvIcon, LuvInput, LuvSpinner } from "luv-ui";
 import { useMapSearchPanelController } from "./MapSearchPanel.controller";
 
 // Forma rápida de navegação do jogador: busca lotes da cidade (dono ou tipo)
@@ -26,10 +26,10 @@ export function MapSearchPanel() {
             />
 
             <div className="d-flex flex-col gap-4 scroll-y h-164 pr-16">
-                {isLoading && <span className="text-placeholder text-size-12">Buscando...</span>}
+                {isLoading && <LuvSpinner label="Buscando..." size={16} />}
 
                 {!isLoading && results.length === 0 && (
-                    <span className="text-placeholder text-size-12">Nenhum lote encontrado.</span>
+                    <LuvEmptyState icon="search_off" message="Nenhum lote encontrado." />
                 )}
 
                 {!isLoading &&

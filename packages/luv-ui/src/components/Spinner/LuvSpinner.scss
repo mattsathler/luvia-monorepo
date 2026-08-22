@@ -1,0 +1,20 @@
+.luv-spinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.luv-spinner-icon {
+    color: var(--luv-spinner-color, var(--text));
+    animation: luv-spinner-rotate 1s linear infinite;
+}
+
+@keyframes luv-spinner-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,3 +1,4 @@
+import { LuvSpinner } from "luv-ui";
 import { CityGrid } from "./CityGrid";
 import { HomeHud } from "./hud/HomeHud";
 import type { Character } from "../../lib/api";
@@ -28,7 +29,7 @@ export function HomePage({ character }: HomePageProps) {
 
             {!dimensions && !loadError && (
                 <div className="d-flex items-center justify-center w-full h-full">
-                    <p className="text-text">Carregando cidade...</p>
+                    <LuvSpinner label="Carregando cidade..." />
                 </div>
             )}
 

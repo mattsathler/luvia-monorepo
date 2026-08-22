@@ -33,7 +33,7 @@ describe("MapSearchPanel", () => {
         render(<MapSearchPanel />);
 
         expect(screen.getByRole("button", { name: "Buscar lotes" })).toBeInTheDocument();
-        expect(screen.queryByPlaceholderText("Buscar por dono ou tipo...")).not.toBeInTheDocument();
+        expect(screen.queryByPlaceholderText("Buscar lote")).not.toBeInTheDocument();
     });
 
     it("shows the search input and results once opened", async () => {
@@ -51,7 +51,7 @@ describe("MapSearchPanel", () => {
             await Promise.resolve();
         });
 
-        expect(screen.getByPlaceholderText("Buscar por dono ou tipo...")).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Buscar lote")).toBeInTheDocument();
         expect(screen.getByText("Ana Silva")).toBeInTheDocument();
         expect(screen.getByText(/Residência · \(3, 5\)/)).toBeInTheDocument();
     });
@@ -103,7 +103,7 @@ describe("MapSearchPanel", () => {
         });
         (searchLots as ReturnType<typeof vi.fn>).mockClear();
 
-        await user.type(screen.getByPlaceholderText("Buscar por dono ou tipo..."), "ana");
+        await user.type(screen.getByPlaceholderText("Buscar lote"), "ana");
         await act(async () => {
             vi.advanceTimersByTime(DEBOUNCE_MS);
             await Promise.resolve();

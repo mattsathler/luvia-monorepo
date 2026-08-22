@@ -1,4 +1,4 @@
-import { LuvIcon } from "luv-ui";
+import { LuvIcon, LuvSpinner } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
 import type { Character } from "../../lib/api";
 import { Player } from "../../components/Player/Player";
@@ -50,7 +50,7 @@ function CharacterSelectPageContent({ accessToken, onCharacterSelected, onCreate
                     </div>
                 )}
 
-                {characters === null && !loadError && <p className="text-text">Carregando personagens...</p>}
+                {characters === null && !loadError && <LuvSpinner label="Carregando personagens..." />}
 
                 {characters !== null && (
                     <>
