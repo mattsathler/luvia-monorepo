@@ -238,13 +238,24 @@ export type LotSearchResult = {
     ownerName: string;
     x: number;
     y: number;
+    /** Distância em blocos até a casa de `characterId` — `null` sem `characterId` ou sem lote próprio ainda. */
+    distanceBlocks: number | null;
 };
 
 // Ponto de navegação rápida do jogador (ícone de mapa na HUD) — busca em
 // todos os lotes da cidade por dono ou tipo. `query` vazio/omitido devolve a
-// lista inteira, sem filtro.
-export async function searchLots(accessToken: string, query?: string): Promise<LotSearchResult[]> {
-    const suffix = query ? `?q=${encodeURIComponent(query)}` : "";
+// lista inteira, sem filtro. Com `characterId`, o backend já devolve os
+// resultados ordenados do lote mais próximo da casa desse personagem pro
+// mais distante (ver SearchLotsUseCase na API).
+export async function searchLots(accessToken: string, query?: string, characterId?: string): Promise<LotSearchResult[]> {
+    const params = new URLSearchParams();
+    if (query) {
+        params.set("q", query);
+    }
+    if (characterId) {
+        params.set("characterId", characterId);
+    }
+    const suffix = params.toString() ? `?${params.toString()}` : "";
     const response = await authFetch(`/city/lots${suffix}`, accessToken);
 
     if (!response.ok) {

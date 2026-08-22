@@ -64,22 +64,22 @@ describe('CityController', () => {
     expect(result).resolves.toBe('current-lot');
   });
 
-  it('searchLots() delegates to SearchLotsUseCase with the query param', () => {
+  it('searchLots() delegates to SearchLotsUseCase with the query and characterId params', () => {
     const { controller, searchLotsUseCase } = buildController();
     searchLotsUseCase.execute.mockResolvedValue('results' as never);
 
-    const result = controller.searchLots('ana');
+    const result = controller.searchLots('ana', 'char-1');
 
-    expect(searchLotsUseCase.execute).toHaveBeenCalledWith('ana');
+    expect(searchLotsUseCase.execute).toHaveBeenCalledWith('ana', 'char-1');
     expect(result).resolves.toBe('results');
   });
 
-  it('searchLots() works without a query param', () => {
+  it('searchLots() works without a query or characterId param', () => {
     const { controller, searchLotsUseCase } = buildController();
     searchLotsUseCase.execute.mockResolvedValue('results' as never);
 
     controller.searchLots();
 
-    expect(searchLotsUseCase.execute).toHaveBeenCalledWith(undefined);
+    expect(searchLotsUseCase.execute).toHaveBeenCalledWith(undefined, undefined);
   });
 });

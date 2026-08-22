@@ -41,7 +41,7 @@ export function HomeHud({ character, currentLot, hour, weekday, weather }: HomeH
             </div>
 
             <div className="pos-absolute bottom left m-16 pointer-events-none">
-                <MapSearchPanel />
+                <MapSearchPanel character={character} />
             </div>
         </div>
     );

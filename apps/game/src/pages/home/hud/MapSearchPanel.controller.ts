@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../auth/AuthContext";
-import { searchLots, type LotSearchResult } from "../../../lib/api";
+import { searchLots, type Character, type LotSearchResult } from "../../../lib/api";
 
 const DEBOUNCE_MS = 250;
 
@@ -9,8 +9,12 @@ const DEBOUNCE_MS = 250;
  * navegação rápida do jogador (ver docs/game-design). Debounce simples pra
  * não disparar uma requisição por tecla; `query` vazio já dispara (devolve a
  * cidade inteira, sem filtro — ver SearchLotsUseCase na API).
+ *
+ * A distância (em blocos) até a casa do jogador e a ordenação por
+ * proximidade já vêm prontas do backend (`characterId` na busca) — ver
+ * `searchLots` em lib/api.ts.
  */
-export function useMapSearchPanelController() {
+export function useMapSearchPanelController(character: Character) {
     const { accessToken } = useAuth();
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<LotSearchResult[]>([]);
@@ -23,14 +27,14 @@ export function useMapSearchPanelController() {
 
         setIsLoading(true);
         const timeout = setTimeout(() => {
-            searchLots(accessToken, query)
+            searchLots(accessToken, query, character.id)
                 .then(setResults)
                 .catch(() => setResults([]))
                 .finally(() => setIsLoading(false));
         }, DEBOUNCE_MS);
 
         return () => clearTimeout(timeout);
-    }, [accessToken, query]);
+    }, [accessToken, query, character.id]);
 
     // Navegar até o lote (centralizar o mapa nele) depende do sistema de
     // pan/zoom pela cidade toda, ainda pendente (ver

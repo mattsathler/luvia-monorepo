@@ -354,7 +354,31 @@ describe("searchLots", () => {
         await searchLots("token-123", "ana & bia");
 
         expect(fetchMock).toHaveBeenCalledWith(
-            expect.stringContaining("/city/lots?q=ana%20%26%20bia"),
+            expect.stringContaining("/city/lots?q=ana+%26+bia"),
+            expect.anything(),
+        );
+    });
+
+    it("appends the characterId param when given, alongside the query", async () => {
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, []));
+        vi.stubGlobal("fetch", fetchMock);
+
+        await searchLots("token-123", "ana", "char-1");
+
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining("/city/lots?q=ana&characterId=char-1"),
+            expect.anything(),
+        );
+    });
+
+    it("appends only the characterId param when there is no query", async () => {
+        const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, []));
+        vi.stubGlobal("fetch", fetchMock);
+
+        await searchLots("token-123", undefined, "char-1");
+
+        expect(fetchMock).toHaveBeenCalledWith(
+            expect.stringContaining("/city/lots?characterId=char-1"),
             expect.anything(),
         );
     });

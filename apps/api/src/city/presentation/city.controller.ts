@@ -32,8 +32,8 @@ export class CityController {
   // segmento extra) não colidiria de qualquer forma com uma rota que exige
   // `:characterId`, mas mantém a mesma convenção de ordem do resto do arquivo.
   @Get('lots')
-  searchLots(@Query('q') query?: string) {
-    return this.searchLotsUseCase.execute(query);
+  searchLots(@Query('q') query?: string, @Query('characterId') characterId?: string) {
+    return this.searchLotsUseCase.execute(query, characterId);
   }
 
   @Get('lots/:characterId')

@@ -1,11 +1,17 @@
 import { LuvDivider, LuvEmptyState, LuvExpandableBox, LuvIcon, LuvInput, LuvSpinner } from "luv-ui";
+import type { Character } from "../../../lib/api";
 import { useMapSearchPanelController } from "./MapSearchPanel.controller";
+
+type MapSearchPanelProps = {
+    character: Character;
+};
 
 // Forma rápida de navegação do jogador: busca lotes da cidade (dono ou tipo)
 // pra empregos, compra, visitas etc. — ver docs/game-design e
-// SearchLotsUseCase na API.
-export function MapSearchPanel() {
-    const { query, setQuery, results, isLoading, handleSelectLot } = useMapSearchPanelController();
+// SearchLotsUseCase na API. Mostra distância (em blocos) até a casa do
+// jogador em vez de coordenadas cruas, do mais próximo pro mais distante.
+export function MapSearchPanel({ character }: MapSearchPanelProps) {
+    const { query, setQuery, results, isLoading, handleSelectLot } = useMapSearchPanelController(character);
 
     return (
         <LuvExpandableBox
@@ -45,7 +51,7 @@ export function MapSearchPanel() {
                             <div className="d-flex flex-col items-start">
                                 <span>{lot.ownerName || lot.typeName}</span>
                                 <span className="text-placeholder text-size-12">
-                                    {lot.typeName} · ({lot.x}, {lot.y})
+                                    {lot.typeName} · {lot.distanceBlocks === null ? "—" : `${lot.distanceBlocks}m`}
                                 </span>
                             </div>
                         </button>
