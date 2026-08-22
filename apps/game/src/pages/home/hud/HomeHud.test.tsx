@@ -27,7 +27,7 @@ const CHARACTER: Character = {
     energy: 40,
     money: 2350,
     fame: 1250,
-    activity: "idle",
+    activity: "resting",
     activityEndsAt: null,
     lastUpdatedAt: "2026-01-01T00:00:00.000Z",
     appearance: {

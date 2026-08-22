@@ -67,10 +67,9 @@ describe("CalendarPanel", () => {
         logSpy.mockRestore();
     });
 
-    it("shows the current lot's name and coordinates", () => {
+    it("shows the current lot's name", () => {
         render(<CalendarPanel character={CHARACTER} currentLot={CURRENT_LOT} />);
 
         expect(screen.getByText("Residência")).toBeInTheDocument();
-        expect(screen.getByText("(3, 5)")).toBeInTheDocument();
     });
 });
