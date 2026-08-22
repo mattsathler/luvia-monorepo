@@ -10,10 +10,10 @@ Modelar o lote como entidade persistida — posição na grade, tipo, dono — s
 
 ## Escopo
 
-- Entidade `Lot`: id, dono (`accountId`/`characterId`), tipo (`residential` nesta milestone — `commercial`/`industrial` entram na M06), posição na grade da cidade.
+- Entidade `Lot`: id, dono (`accountId`/`characterId`), tipo (`residential` nesta milestone — `commercial`/`industrial` entram na M07), posição na grade da cidade.
 - Repositório + persistência Mongo.
 - Endpoint(s) pra listar lotes da cidade (pra renderizar a grade) e o(s) lote(s) de um jogador.
-- Regra de posse: nenhum jogador pode ter mais de 1 lote de cada tipo (ver [[../../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]) — nesta milestone, só residencial é validado; a regra já nasce genérica pra não precisar refatorar na M06.
+- Regra de posse: nenhum jogador pode ter mais de 1 lote de cada tipo (ver [[../../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]) — nesta milestone, só residencial é validado; a regra já nasce genérica pra não precisar refatorar na M07.
 
 ## Onde no código
 

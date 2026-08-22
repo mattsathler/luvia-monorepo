@@ -1,4 +1,4 @@
-# M06 — Economia de Jogadores
+# M07 — Economia de Jogadores
 
 ## Objetivo
 

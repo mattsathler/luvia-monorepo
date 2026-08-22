@@ -31,7 +31,7 @@ Tornar Luvia jogável de ponta a ponta: o jogador loga, escolhe uma atividade pr
 - Cidade, lotes, construção — personagem continua restrito à aba de detalhes (ver [[../../decisions/0019-personagem-montado-em-camadas-com-rig-2d]]).
 - Eventos, relacionamentos, empresas, contratos, economia — tudo isso vem depois.
 - Múltiplos empregos ou qualquer sistema de emprego privado (só o emprego público genérico existe aqui).
-- Balanceamento fino das taxas de efeito — os valores atuais (`RATES_PER_MINUTE`) são placeholder e continuam sendo até M07.
+- Balanceamento fino das taxas de efeito — os valores atuais (`RATES_PER_MINUTE`) são placeholder e continuam sendo até M08.
 
 ## Estimativa
 

@@ -11,7 +11,7 @@ Substituir o placeholder de `HomePage` (hoje só nome do personagem + botão de 
 ## Escopo
 
 - Exibir felicidade, energia, dinheiro e fama (ver [[../../../game-design/character-needs]]) com algum indicador visual (barra/medidor), não só número cru.
-- Layout preparado pra crescer: esta tela vira a "tela de vida" onde o seletor de atividade (plano 03) e, depois, os atalhos pra cidade (M03) e eventos (M04) vão morar.
+- Layout preparado pra crescer: esta tela vira a "tela de vida" onde o seletor de atividade (plano 03) e, depois, os atalhos pra cidade (M03) e eventos (M05) vão morar.
 - Estado de erro tratável (API fora do ar não deixa a tela em branco).
 
 ## Onde no código

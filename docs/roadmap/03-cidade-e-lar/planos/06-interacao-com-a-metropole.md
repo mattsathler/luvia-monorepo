@@ -12,8 +12,8 @@ A cidade é única e persistente (ver [[../../../decisions/0005-cidade-unica-per
 
 - Tela de cidade (plano 01) renderiza a grade **inteira**, não só o lote do jogador — navegação (pan/zoom ou equivalente) pela cidade completa.
 - Lotes de outros jogadores aparecem na grade, com a personalização deles visível (plano 04) — visualização, não interação ainda.
-- Jogador consegue abrir o "perfil" de um lote alheio (dono, nível — sem nenhuma ação social ainda, isso é escopo da M05).
-- Esta é a infraestrutura de navegação que a M05 (ação "Visitar") vai consumir — este plano não inclui nenhuma ação, só a capacidade de ver e localizar outros lotes.
+- Jogador consegue abrir o "perfil" de um lote alheio (dono, nível — sem nenhuma ação social ainda, isso é escopo da M06).
+- Esta é a infraestrutura de navegação que a M06 (ação "Visitar") vai consumir — este plano não inclui nenhuma ação, só a capacidade de ver e localizar outros lotes.
 
 ## Onde no código
 
@@ -29,4 +29,4 @@ A cidade é única e persistente (ver [[../../../decisions/0005-cidade-unica-per
 
 - [[../../../decisions/0005-cidade-unica-persistente]]
 - [[../../../game-design/city-and-world]]
-- [[../../05-relacionamentos-e-social/planos/02-acao-visitar]]
+- [[../../06-relacionamentos-e-social/planos/02-acao-visitar]]

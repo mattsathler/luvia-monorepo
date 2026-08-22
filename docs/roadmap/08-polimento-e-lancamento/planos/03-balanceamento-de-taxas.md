@@ -10,7 +10,7 @@ Todas as taxas de efeito introduzidas desde a M01 (`RATES_PER_MINUTE` e equivale
 
 ## Escopo
 
-- Revisar taxas de: atividades WRYD (M01/M02), eventos (M04), produção industrial (M06), progressão de skill (M01, plano 07, e M02, plano 04).
+- Revisar taxas de: atividades WRYD (M01/M02), eventos (M05), produção industrial (M07), progressão de skill (M01, plano 07, e M02, plano 04).
 - Validar que nada é maximizável em poucos dias de jogo real.
 - Registrar os valores finais escolhidos e o motivo (mesmo que ainda sujeitos a ajuste pós-lançamento).
 
@@ -21,7 +21,7 @@ Todas as taxas de efeito introduzidas desde a M01 (`RATES_PER_MINUTE` e equivale
 
 ## Depende de
 
-- Todas as milestones anteriores (M01–M06), já que toca taxa de cada uma.
+- Todas as milestones anteriores (M01–M07), já que toca taxa de cada uma.
 
 ## Referências
 

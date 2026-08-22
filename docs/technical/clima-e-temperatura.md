@@ -47,12 +47,14 @@ A temperatura é sorteada dentro da faixa do tipo já escolhido — é o clima q
 Fora de escopo nesta fase (registrado, não implementado):
 
 - **Efeito visual de chuva na cidade isométrica** (partículas, overlay semi-transparente, som) — Luvia sendo uma cidade chuvosa, isso é um candidato natural de polish visual futuro, mas depende de decisões de arte/performance não fechadas ainda.
-- **Qualquer efeito de jogabilidade do clima** (ex.: atividades ao ar livre desabilitadas na chuva, penalidade/bônus de energia) — decisão explícita de não fazer isso nesta fase (ver [[../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]); revisitar exigiria uma decisão nova.
+- ~~Qualquer efeito de jogabilidade do clima~~ — passou a existir na [[../roadmap/04-clima-e-produtividade/descricao]]: clima/temperatura afetam felicidade (desconforto térmico) e, indiretamente, produtividade no trabalho (ver [[../decisions/0030-clima-temperatura-e-hora-afetam-felicidade-e-produtividade]], que revoga o ponto 1 da [[../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]).
 - **Ciclo/estação do ano** — clima hoje não varia por estação nem tem tendência de longo prazo, é só um sorteio pesado por dia independente dos dias anteriores.
 
 ## Referências
 
 - [[../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]
+- [[../decisions/0030-clima-temperatura-e-hora-afetam-felicidade-e-produtividade]]
 - [[relogio-do-mundo]]
 - [[../game-design/city-and-world]]
 - [[../roadmap/03-cidade-e-lar/planos/09-clima-e-temperatura]]
+- [[../roadmap/04-clima-e-produtividade/descricao]]

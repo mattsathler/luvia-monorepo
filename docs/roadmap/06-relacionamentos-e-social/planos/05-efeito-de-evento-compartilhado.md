@@ -6,7 +6,7 @@
 
 ## Objetivo técnico
 
-Fecha a lacuna deixada intencionalmente aberta na M04: participar do mesmo evento que outro jogador passa a afetar o relacionamento entre os dois, não só a Fama/skills de cada um isoladamente.
+Fecha a lacuna deixada intencionalmente aberta na M05: participar do mesmo evento que outro jogador passa a afetar o relacionamento entre os dois, não só a Fama/skills de cada um isoladamente.
 
 ## Escopo
 
@@ -16,12 +16,12 @@ Fecha a lacuna deixada intencionalmente aberta na M04: participar do mesmo event
 ## Onde no código
 
 - `apps/api/src/relationship/`
-- `apps/api/src/character/` (ponto de recompute do evento, M04)
+- `apps/api/src/character/` (ponto de recompute do evento, M05)
 
 ## Depende de
 
 - Bounded context de relacionamento (plano 01).
-- Atividade evento (M04, plano 02).
+- Atividade evento (M05, plano 02).
 
 ## Referências
 

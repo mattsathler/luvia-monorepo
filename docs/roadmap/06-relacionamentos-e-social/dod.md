@@ -1,10 +1,10 @@
-# Definition of Done — M05 Relacionamentos & Social
+# Definition of Done — M06 Relacionamentos & Social
 
 ## Backend
 
 - [ ] Bounded context de relacionamento: dois personagens podem ter um relacionamento com nível (conhecido/amigo/melhor amigo/namoro/casamento).
 - [ ] Pelo menos 2 ações de interação implementadas (ex.: visitar, presentear), cada uma com efeito definido sobre o nível do relacionamento.
-- [ ] Participar do mesmo evento (M04) junto com outro jogador afeta o relacionamento entre os dois.
+- [ ] Participar do mesmo evento (M05) junto com outro jogador afeta o relacionamento entre os dois.
 - [ ] Regras de transição entre níveis (o que evolui, o que não regride, etc.) implementadas e testadas.
 
 ## Frontend

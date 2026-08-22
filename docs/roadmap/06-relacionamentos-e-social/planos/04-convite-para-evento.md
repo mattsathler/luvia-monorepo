@@ -6,7 +6,7 @@
 
 ## Objetivo técnico
 
-Terceira ação social, conectando com o sistema de eventos da M04.
+Terceira ação social, conectando com o sistema de eventos da M05.
 
 ## Escopo
 
@@ -15,14 +15,14 @@ Terceira ação social, conectando com o sistema de eventos da M04.
 
 ## Onde no código
 
-- `apps/api/src/relationship/` ou `apps/api/src/character/` (dependendo de onde o evento acabou modelado na M04)
+- `apps/api/src/relationship/` ou `apps/api/src/character/` (dependendo de onde o evento acabou modelado na M05)
 
 ## Depende de
 
 - Bounded context de relacionamento (plano 01).
-- Atividade evento (M04, plano 02).
+- Atividade evento (M05, plano 02).
 
 ## Referências
 
 - [[../../../game-design/events]]
-- [[../../04-fama-e-eventos/planos/02-atividade-evento]]
+- [[../../05-fama-e-eventos/planos/02-atividade-evento]]

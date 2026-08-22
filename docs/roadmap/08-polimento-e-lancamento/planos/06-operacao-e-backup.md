@@ -20,7 +20,7 @@ Garantir que o jogo pode ser operado com segurança depois de lançado — hoje 
 
 ## Depende de
 
-Nenhuma tecnicamente, mas só faz sentido fechar depois que o jogo tiver algo de valor real pra proteger (pós M06).
+Nenhuma tecnicamente, mas só faz sentido fechar depois que o jogo tiver algo de valor real pra proteger (pós M07).
 
 ## Referências
 

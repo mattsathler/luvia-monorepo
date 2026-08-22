@@ -12,7 +12,7 @@ Fechar quais eventos existem e quando ficam disponíveis, antes de implementar o
 
 - Definir 2 tipos de evento pra esta milestone (ex.: Festa, Feira — ver [[../../../game-design/events]]), cada um com duração e efeito.
 - Regra de disponibilidade: horário fixo? Recorrente? Sempre disponível com fila? — decisão de game design a fechar aqui.
-- Efeito de cada evento sobre Fama e/ou skills (relacionamentos ficam pra M05 — ver [[../descricao]]).
+- Efeito de cada evento sobre Fama e/ou skills (relacionamentos ficam pra M06 — ver [[../descricao]]).
 
 ## Onde no código
 

@@ -11,7 +11,7 @@ Deixar a Fama visível como o indicador de progresso do jogo, evitando qualquer 
 ## Escopo
 
 - Exibir Fama no dashboard (plano 02), com destaque visual proporcional à sua função de "indicador de progresso" (não é só mais um número ao lado dos outros três).
-- Nenhuma fonte de Fama além do valor inicial existe ainda nesta milestone — o indicador é preparado pra crescer a partir da M04 (eventos), sem ficar "morto" visualmente enquanto isso.
+- Nenhuma fonte de Fama além do valor inicial existe ainda nesta milestone — o indicador é preparado pra crescer a partir da M05 (eventos), sem ficar "morto" visualmente enquanto isso.
 
 ## Onde no código
 

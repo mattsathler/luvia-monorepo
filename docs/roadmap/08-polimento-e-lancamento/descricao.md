@@ -1,8 +1,8 @@
-# M07 — Polimento & Lançamento
+# M08 — Polimento & Lançamento
 
 ## Objetivo
 
-Levar o jogo funcional (M01–M06) a um estado lançável: conteúdo suficiente pra não parecer vazio, progressão de longo prazo balanceada (ver [[../../vision/principles]] — Long Term Progression), e operação de produção verificada.
+Levar o jogo funcional (M01–M07) a um estado lançável: conteúdo suficiente pra não parecer vazio, progressão de longo prazo balanceada (ver [[../../vision/principles]] — Long Term Progression), e operação de produção verificada.
 
 ## Status
 
@@ -20,7 +20,7 @@ Levar o jogo funcional (M01–M06) a um estado lançável: conteúdo suficiente 
 ## Escopo
 
 - **Conteúdo**: mais variedade de roupas/aparência, mais tipos de evento, mais produtos/empregos — o suficiente pra a cidade não parecer repetitiva nas primeiras semanas de jogador real.
-- **Balanceamento**: revisar as taxas de efeito (`RATES_PER_MINUTE` e equivalentes em M04/M06) que são placeholder desde a M01, com base em como o jogo se sente jogando de verdade — não em teoria.
+- **Balanceamento**: revisar as taxas de efeito (`RATES_PER_MINUTE` e equivalentes em M05/M07) que são placeholder desde a M01, com base em como o jogo se sente jogando de verdade — não em teoria.
 - **Teste de carga do tick em lote**: validar que `CharacterTickScheduler` aguenta um volume realista de personagens simultâneos sem atrasar (ver [[../../technical/simulation-tick]] — tamanho de lote e intervalo ainda marcados como "Pendente" nesse documento).
 - **Responsividade e acessibilidade**: revisão geral das telas do jogo (não só componentes isolados do design system).
 - **Checklist de operação**: backup do banco, monitoramento básico, plano de rollback de deploy.

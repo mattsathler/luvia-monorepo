@@ -1,5 +1,7 @@
 # 0029 — Clima e temperatura são cosméticos, e Luvia é uma cidade chuvosa
 
+> **Superada parcialmente pela [[0030-clima-temperatura-e-hora-afetam-felicidade-e-produtividade]]**: o ponto 1 (sem efeito de jogabilidade) foi revogado. Os demais pontos desta decisão continuam valendo.
+
 ## Contexto
 
 O jogo já tem um relógio de mundo global ([[0028-relogio-do-mundo-global-sincronizado-do-backend]]), mas nenhuma noção de clima/temperatura. Era necessário definir se clima afeta jogabilidade (mecânicas, atividades, economia) ou é só um elemento visual/atmosférico, e como ele se relaciona com o próprio nome do jogo — "Luvia" remete a "chuva".

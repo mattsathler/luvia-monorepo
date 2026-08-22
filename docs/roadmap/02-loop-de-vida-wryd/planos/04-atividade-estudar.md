@@ -22,7 +22,7 @@ Primeira atividade nova desde a M01 — valida que o motor de simulação (feito
 
 ## Depende de
 
-Nenhuma (o catálogo de skills provisório da M01 já é suficiente pra implementar o mecanismo — balanceamento fica pro plano 07 da M01 / M07).
+Nenhuma (o catálogo de skills provisório da M01 já é suficiente pra implementar o mecanismo — balanceamento fica pro plano 07 da M01 / M08).
 
 ## Referências
 

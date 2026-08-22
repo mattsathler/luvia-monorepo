@@ -22,7 +22,7 @@ Todas as rotas exigem autenticação (`Authorization: Bearer <token>`).
 }
 ```
 
-`type` só assume `residential` nesta milestone (ver [[../../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]) — `commercial`/`industrial` entram na M06, junto com empresas.
+`type` só assume `residential` nesta milestone (ver [[../../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]) — `commercial`/`industrial` entram na M07, junto com empresas.
 
 ## Formato do tile de terreno
 
