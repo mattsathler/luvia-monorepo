@@ -6,14 +6,14 @@ Tornar Luvia jogável de ponta a ponta: o jogador loga, escolhe uma atividade pr
 
 ## Status
 
-🔄 Em andamento — planos 02 concluído (via HUD), 06 parcialmente coberto. Planos 01, 03, 05 ainda não começaram, incluindo o cliente de API pra trocar de atividade (plano 01) — apesar de vir primeiro na lista, ainda está pendente. Plano 04 foi redefinido: era "Atividade Estudar", virou "Empregos públicos e hierarquia de cargos" — Estudar foi descartado como próximo marco (ver [[../../game-design/skills-and-study]]); Trabalho assume esse lugar.
+🔄 Em andamento — planos 02 concluído (via HUD), 06 parcialmente coberto. Planos 01, 03, 05 ainda não começaram, incluindo o cliente de API pra trocar de atividade (plano 01) — apesar de vir primeiro na lista, ainda está pendente. Plano 04 foi redefinido: era "Atividade Estudar", virou "Empregos públicos e hierarquia de cargos" — Estudar foi descartado como próximo marco (ver [[../../game-design/skills-and-study]]); Trabalho assume esse lugar. O backend do plano 04 já está concluído (catálogo de prédios/cargos, `Workplace`, bounded context `employment` com `Contract`, eficiência e promoção automática — ver [[planos/04-empregos-publicos-e-hierarquia-de-cargos]]); falta a UI de emprego, que depende dos planos 01/03 (seletor de atividade e cliente de API).
 
 ## Planos
 
 1. [[planos/01-cliente-de-api-para-atividade]] — ⏳ Pendente
 2. [[planos/02-dashboard-de-necessidades]] — ✅ Concluído
 3. [[planos/03-seletor-de-atividade]] — ⏳ Pendente
-4. [[planos/04-empregos-publicos-e-hierarquia-de-cargos]] — ⏳ Pendente
+4. [[planos/04-empregos-publicos-e-hierarquia-de-cargos]] — 🔄 Backend concluído, frontend pendente
 5. [[planos/05-polling-de-estado]] — ⏳ Pendente
 6. [[planos/06-indicador-de-fama]] — ⏳ Pendente (parcial)
 
@@ -21,7 +21,7 @@ Tornar Luvia jogável de ponta a ponta: o jogador loga, escolhe uma atividade pr
 
 - **Dashboard funcional** substituindo o placeholder atual de `HomePage`: mostra felicidade, energia, dinheiro e fama do personagem (ver [[../../game-design/character-needs]]). ✅ Concluído — entregue como HUD sobre o mapa da cidade (`ProfilePanel.tsx`), não como tela separada (ver plano 02).
 - **Seletor de atividade** (ver [[../../game-design/wryd-activity-system]]): jogador escolhe entre Ocioso, Descansar e Trabalhar (emprego público — ver [[../../game-design/jobs]]). Estudar sai da lista desta milestone (mecanismo descartado, precisa de redesenho — ver plano 04 e [[../../game-design/skills-and-study]]).
-- **Empregos públicos e hierarquia de cargos** (novo escopo do plano 04, substituindo "Atividade Estudar"): prédio → hierarquia de cargo → habilidade principal/secundária/terciária, eficiência de trabalho baseada nas skills do personagem, e promoção de cargo por eficiência acumulada ao longo do tempo trabalhado — ver [[../../game-design/jobs]] pro desenho completo.
+- **Empregos públicos e hierarquia de cargos** (novo escopo do plano 04, substituindo "Atividade Estudar"): prédio → hierarquia de cargo → habilidade principal/secundária/terciária, eficiência de trabalho baseada nas skills do personagem, e promoção de cargo por eficiência acumulada ao longo do tempo trabalhado — ver [[../../game-design/jobs]] pro desenho completo. Backend concluído (bounded context `employment`); falta a UI.
 - **Cliente de API no frontend** pra `POST /characters/:id/activity` (hoje só existe no backend).
 - **Polling do estado do personagem**: frontend consulta o backend periodicamente pra refletir o efeito do tick sem precisar recarregar a página (ver [[../../technical/simulation-tick]] — intervalo de polling é uma das decisões pendentes desse documento; fechar aqui).
 - Indicador de Fama visível na UI (ver [[../../game-design/progression-fame]]) — mesmo sem nenhuma fonte de fama além de um valor inicial fixo por enquanto. Parcial: Fama já aparece, sem o destaque visual próprio ainda (ver plano 06).

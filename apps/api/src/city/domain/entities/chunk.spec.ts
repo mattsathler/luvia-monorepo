@@ -1,6 +1,7 @@
-import { CHUNK_SIZE, lotsInChunk, tilesInChunk } from './chunk';
+import { CHUNK_SIZE, lotsInChunk, tilesInChunk, workplacesInChunk } from './chunk';
 import { Lot } from './lot.entity';
 import { TerrainTile } from './terrain-tile';
+import { Workplace } from './workplace.entity';
 
 describe('tilesInChunk', () => {
   const tiles: TerrainTile[] = [
@@ -43,5 +44,24 @@ describe('lotsInChunk', () => {
 
   it('returns an empty array when no lot falls in the requested chunk', () => {
     expect(lotsInChunk(lots, 9, 9)).toEqual([]);
+  });
+});
+
+describe('workplacesInChunk', () => {
+  const workplaces: Workplace[] = [
+    Workplace.create({ buildingTypeId: 'city-hall', x: 0, y: 0 }, 'workplace-1'),
+    Workplace.create({ buildingTypeId: 'hospital', x: CHUNK_SIZE, y: 0 }, 'workplace-2'),
+  ];
+
+  it('keeps only workplaces inside the requested chunk', () => {
+    expect(workplacesInChunk(workplaces, 0, 0)).toEqual([workplaces[0]]);
+  });
+
+  it('resolves the neighboring chunk', () => {
+    expect(workplacesInChunk(workplaces, 1, 0)).toEqual([workplaces[1]]);
+  });
+
+  it('returns an empty array when no workplace falls in the requested chunk', () => {
+    expect(workplacesInChunk(workplaces, 9, 9)).toEqual([]);
   });
 });

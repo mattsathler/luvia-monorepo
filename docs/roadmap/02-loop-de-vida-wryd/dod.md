@@ -2,11 +2,11 @@
 
 ## Backend
 
-- [ ] Catálogo de prédios públicos e cargos em código (TS const), com habilidade principal/secundária/terciária por cargo (ver [[../../game-design/jobs]]).
-- [ ] Nova entidade de local de trabalho (`Workplace` ou equivalente) — sem as regras de posse de `Lot`.
-- [ ] `working` calcula eficiência a partir das skills do personagem no cargo atual, em vez de usar uma taxa fixa.
-- [ ] Promoção de cargo automática, baseada em eficiência acumulada × tempo trabalhado, verificada no mesmo recompute/tick dos demais efeitos.
-- [ ] Testes cobrindo cálculo de eficiência, acúmulo de progresso e promoção (prorata ao trocar de atividade/emprego incluso).
+- [x] Catálogo de prédios públicos e cargos em código (TS const), com habilidade principal/secundária/terciária por cargo (ver [[../../game-design/jobs]]). (`apps/api/src/employment/domain/entities/building-catalog.ts` — só 1 prédio de exemplo, Prefeitura/3 cargos; catálogo cresce aditivamente depois)
+- [x] Nova entidade de local de trabalho (`Workplace` ou equivalente) — sem as regras de posse de `Lot`. (`apps/api/src/city/domain/entities/workplace.entity.ts`)
+- [x] `working` calcula eficiência a partir das skills do personagem no cargo atual, em vez de usar uma taxa fixa. (`apps/api/src/employment/domain/entities/efficiency.ts` + `Contract.recomputeUntil`)
+- [x] Promoção de cargo automática, baseada em eficiência acumulada × tempo trabalhado, verificada no mesmo recompute/tick dos demais efeitos. (`Contract.recomputeUntil`, `ContractTickScheduler`)
+- [x] Testes cobrindo cálculo de eficiência, acúmulo de progresso e promoção (prorata ao trocar de atividade/emprego incluso). (100% de cobertura em `apps/api/src/employment`, incluindo troca de emprego sem descartar ganho pendente em `StartContractUseCase`)
 
 ## Frontend
 

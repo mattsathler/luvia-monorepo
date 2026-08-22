@@ -9,14 +9,17 @@ export type SkillDefinition = {
  * nova é só acrescentar uma entrada aqui: `skills` é persistido como um mapa
  * livre (id -> pontos), sem exigir migração de schema.
  */
-export const SKILL_DEFINITIONS: SkillDefinition[] = [
+export const SKILL_DEFINITIONS = [
   { id: 'intelligence', label: 'Inteligência' },
   { id: 'charisma', label: 'Carisma' },
   { id: 'creativity', label: 'Criatividade' },
   { id: 'strength', label: 'Força' },
-];
+] as const satisfies readonly SkillDefinition[];
 
-export const SKILL_IDS = SKILL_DEFINITIONS.map((skill) => skill.id);
+/** Union literal dos ids de skill — usado pelo catálogo de cargos (employment) pra referenciar skills com segurança de tipo em compile-time, sem precisar validar em runtime. */
+export type SkillId = (typeof SKILL_DEFINITIONS)[number]['id'];
+
+export const SKILL_IDS: SkillId[] = SKILL_DEFINITIONS.map((skill) => skill.id);
 
 /**
  * Mapa skillId -> pontos. Todo personagem nasce sem nenhuma entrada aqui

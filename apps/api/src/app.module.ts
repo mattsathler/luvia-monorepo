@@ -10,6 +10,7 @@ import { AccountModule } from './account/account.module';
 import { CharacterModule } from './character/character.module';
 import { CityModule } from './city/city.module';
 import { WorldModule } from './world/world.module';
+import { EmploymentModule } from './employment/employment.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { WorldModule } from './world/world.module';
     CharacterModule,
     CityModule,
     WorldModule,
+    EmploymentModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })

@@ -1,5 +1,6 @@
 import { Lot } from './lot.entity';
 import { TerrainTile } from './terrain-tile';
+import { Workplace } from './workplace.entity';
 
 /**
  * Tamanho de um chunk (LOWYS — ver docs/technical/lowys-carregamento-em-chunks.md).
@@ -21,4 +22,8 @@ export function tilesInChunk(tiles: TerrainTile[], chunkX: number, chunkY: numbe
 
 export function lotsInChunk(lots: Lot[], chunkX: number, chunkY: number): Lot[] {
   return lots.filter((lot) => inChunkRange(lot.x, chunkX) && inChunkRange(lot.y, chunkY));
+}
+
+export function workplacesInChunk(workplaces: Workplace[], chunkX: number, chunkY: number): Workplace[] {
+  return workplaces.filter((workplace) => inChunkRange(workplace.x, chunkX) && inChunkRange(workplace.y, chunkY));
 }

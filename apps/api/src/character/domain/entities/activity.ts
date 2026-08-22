@@ -16,10 +16,17 @@ const MINUTE_MS = 60_000;
  * Valores provisórios (placeholder) até o balanceamento de game design ser
  * decidido — ver docs/game-design/wryd-activity-system.md.
  */
+/**
+ * `working` não tem mais taxa de dinheiro fixa — o dinheiro ganho ao
+ * trabalhar agora vem de um Contract (bounded context `employment`, ver
+ * docs/game-design/jobs.md), calculado a partir da eficiência do personagem
+ * no cargo atual. Sem contrato ativo, trabalhar só custa energia e não rende
+ * nada — não é uma regressão, é o comportamento esperado.
+ */
 const RATES_PER_MINUTE: Record<Activity, Partial<CharacterStats>> = {
   idle: {},
   resting: { energy: 2, happiness: 0.5 },
-  working: { energy: -1, money: 1 },
+  working: { energy: -1 },
 };
 
 function clamp(value: number, min: number, max: number): number {

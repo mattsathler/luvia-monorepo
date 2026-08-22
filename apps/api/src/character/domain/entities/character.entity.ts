@@ -144,6 +144,16 @@ export class Character {
     return new Character({ ...this.withStats(this.stats()), appearance: { ...this.appearance, ...patch } });
   }
 
+  /**
+   * Credita (ou debita) dinheiro, clampando em 0 — usado por
+   * CreditCharacterMoneyUseCase (ex.: pagamento de um Contract no bounded
+   * context `employment`). Não mexe em mais nada; o chamador já deve ter
+   * recomputado o personagem até `now` antes de chamar isso.
+   */
+  credit(amount: number): Character {
+    return new Character({ ...this.withStats(this.stats()), money: Math.max(0, this.money + amount) });
+  }
+
   private stats(): CharacterStats {
     return { happiness: this.happiness, energy: this.energy, money: this.money, fame: this.fame };
   }

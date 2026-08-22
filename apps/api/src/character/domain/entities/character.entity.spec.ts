@@ -58,7 +58,9 @@ describe('Character.recomputeUntil', () => {
     const fiveMinutesLater = new Date(T0.getTime() + 5 * 60_000);
     const { character: recomputed } = character.recomputeUntil(fiveMinutesLater);
 
-    expect(recomputed.money).toBe(5); // +1/min * 5min
+    // Dinheiro de `working` vem de um Contract (employment), não de uma taxa
+    // fixa aqui — ver docs/game-design/jobs.md.
+    expect(recomputed.money).toBe(0);
     expect(recomputed.energy).toBe(45); // -1/min * 5min
   });
 
@@ -155,6 +157,34 @@ describe('Character.updateAppearance', () => {
     const updated = character.updateAppearance({ accessory: 'chapeu-1' });
 
     expect(updated.happiness).toBe(character.happiness);
+    expect(updated.lastUpdatedAt).toEqual(character.lastUpdatedAt);
+  });
+});
+
+describe('Character.credit', () => {
+  it('adds the given amount to money', () => {
+    const character = characterAt({ money: 10 });
+
+    const updated = character.credit(5);
+
+    expect(updated.money).toBe(15);
+  });
+
+  it('clamps at 0 when the amount would make money negative', () => {
+    const character = characterAt({ money: 10 });
+
+    const updated = character.credit(-20);
+
+    expect(updated.money).toBe(0);
+  });
+
+  it('does not change anything else (activity, lastUpdatedAt, other stats)', () => {
+    const character = characterAt({ money: 10, happiness: 40 });
+
+    const updated = character.credit(5);
+
+    expect(updated.happiness).toBe(40);
+    expect(updated.activity).toBe(character.activity);
     expect(updated.lastUpdatedAt).toEqual(character.lastUpdatedAt);
   });
 });
