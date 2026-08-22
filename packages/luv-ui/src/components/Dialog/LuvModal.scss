@@ -2,7 +2,10 @@
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    // Acima de qualquer camada de HUD (ver .z-index-top em _helpers.scss,
+    // também 9999) — um modal precisa sempre vencer o overlay do jogo, não
+    // empatar com ele e depender de ordem no DOM pra desempate.
+    z-index: 10000;
 }
 
 .luv-modal {
@@ -10,7 +13,7 @@
     overflow: hidden;
 }
 
-.luve-modal-content {
+.luv-modal-content {
     overflow-y: auto;
 }
 
