@@ -30,6 +30,8 @@ export { LuvModal } from './components/Dialog/LuvModal';
 export type { LuvModalProps, LuvModalVariant } from './components/Dialog/LuvModal';
 export { LuvDropdownCard } from './components/DropdownCard/LuvDropdownCard';
 export type { LuvDropdownCardProps } from './components/DropdownCard/LuvDropdownCard';
+export { LuvExpandableBox } from './components/ExpandableBox/LuvExpandableBox';
+export type { LuvExpandableBoxProps, LuvExpandableBoxOrigin } from './components/ExpandableBox/LuvExpandableBox';
 export { LuvIcon } from './components/Icon/LuvIcon';
 export type { LuvIconProps } from './components/Icon/LuvIcon';
 export { LuvStepper, useLuvStepper } from './components/Stepper/LuvStepper';

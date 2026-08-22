@@ -1,0 +1,123 @@
+// A raiz não tem tamanho próprio (só existe pra dar um `position: relative`
+// de referência) — quem realmente ocupa espaço e cresce é a superfície
+// (`.expandable-box-surface`), ancorada no canto de `origin` via
+// position:absolute com os dois insets daquele canto (ex.: top+left). Ancorar
+// assim (em vez de só deixar o box crescer no fluxo normal) é o que garante
+// que o canto do `origin` fique parado enquanto os lados opostos se movem —
+// funciona pros 4 cantos, não só o padrão (topo-esquerda) que o fluxo normal
+// já daria de graça.
+.expandable-box {
+    position: relative;
+    width: 0;
+    height: 0;
+}
+
+// `gap` some entre TODO par de itens flex adjacentes, mesmo quando um deles
+// mede 0×0 — por isso não dá pra deixar `gap` fixo em 8px aqui: enquanto
+// fechado, isso criaria um espaço fantasma entre `trigger` e
+// `.expandable-box-collapse` (que está lá no DOM, só que colapsado a 0×0).
+// Animar `gap` em conjunto com a largura/altura do collapse (mesma duração)
+// resolve isso sem precisar desmontar `.expandable-box-collapse` quando
+// fechado — o que quebraria a transição, já que um elemento recém-montado
+// não tem um quadro "fechado" anterior pra animar a partir.
+.expandable-box-surface {
+    position: absolute;
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    transition: gap 0.3s ease;
+}
+
+.expandable-box-surface--open {
+    gap: 8px;
+}
+
+.expandable-box--origin-top-left .expandable-box-surface {
+    top: 0;
+    left: 0;
+}
+
+.expandable-box--origin-top-right .expandable-box-surface {
+    top: 0;
+    right: 0;
+}
+
+.expandable-box--origin-bottom-left .expandable-box-surface {
+    bottom: 0;
+    left: 0;
+}
+
+.expandable-box--origin-bottom-right .expandable-box-surface {
+    bottom: 0;
+    right: 0;
+}
+
+// Sem canto pra ancorar (`left`/`right` fixos) — aqui o que fica parado é o
+// centro horizontal. `left:50%` marca o centro do pai, e `translateX(-50%)`
+// desloca de volta meia LARGURA PRÓPRIA da superfície — como essa largura
+// está mudando a cada frame da transição, o navegador recalcula esse
+// deslocamento automaticamente a cada frame também (não precisa animar o
+// `transform` à parte), mantendo a caixa sempre centralizada enquanto cresce
+// pros dois lados. `bottom:0` cuida da metade vertical (cresce pra cima).
+.expandable-box--origin-bottom-center .expandable-box-surface {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.expandable-box-trigger {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+// Mesmo truque do LuvDropdownCard (grid `1fr` anima suavemente até `0fr`,
+// única forma de animar até a altura/largura real do conteúdo sem medir em
+// JS), só que nos dois eixos — animar largura E altura juntas é o que faz a
+// caixa crescer "pra todos os lados" a partir do `trigger`, não só pra baixo.
+//
+// A altura funciona de graça com qualquer conteúdo (`1fr` mede a altura
+// intrínseca certinho). A LARGURA só mede certo se `children` não tiver
+// nenhum descendente com largura em %  (ex.: `LuvStatBar` usa `width:100%`)
+// — largura em % não tem como contribuir pro cálculo de largura intrínseca
+// do ancestral (não existe uma base definida pra resolver o %), então esse
+// grid mede a largura "natural" do conteúdo como 0. Se isso acontecer, passe
+// uma largura explícita (não-%) via `bodyClassName` (ex.: `w-164`) — com uma
+// largura definida no próprio body, os filhos em % passam a ter uma base
+// real pra resolver, e a transição volta a funcionar.
+.expandable-box-collapse {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 0.3s ease, grid-template-columns 0.3s ease, opacity 0.2s ease;
+}
+
+.expandable-box-collapse--closed {
+    grid-template-rows: 0fr;
+    grid-template-columns: 0fr;
+    opacity: 0;
+}
+
+.expandable-box-body {
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+}
+
+// Sempre no canto superior direito da superfície, independente do `origin`
+// do `trigger` — só existe (e só é clicável/focável) enquanto aberto, já que
+// o componente já desmonta ela junto com `children` ao fechar.
+.expandable-box-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+}

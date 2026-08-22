@@ -11,9 +11,8 @@ type TabsProps = {
 };
 
 export function Tabs({ children, defaultColor = "primary", orientation = "horizontal" }: TabsProps) {
-  const [active, setActive] = useState<string>(children && Array.isArray(children) ? children[0].props.title : children?.props.title || "");
-
   const childrenArray = React.Children.toArray(children) as ReactElement<TabProps>[];
+  const [active, setActive] = useState<string>(childrenArray[0]?.props.title ?? "");
 
   const select = (title: string) => {
     setActive(title);

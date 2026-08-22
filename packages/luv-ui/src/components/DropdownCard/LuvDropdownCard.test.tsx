@@ -23,16 +23,14 @@ describe("LuvDropdownCard", () => {
         expect(screen.getByRole("button", { name: "Minimizar" })).toHaveAttribute("aria-expanded", "true");
     });
 
-    it("collapses the body when the toggle is clicked, without removing it from the DOM", async () => {
+    it("collapses and unmounts the body when the toggle is clicked", async () => {
         const user = userEvent.setup();
         render(<LuvDropdownCard title="Perfil">Conteúdo</LuvDropdownCard>);
 
         await user.click(screen.getByRole("button", { name: "Minimizar" }));
 
         expect(screen.getByRole("button", { name: "Expandir" })).toHaveAttribute("aria-expanded", "false");
-        // Colapsar é uma animação CSS (altura via grid-template-rows), não
-        // desmontagem — o conteúdo continua na árvore.
-        expect(screen.getByText("Conteúdo")).toBeInTheDocument();
+        expect(screen.queryByText("Conteúdo")).not.toBeInTheDocument();
     });
 
     it("expands again when the toggle is clicked a second time", async () => {

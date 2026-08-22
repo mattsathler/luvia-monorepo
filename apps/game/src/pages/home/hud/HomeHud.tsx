@@ -2,7 +2,6 @@ import type { Character, Weather } from "../../../lib/api";
 import type { CurrentLot } from "../HomePage.controller";
 import { ProfilePanel } from "./ProfilePanel";
 import { WorldClockPanel } from "./WorldClockPanel";
-import { NavigationPanel } from "./NavigationPanel";
 import { CalendarPanel } from "./CalendarPanel";
 
 type HomeHudProps = {

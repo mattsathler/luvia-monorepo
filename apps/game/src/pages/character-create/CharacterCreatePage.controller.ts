@@ -57,7 +57,7 @@ export function useCharacterCreatePageController({
     const [gender, setGender] = useState<Gender>(GENDER_OPTIONS[0].value);
     const [skinToneId, setSkinToneId] = useState("3");
     const [hairType, setHairType] = useState(DEFAULT_HAIR_TYPE_ID);
-    const [eyeType, setEyeType] = useState(DEFAULT_EYE_TYPE_ID);
+    const [eyeType] = useState(DEFAULT_EYE_TYPE_ID);
     const [faceId, setFaceId] = useState(DEFAULT_FACE_ID);
     const [topId, setTopId] = useState(DEFAULT_TOP_ID);
     const [pantsId, setPantsId] = useState(DEFAULT_PANTS_ID);

@@ -1,4 +1,4 @@
-import { LuvDivider, LuvDropdownCard, LuvIcon, LuvStatBar } from "luv-ui";
+import { LuvDivider, LuvExpandableBox, LuvIcon, LuvStatBar } from "luv-ui";
 import type { Character } from "../../../lib/api";
 import { Player } from "../../../components/Player/Player";
 import { characterToPlayerLayers } from "../../../components/Player/characterToPlayerLayers";
@@ -14,35 +14,45 @@ type ProfilePanelProps = {
 
 export function ProfilePanel({ character }: ProfilePanelProps) {
     return (
-        <LuvDropdownCard
-            title={`${character.firstName} ${character.lastName}`}
-            className="p-16 border-16"
-            bodyClassName="d-flex gap-8 items-center"
-        >
-            <div className="d-flex gap-8">
-
+        <LuvExpandableBox
+            trigger={
                 <div className="w-72 bg-transparent">
                     <Player layers={characterToPlayerLayers(character)} part="head" />
                 </div>
-            </div>
-            <div className="d-flex flex-col gap-4 pointer-events-auto">
-                <div className="d-flex flex-col gap-4">
-                    <LuvStatBar icon="sentiment_satisfied" label="Felicidade" value={character.happiness} max={MAX_STAT} color="game-green" />
-                    <LuvStatBar icon="bolt" label="Energia" value={character.energy} max={MAX_STAT} color="game-yellow" />
-                </div>
+            }
+            triggerLabel={`Perfil de ${character.firstName}`}
+            defaultOpen
+            className="border-16 card p-16"
+            bodyClassName="w-164 d-flex flex-col gap-8 pointer-events-auto"
+        >
+            <div className="d-flex gap-8">
 
+                <LuvDivider orientation="vertical"></LuvDivider>
 
-                <div className="d-grid grid-cols-2 items-center text-text">
-                    <span className="d-flex items-center gap-4 justify-center items-center">
-                        <LuvIcon name="payments" size={16} className="text-money" />
-                        <span>{character.money}</span>
-                    </span>
-                    <span className="d-flex items-center gap-4 justify-center items-center">
-                        <LuvIcon name="paid" size={16} className="text-cash" />
-                        <span>{character.fame}</span>
-                    </span>
+                <div className="d-flex flex-col gap-8">
+                    <strong className="text-text">
+                        {character.firstName} {character.lastName}
+                    </strong>
+
+                    <div className="d-flex flex-col gap-4">
+                        <LuvStatBar icon="sentiment_satisfied" label="Felicidade" value={character.happiness} max={MAX_STAT} color="game-green" />
+                        <LuvStatBar icon="bolt" label="Energia" value={character.energy} max={MAX_STAT} color="game-yellow" />
+                    </div>
+
+                    <LuvDivider></LuvDivider>
+
+                    <div className="d-grid grid-cols-2 items-center text-text">
+                        <span className="d-flex items-center gap-4 justify-center items-center">
+                            <LuvIcon name="payments" size={16} className="text-money" />
+                            <span>{character.money}</span>
+                        </span>
+                        <span className="d-flex items-center gap-4 justify-center items-center">
+                            <LuvIcon name="paid" size={16} className="text-cash" />
+                            <span>{character.fame}</span>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </LuvDropdownCard>
+        </LuvExpandableBox>
     );
 }

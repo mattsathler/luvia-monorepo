@@ -1,4 +1,4 @@
-import { LuvDivider, LuvDropdownCard, LuvIcon } from "luv-ui";
+import { LuvExpandableBox, LuvIcon } from "luv-ui";
 import type { Character } from "../../../lib/api";
 import type { CurrentLot } from "../HomePage.controller";
 
@@ -28,28 +28,39 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
     }
 
     return (
-        <div className="d-flex flex-col card border-1 border-16 justify-between items-center py-4 px-16">
-            <div className="d-flex flex-row gap-16 items-center">
-                <LuvIcon name="chair" size={20} className="text-game-green"></LuvIcon>
-                <div className="d-flex flex-col items-start">
+        <LuvExpandableBox
+            trigger={
+                <div className="d-flex items-center justify-center gap-4 text-text">
+                    <LuvIcon name="chair" size={40} className="text-game-green"></LuvIcon>
+                </div>
+            }
+            triggerLabel={`Atividade de ${character.firstName}`}
+            origin="bottom-center"
+            defaultOpen
+            className="border-16 card"
+            bodyClassName="w-164 d-flex flex-col gap-8 pointer-events-auto items-center"
+        >
+            <div className="d-flex items-center gap-4">
+
+                <div className="d-flex flex-col border-1 border-16 justify-between items-center py-4 px-16">
                     <span>{activityLabel}</span>
-                    <div className="d-flex items-center justify-center gap-4 text-text">
+                    <div className="d-flex flex-row gap-4 items-center">
                         <LuvIcon name="location_on" size={12} className="text-game-green" />
                         <span className="text-placeholder text-size-12">{currentLot.name}</span>
                     </div>
                 </div>
-            </div>
 
-            {!isIdle && (
-                <button
-                    type="button"
-                    className="circle icon border-text w-16 h-16"
-                    aria-label="Cancelar atividade"
-                    onClick={handleCancelActivity}
-                >
-                    <LuvIcon name="close" className="text-size-12" />
-                </button>
-            )}
-        </div>
+                {isIdle && (
+                    <button
+                        type="button"
+                        className="circle icon border-error w-16 h-16"
+                        aria-label="Cancelar atividade"
+                        onClick={handleCancelActivity}
+                    >
+                        <LuvIcon name="close" className="text-size-12 text-error" />
+                    </button>
+                )}
+            </div>
+        </LuvExpandableBox>
     );
 }

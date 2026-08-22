@@ -1,4 +1,4 @@
-import { LuvIcon, LuvInput, LuvStepper, LuvStepperStep, Tab, Tabs, luviaLogo } from "luv-ui";
+import { LuvIcon, LuvInput, LuvStepper, LuvStepperStep, Tab, Tabs } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
 import type { Character } from "../../lib/api";
 import { Player } from "../../components/Player/Player";

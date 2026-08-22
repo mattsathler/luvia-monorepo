@@ -1,5 +1,4 @@
 import { LuvIcon } from "luv-ui";
-import { CalendarPanel } from "./CalendarPanel";
 import type { Character, CurrentLot } from "../../../lib/api";
 
 type NavigationItem = {
@@ -25,7 +24,7 @@ function handleSelect(id: string) {
     console.log("Navegar para:", id);
 }
 
-export function NavigationPanel(props: { character: Character, currentLot: CurrentLot }) {
+export function NavigationPanel(_props: { character: Character, currentLot: CurrentLot }) {
     return (
         <div className="d-flex flex-col gap-8">
             <div className="card mb-8 p-8 d-flex gap-8 items-center pointer-events-auto">
