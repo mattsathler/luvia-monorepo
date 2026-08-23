@@ -28,15 +28,17 @@ export function generateCity(size = 100): TileData[] {
             }
 
             else {
-                const isMainRoad =
-                    x === Math.floor(size / 2) ||
-                    y === Math.floor(size / 2);
+                // Ancorada no centro (não `x % roadSpacing === 0` puro) pra
+                // garantir um cruzamento exatamente no meio do mapa sem criar
+                // quarteirões disformes ao redor — ver
+                // apps/api/src/city/domain/entities/generate-roads.ts#placeRoads.
+                const mainX = Math.floor(size / 2);
+                const mainY = Math.floor(size / 2);
 
-                const isSecondaryRoad =
-                    x % roadSpacing === 0 ||
-                    y % roadSpacing === 0;
+                const isRoadColumn = (x - mainX) % roadSpacing === 0;
+                const isRoadRow = (y - mainY) % roadSpacing === 0;
 
-                if (isMainRoad || isSecondaryRoad) {
+                if (isRoadColumn || isRoadRow) {
                     type = "road";
                 }
             }
@@ -70,9 +72,21 @@ function applyRoadDirection(tiles: TileData[]): TileData[] {
         const up = isRoad(tile.x, tile.y - 1);
         const down = isRoad(tile.x, tile.y + 1);
 
-        // 🔥 cruzamento completo
-        if (left && right && up && down) {
+        const neighborCount = [left, right, up, down].filter(Boolean).length;
+        const horizontal = left || right;
+        const vertical = up || down;
+
+        // 🔥 cruzamento ou T — sem sprite dedicado, reaproveita o cruzamento
+        if (neighborCount >= 3) {
             return { ...tile, type: "road-i" };
+        }
+
+        // 🔀 esquina: curva de 90°, nome codifica as duas direções conectadas
+        if (horizontal && vertical) {
+            if (right && down) return { ...tile, type: "road-corner-dr" };
+            if (right && up) return { ...tile, type: "road-corner-ru" };
+            if (left && down) return { ...tile, type: "road-corner-dl" };
+            return { ...tile, type: "road-corner-lu" };
         }
 
         // 👉 prioridade: direção horizontal

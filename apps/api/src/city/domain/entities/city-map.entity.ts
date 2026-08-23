@@ -9,7 +9,7 @@ import { GridPosition, TerrainTile, isBuildableTerrain } from './terrain-tile';
  */
 export const CITY_WIDTH = 40;
 export const CITY_HEIGHT = 40;
-export const CITY_SEED = 'luvia-city-v4';
+export const CITY_SEED = 'luvia-city-v5';
 
 /**
  * Verde de `packages/luv-ui/src/styles/_colors.scss` (`green`) — mesma

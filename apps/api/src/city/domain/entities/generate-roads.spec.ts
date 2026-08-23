@@ -1,4 +1,4 @@
-import { placeRoads, resolveRoadOrientation } from './generate-roads';
+import { ROAD_SPACING, placeRoads, resolveRoadOrientation } from './generate-roads';
 import { RawTerrainTile } from './terrain-tile';
 
 function grid(width: number, height: number): RawTerrainTile[] {
@@ -18,29 +18,40 @@ function tileAt(tiles: RawTerrainTile[], x: number, y: number): RawTerrainTile {
 }
 
 describe('placeRoads', () => {
-  const size = 8;
+  // Grande o bastante pra ter linhas de grade dos dois lados do centro
+  // (mainX/mainY = 7): 1, 7 e 13 — ver comentário de `placeRoads`.
+  const size = 14;
   const result = placeRoads(grid(size, size), size, size);
 
-  it('marks the main road crossing the center', () => {
-    expect(tileAt(result, 4, 2).type).toBe('road');
-    expect(tileAt(result, 2, 4).type).toBe('road');
+  it('marks a crossing exactly at the center of the map', () => {
+    expect(tileAt(result, 7, 3).type).toBe('road');
+    expect(tileAt(result, 3, 7).type).toBe('road');
   });
 
-  it('marks secondary roads every ROAD_SPACING tiles', () => {
-    expect(tileAt(result, 6, 3).type).toBe('road');
+  it('marks secondary roads every ROAD_SPACING tiles, anchored on the center', () => {
+    expect(tileAt(result, 1, 3).type).toBe('road');
+    expect(tileAt(result, 13, 3).type).toBe('road');
   });
 
   it('leaves tiles away from any road grid line as grass', () => {
-    expect(tileAt(result, 2, 2).type).toBe('grass');
+    expect(tileAt(result, 3, 3).type).toBe('grass');
+  });
+
+  it('keeps every block the same width — the center never creates a cramped or oversized gap', () => {
+    const roadColumns = Array.from({ length: size }, (_, x) => x).filter((x) => tileAt(result, x, 0).type === 'road');
+
+    for (let i = 1; i < roadColumns.length; i++) {
+      expect(roadColumns[i] - roadColumns[i - 1]).toBe(ROAD_SPACING);
+    }
   });
 
   it('never overwrites a tile that is not grass', () => {
     const tiles = grid(size, size);
-    const seeded = tiles.map((t) => (t.x === 4 && t.y === 2 ? { ...t, type: 'ocean' as const } : t));
+    const seeded = tiles.map((t) => (t.x === 7 && t.y === 3 ? { ...t, type: 'ocean' as const } : t));
 
     const withRoads = placeRoads(seeded, size, size);
 
-    expect(tileAt(withRoads, 4, 2).type).toBe('ocean');
+    expect(tileAt(withRoads, 7, 3).type).toBe('ocean');
   });
 });
 
@@ -59,9 +70,19 @@ describe('resolveRoadOrientation', () => {
     expect(tileAt(result as RawTerrainTile[], 5, 5).type).toBe('road-i');
   });
 
-  it('resolves a corner (one horizontal + one vertical neighbor) to road-i', () => {
-    const result = resolveRoadOrientation(tileWithNeighbors(true, false, false, true));
+  it('resolves a T (3 neighbors) to road-i, same as a full crossing', () => {
+    const result = resolveRoadOrientation(tileWithNeighbors(true, true, true, false));
     expect(tileAt(result as RawTerrainTile[], 5, 5).type).toBe('road-i');
+  });
+
+  it.each([
+    [{ left: false, right: true, up: false, down: true }, 'road-corner-dr'],
+    [{ left: true, right: false, up: false, down: true }, 'road-corner-dl'],
+    [{ left: true, right: false, up: true, down: false }, 'road-corner-lu'],
+    [{ left: false, right: true, up: true, down: false }, 'road-corner-ru'],
+  ] as const)('resolves a corner (one horizontal + one vertical neighbor) %o to %s', (neighbors, expected) => {
+    const result = resolveRoadOrientation(tileWithNeighbors(neighbors.left, neighbors.right, neighbors.up, neighbors.down));
+    expect(tileAt(result as RawTerrainTile[], 5, 5).type).toBe(expected);
   });
 
   it('resolves a horizontal-only segment to road-l', () => {

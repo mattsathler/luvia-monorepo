@@ -28,7 +28,7 @@ vi.mock("../../lib/api", async () => {
 const CHARACTER = { id: "char-1" } as Character;
 
 describe("isTileClickable", () => {
-    it.each(["road-r", "road-l", "road-i"] as const)("is false for road tiles (%s)", (type) => {
+    it.each(["road-r", "road-l", "road-i", "road-corner-dr", "road-corner-dl", "road-corner-lu", "road-corner-ru"] as const)("is false for road tiles (%s)", (type) => {
         expect(isTileClickable({ x: 0, y: 0, z: 0, type })).toBe(false);
     });
 

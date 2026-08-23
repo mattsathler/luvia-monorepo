@@ -1,4 +1,14 @@
-export type TerrainKind = 'grass' | 'ocean' | 'road-r' | 'road-l' | 'road-i' | 'landmark';
+export type TerrainKind =
+  | 'grass'
+  | 'ocean'
+  | 'road-r'
+  | 'road-l'
+  | 'road-i'
+  | 'road-corner-dr'
+  | 'road-corner-dl'
+  | 'road-corner-lu'
+  | 'road-corner-ru'
+  | 'landmark';
 
 /**
  * `'road'` é um marcador interno usado só durante a geração — todo tile

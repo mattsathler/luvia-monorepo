@@ -2,6 +2,10 @@ import grass from "../textures/grass.png";
 import roadL from "../textures/road-l.png";
 import roadR from "../textures/road-r.png";
 import roadI from "../textures/road-i.png";
+import roadCornerDr from "../textures/road-corner-dr.png";
+import roadCornerDl from "../textures/road-corner-dl.png";
+import roadCornerLu from "../textures/road-corner-lu.png";
+import roadCornerRu from "../textures/road-corner-ru.png";
 import sand from '../textures/sand.png';
 import ocean from '../textures/ocean.png';
 import autumn from '../textures/autumn.png';
@@ -31,6 +35,29 @@ export const TILE_TYPES = {
     'road-i': {
         color: "#ffffff00",
         texture: roadI,
+    },
+
+    // Curvas de 90° — nome codifica as duas direções de vizinho de rua que a
+    // curva conecta (d=down/y+1, l=left/x-1, r=right/x+1, u=up/y-1), ver
+    // apps/api/src/city/domain/entities/generate-roads.ts#resolveOrientation.
+    'road-corner-dr': {
+        color: "#ffffff00",
+        texture: roadCornerDr,
+    },
+
+    'road-corner-dl': {
+        color: "#ffffff00",
+        texture: roadCornerDl,
+    },
+
+    'road-corner-lu': {
+        color: "#ffffff00",
+        texture: roadCornerLu,
+    },
+
+    'road-corner-ru': {
+        color: "#ffffff00",
+        texture: roadCornerRu,
     },
 
     sand: {

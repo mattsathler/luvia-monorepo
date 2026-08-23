@@ -5,7 +5,7 @@ describe('isBuildableTerrain', () => {
     expect(isBuildableTerrain('grass')).toBe(true);
   });
 
-  it.each(['ocean', 'road-r', 'road-l', 'road-i', 'landmark'] as const)(
+  it.each(['ocean', 'road-r', 'road-l', 'road-i', 'road-corner-dr', 'road-corner-dl', 'road-corner-lu', 'road-corner-ru', 'landmark'] as const)(
     'is false for %s',
     (type) => {
       expect(isBuildableTerrain(type)).toBe(false);

@@ -4,13 +4,23 @@ import { RawTerrainTile, TerrainTile } from './terrain-tile';
 export const ROAD_SPACING = 6;
 
 /**
- * Marca a grade de ruas (rua principal cruzando o centro + ruas secundárias
- * a cada `ROAD_SPACING` tiles) só sobre células que ainda são grama — nunca
- * sobrescreve oceano/praia. As células viram o marcador interno `'road'`;
- * a orientação final (`road-l`/`road-r`/`road-i`) só é resolvida depois que
- * os demais passes (água, pontos de interesse) já rodaram, porque eles podem
+ * Marca a grade de ruas (uma a cada `ROAD_SPACING` tiles, ancorada no centro
+ * do mapa) só sobre células que ainda são grama — nunca sobrescreve
+ * oceano/praia. As células viram o marcador interno `'road'`; a orientação
+ * final (reta, cruzamento ou curva de 90°) só é resolvida depois que os
+ * demais passes (água, pontos de interesse) já rodaram, porque eles podem
  * remover vizinhos de uma rua — ver `resolveRoadOrientation` e
  * `city-map.entity.ts`.
+ *
+ * A grade é ancorada em `(mainX, mainY)` — em vez de `x % ROAD_SPACING === 0`
+ * — pra garantir um cruzamento exatamente no centro do mapa sem quebrar o
+ * espaçamento uniforme ao redor dele. Antes disso, a "rua principal" era uma
+ * linha extra e independente da grade (`x === mainX`), o que criava quarteirões
+ * disformes sempre que o centro não caía num múltiplo de `ROAD_SPACING` — ex.:
+ * em 40x40, a grade absoluta tem ruas em x=18/24, mas o centro é x=20, então
+ * sobrava uma fatia de 1 tile de largura entre x=18 e x=20. Ancorando no
+ * centro, `mainX`/`mainY` já são a própria linha de grade (distância 0), então
+ * todo quarteirão ao redor fica com a mesma largura de `ROAD_SPACING - 1`.
  */
 export function placeRoads(tiles: RawTerrainTile[], width: number, height: number): RawTerrainTile[] {
   const mainX = Math.floor(width / 2);
@@ -21,10 +31,10 @@ export function placeRoads(tiles: RawTerrainTile[], width: number, height: numbe
       return tile;
     }
 
-    const isMainRoad = tile.x === mainX || tile.y === mainY;
-    const isSecondaryRoad = tile.x % ROAD_SPACING === 0 || tile.y % ROAD_SPACING === 0;
+    const isRoadColumn = (tile.x - mainX) % ROAD_SPACING === 0;
+    const isRoadRow = (tile.y - mainY) % ROAD_SPACING === 0;
 
-    if (isMainRoad || isSecondaryRoad) {
+    if (isRoadColumn || isRoadRow) {
       return { ...tile, type: 'road' };
     }
 
@@ -32,15 +42,27 @@ export function placeRoads(tiles: RawTerrainTile[], width: number, height: numbe
   });
 }
 
-function resolveOrientation(left: boolean, right: boolean, up: boolean, down: boolean): 'road-l' | 'road-r' | 'road-i' {
+type RoadOrientation = 'road-l' | 'road-r' | 'road-i' | 'road-corner-dr' | 'road-corner-dl' | 'road-corner-lu' | 'road-corner-ru';
+
+function resolveOrientation(left: boolean, right: boolean, up: boolean, down: boolean): RoadOrientation {
   const neighborCount = [left, right, up, down].filter(Boolean).length;
   const horizontal = left || right;
   const vertical = up || down;
 
-  // Cruzamento (4 vizinhos), esquina (1 horizontal + 1 vertical) ou T —
-  // nenhum tem sprite dedicado, então reaproveitamos o de cruzamento.
-  if (neighborCount >= 3 || (horizontal && vertical)) {
+  // Cruzamento (4 vizinhos) ou T (3) — nenhum tem sprite dedicado, então
+  // reaproveitamos o de cruzamento.
+  if (neighborCount >= 3) {
     return 'road-i';
+  }
+
+  // Esquina (exatamente 1 horizontal + 1 vertical): curva de 90°, ver
+  // packages/luv-ui/src/city/Block/models/TilesTypes.ts — o nome do sprite
+  // codifica as duas direções que ele conecta.
+  if (horizontal && vertical) {
+    if (right && down) return 'road-corner-dr';
+    if (right && up) return 'road-corner-ru';
+    if (left && down) return 'road-corner-dl';
+    return 'road-corner-lu';
   }
 
   if (horizontal) {

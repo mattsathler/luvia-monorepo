@@ -33,10 +33,10 @@ export default function City() {
                     </div>
                     <div className="d-flex flex-wrap gap">
                         <Block key={6} size={124} texture={TILE_TYPES.grass.texture} isometric></Block>
-                        <Block key={6} size={124} texture={TILE_TYPES.sand.texture} isometric></Block>
-                        <Block key={6} size={124} texture={TILE_TYPES.autumn.texture} isometric></Block>
-                        <Block key={6} size={124} texture={TILE_TYPES.ocean.texture} isometric></Block>
-                        <Block key={6} size={124} texture={TILE_TYPES["road-l"].texture} isometric></Block>
+                        <Block key={7} size={124} texture={TILE_TYPES.sand.texture} isometric></Block>
+                        <Block key={8} size={124} texture={TILE_TYPES.autumn.texture} isometric></Block>
+                        <Block key={9} size={124} texture={TILE_TYPES.ocean.texture} isometric></Block>
+                        <Block key={10} size={124} texture={TILE_TYPES["road-l"].texture} isometric></Block>
                     </div>
                     <DayCycleControl />
                 </div>

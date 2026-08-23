@@ -190,7 +190,17 @@ export type Lot = {
     y: number;
 };
 
-export type TerrainType = "grass" | "ocean" | "road-r" | "road-l" | "road-i" | "landmark";
+export type TerrainType =
+    | "grass"
+    | "ocean"
+    | "road-r"
+    | "road-l"
+    | "road-i"
+    | "road-corner-dr"
+    | "road-corner-dl"
+    | "road-corner-lu"
+    | "road-corner-ru"
+    | "landmark";
 
 export type TerrainTile = {
     x: number;

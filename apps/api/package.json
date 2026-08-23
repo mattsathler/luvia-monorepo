@@ -14,7 +14,8 @@
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "city:generate": "npm run build && node dist/city/scripts/generate-city-map.script.js",
-    "city:seed-workplaces": "npm run build && node dist/city/scripts/seed-workplaces.script.js"
+    "city:seed-workplaces": "npm run build && node dist/city/scripts/seed-workplaces.script.js",
+    "city:reset": "npm run build && node dist/city/scripts/reset-city.script.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.28",

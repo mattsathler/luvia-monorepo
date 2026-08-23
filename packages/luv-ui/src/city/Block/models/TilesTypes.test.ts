@@ -2,7 +2,21 @@ import { describe, expect, it } from "vitest";
 import { TILE_TYPES } from "./TilesTypes";
 
 describe("TILE_TYPES", () => {
-    const terrainKeys = ["grass", "road", "road-r", "road-l", "road-i", "sand", "ocean", "autumn", "snow"] as const;
+    const terrainKeys = [
+        "grass",
+        "road",
+        "road-r",
+        "road-l",
+        "road-i",
+        "road-corner-dr",
+        "road-corner-dl",
+        "road-corner-lu",
+        "road-corner-ru",
+        "sand",
+        "ocean",
+        "autumn",
+        "snow",
+    ] as const;
     const lotKeys = ["lot", "lot-mine"] as const;
     const poiKeys = ["landmark"] as const;
 
