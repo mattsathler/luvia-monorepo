@@ -26,6 +26,7 @@ function buildScheduler(configValues: Record<string, unknown> = {}) {
     findByCharacterId: jest.fn(),
     trySave: jest.fn(),
     findStaleBatch: jest.fn(),
+    countActiveByWorkplaceAndCargo: jest.fn(),
   };
 
   const recomputeContractUseCase = {

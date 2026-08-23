@@ -19,6 +19,8 @@ Habilidades permitem:
 
 Nunca existem classes.
 
+O catálogo de skills (`SKILL_DEFINITIONS`, `apps/api/src/character/domain/entities/skill.ts`) tem hoje 21 entradas, desenhadas contra os cargos de emprego público que existem em [[jobs]] (cada skill serve de principal/secundária/terciária em pelo menos um cargo) — deixou de ser as 4 skills de validação inicial, mas os pesos/nomes ainda são **placeholder de balanceamento**, como qualquer taxa do jogo.
+
 ## Referências
 
 - [[jobs]]

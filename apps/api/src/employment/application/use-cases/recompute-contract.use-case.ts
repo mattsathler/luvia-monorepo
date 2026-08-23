@@ -4,7 +4,7 @@ import { CreditCharacterMoneyUseCase } from '../../../character/application/use-
 import { LOT_REPOSITORY, LotRepository } from '../../../city/domain/repositories/lot.repository';
 import { WORKPLACE_REPOSITORY, WorkplaceRepository } from '../../../city/domain/repositories/workplace.repository';
 import { Contract } from '../../domain/entities/contract.entity';
-import { findCargo } from '../../domain/entities/building-catalog';
+import { findCargo, nextCargo } from '../../domain/entities/building-catalog';
 import { computeEfficiency } from '../../domain/entities/efficiency';
 import { CONTRACT_REPOSITORY, ContractRepository } from '../../domain/repositories/contract.repository';
 
@@ -37,7 +37,7 @@ export class RecomputeContractUseCase {
     const isWorking = character.activity === 'working';
     const efficiency = await this.computeEfficiency(contract, character.skills);
 
-    const { contract: recomputed, previousLastUpdatedAt, moneyEarned } = contract.recomputeUntil(
+    const { contract: recomputed, previousLastUpdatedAt, moneyEarned, promotionEligible } = contract.recomputeUntil(
       now,
       isWorking,
       efficiency,
@@ -47,7 +47,8 @@ export class RecomputeContractUseCase {
       return contract;
     }
 
-    const saved = await this.contractRepository.trySave(recomputed, previousLastUpdatedAt);
+    const toSave = promotionEligible ? await this.applyPromotionIfVacant(recomputed) : recomputed;
+    const saved = await this.contractRepository.trySave(toSave, previousLastUpdatedAt);
 
     if (saved) {
       if (moneyEarned > 0) {
@@ -62,6 +63,27 @@ export class RecomputeContractUseCase {
     // credita de novo aqui.
     const current = await this.contractRepository.findByCharacterId(characterId);
     return current ?? recomputed;
+  }
+
+  /**
+   * `contract` já cruzou o threshold do cargo atual (`isPromotionEligible()`
+   * verdadeiro) — só falta confirmar vaga livre no próximo cargo (ver
+   * `CargoDefinition.vacancySlots` e docs/game-design/jobs.md, "vagas
+   * limitam promoção"). Sem vaga, retorna o contrato represado no cargo
+   * atual — sem perder score, tenta de novo no próximo recompute.
+   */
+  private async applyPromotionIfVacant(contract: Contract): Promise<Contract> {
+    // Invariante do catálogo: isPromotionEligible() só é true quando
+    // scoreToPromote não é null, o que sempre implica um próximo cargo (ver
+    // building-catalog.ts) — nextCargo nunca é undefined aqui.
+    const next = nextCargo(contract.buildingTypeId, contract.cargoId)!;
+
+    if (next.vacancySlots === null) {
+      return contract.promote();
+    }
+
+    const occupied = await this.contractRepository.countActiveByWorkplaceAndCargo(contract.workplaceId, next.id);
+    return occupied < next.vacancySlots ? contract.promote() : contract;
   }
 
   private async computeEfficiency(contract: Contract, skills: Record<string, number>): Promise<number> {

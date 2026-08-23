@@ -23,7 +23,16 @@ export type WorkplaceDocument = { workplaceId: string; buildingTypeId: string; x
  * prédio obrigatório do catálogo, por Bairro. Este script deixa de ser
  * necessário nesse momento.
  */
-export const EXAMPLE_WORKPLACES: WorkplaceSeed[] = [{ buildingTypeId: 'city-hall', x: 20, y: 20 }];
+export const EXAMPLE_WORKPLACES: WorkplaceSeed[] = [
+  { buildingTypeId: 'city-hall', x: 20, y: 20 },
+  { buildingTypeId: 'hospital', x: 30, y: 20 },
+  { buildingTypeId: 'police-station', x: 40, y: 20 },
+  { buildingTypeId: 'civil-guard', x: 20, y: 30 },
+  { buildingTypeId: 'public-works-department', x: 30, y: 30 },
+  { buildingTypeId: 'metal-workshop', x: 40, y: 30 },
+  { buildingTypeId: 'treasury-department', x: 20, y: 40 },
+  { buildingTypeId: 'municipal-school', x: 30, y: 40 },
+];
 
 export function buildWorkplaceDocuments(workplaces: WorkplaceSeed[] = EXAMPLE_WORKPLACES): WorkplaceDocument[] {
   return workplaces.map((workplace) => ({ workplaceId: randomUUID(), ...workplace }));

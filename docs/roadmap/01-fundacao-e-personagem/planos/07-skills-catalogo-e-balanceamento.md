@@ -2,15 +2,15 @@
 
 ## Status
 
-⏳ Pendente — escopo revisado: não existe mais alocação inicial de pontos (ver [[../../../decisions/0024-personagem-nasce-sem-skills]]). Personagem nasce com nível 0 em tudo; este plano agora é só sobre o catálogo em si, não mais sobre balancear um orçamento de criação.
+🔄 Catálogo de conteúdo fechado (21 skills, desenhadas contra a hierarquia de cargos de [[../../02-loop-de-vida-wryd/planos/04-empregos-publicos-e-hierarquia-de-cargos]]) — falta só o balanceamento fino (M08, ver `Depende de` abaixo). Personagem nasce com nível 0 em tudo (ver [[../../../decisions/0024-personagem-nasce-sem-skills]]); este plano é só sobre o catálogo em si, não sobre um orçamento de criação.
 
 ## Objetivo técnico
 
-O catálogo de skills (`SKILL_DEFINITIONS`) é um placeholder de game design, não uma decisão fechada — precisa amadurecer antes (ou durante) da M02. A atividade "Estudar" (que faria skills crescerem passivamente) foi descartada como próximo marco — hoje as skills que mais importam são as que os cargos de emprego público exigem (ver [[../../../game-design/jobs]]), não um mecanismo de estudo à parte.
+O catálogo de skills (`SKILL_DEFINITIONS`) tem os nomes/pesos ainda como placeholder de balanceamento (como qualquer taxa do jogo), mas o **conteúdo** (quais skills existem, e pra quais cargos cada uma importa) já reflete o game design real — não é mais só as 4 skills de validação do mecanismo. A atividade "Estudar" (que faria skills crescerem passivamente) segue descartada, sem redesenho — hoje as skills só afetam eficiência de trabalho (ver [[../../../game-design/jobs]]), sem nenhum jeito de subir de nível ainda.
 
 ## Escopo
 
-- `SKILL_DEFINITIONS` hoje é uma lista fixa e provisória (`intelligence`, `charisma`, `creativity`, `strength`) — revisar contra o game design real (que cargos de emprego cada skill deve destravar/beneficiar, ver [[../../../game-design/jobs]]) antes de tratar como catálogo final.
+- `SKILL_DEFINITIONS` tem 21 entradas: as 4 originais de validação (`intelligence`, `charisma`, `creativity`, `strength`) mais 17 novas (`dexterity`, `endurance`, `discipline`, `leadership`, `medicine`, `law`, `investigation`, `marksmanship`, `tactics`, `accounting`, `bureaucracy`, `construction`, `engineering`, `metallurgy`, `mechanics`, `electronics`, `teaching`) — cada uma usada por pelo menos um cargo do catálogo de prédios (ver [[../../../game-design/jobs]]).
 - Definir se o catálogo pode crescer depois do lançamento sem migração (hoje `skills` já é um mapa livre `id -> pontos`, então tecnicamente sim — só falta a decisão de produto).
 - Nenhum orçamento inicial pra balancear mais — o balanceamento relevante agora é como as skills afetam a eficiência de trabalho (M02, plano 04 — empregos públicos e hierarquia de cargos) e, mais tarde, o balanceamento fino da M08.
 

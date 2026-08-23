@@ -30,4 +30,14 @@ export interface ContractRepository {
    * inteira de uma vez.
    */
   findStaleBatch(olderThan: Date, limit: number, skip: number): Promise<Contract[]>;
+
+  /**
+   * Quantos `Contract`s ativos já ocupam esse cargo, nessa instância física de
+   * prédio (`workplaceId`) — usado por `RecomputeContractUseCase` pra checar
+   * vaga livre antes de aplicar uma promoção (ver `CargoDefinition.vacancySlots`
+   * em building-catalog.ts e docs/game-design/jobs.md). Note que o próprio
+   * contrato sendo promovido ainda está no cargo *atual* nesse momento (a
+   * promoção ainda não foi aplicada), então não precisa se excluir da conta.
+   */
+  countActiveByWorkplaceAndCargo(workplaceId: string, cargoId: string): Promise<number>;
 }

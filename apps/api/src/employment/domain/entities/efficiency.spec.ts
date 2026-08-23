@@ -8,6 +8,7 @@ function cargo(overrides: Partial<CargoDefinition> = {}): CargoDefinition {
     primarySkillId: 'intelligence',
     baseHourlyWage: 10,
     scoreToPromote: 100,
+    vacancySlots: null,
     ...overrides,
   };
 }

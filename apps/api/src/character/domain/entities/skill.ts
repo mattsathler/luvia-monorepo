@@ -14,6 +14,23 @@ export const SKILL_DEFINITIONS = [
   { id: 'charisma', label: 'Carisma' },
   { id: 'creativity', label: 'Criatividade' },
   { id: 'strength', label: 'Força' },
+  { id: 'dexterity', label: 'Destreza' },
+  { id: 'endurance', label: 'Resistência' },
+  { id: 'discipline', label: 'Disciplina' },
+  { id: 'leadership', label: 'Liderança' },
+  { id: 'medicine', label: 'Medicina' },
+  { id: 'law', label: 'Direito' },
+  { id: 'investigation', label: 'Investigação' },
+  { id: 'marksmanship', label: 'Pontaria' },
+  { id: 'tactics', label: 'Tática' },
+  { id: 'accounting', label: 'Contabilidade' },
+  { id: 'bureaucracy', label: 'Burocracia' },
+  { id: 'construction', label: 'Construção Civil' },
+  { id: 'engineering', label: 'Engenharia' },
+  { id: 'metallurgy', label: 'Metalurgia' },
+  { id: 'mechanics', label: 'Mecânica' },
+  { id: 'electronics', label: 'Eletrônica' },
+  { id: 'teaching', label: 'Docência' },
 ] as const satisfies readonly SkillDefinition[];
 
 /** Union literal dos ids de skill — usado pelo catálogo de cargos (employment) pra referenciar skills com segurança de tipo em compile-time, sem precisar validar em runtime. */

@@ -51,6 +51,7 @@ describe('RecomputeContractUseCase', () => {
       findByCharacterId: jest.fn(),
       trySave: jest.fn(),
       findStaleBatch: jest.fn(),
+      countActiveByWorkplaceAndCargo: jest.fn().mockResolvedValue(0),
     };
     const lotRepository: jest.Mocked<LotRepository> = {
       save: jest.fn(),
@@ -122,6 +123,44 @@ describe('RecomputeContractUseCase', () => {
     expect(contractRepository.trySave).toHaveBeenCalledWith(expect.any(Contract), T0);
     expect(creditCharacterMoneyUseCase.execute).toHaveBeenCalledWith('char-1', expect.any(Number));
     expect(result.hoursWorked).toBe(1);
+  });
+
+  it('promotes to the next cargo when its threshold is crossed and a vacancy is free', async () => {
+    const { useCase, contractRepository, recomputeCharacterUseCase, lotRepository, workplaceRepository } = buildUseCase();
+    // 'intern' -> 'assistant' needs progressScore >= 100; starting at 90 plus
+    // ~1h of efficiency (skills give ~68/h at 0 distance) safely crosses it.
+    const existing = contract({ progressScore: 90 });
+    contractRepository.findByCharacterId.mockResolvedValue(existing);
+    recomputeCharacterUseCase.execute.mockResolvedValue(character('working'));
+    lotRepository.findByCharacterId.mockResolvedValue(lot());
+    workplaceRepository.findById.mockResolvedValue(workplace());
+    contractRepository.countActiveByWorkplaceAndCargo.mockResolvedValue(2); // assistant: vacancySlots 6, 2 occupied
+    contractRepository.trySave.mockImplementation(async (c) => c);
+
+    const result = await useCase.execute('char-1', T1);
+
+    expect(contractRepository.countActiveByWorkplaceAndCargo).toHaveBeenCalledWith('workplace-1', 'assistant');
+    expect(result.cargoId).toBe('assistant');
+    expect(result.hourlyWage).toBe(8);
+    expect(result.hoursWorked).toBe(0);
+    expect(result.progressScore).toBe(0);
+  });
+
+  it('holds the character in the current cargo, without losing score, when the next cargo has no free vacancy', async () => {
+    const { useCase, contractRepository, recomputeCharacterUseCase, lotRepository, workplaceRepository } = buildUseCase();
+    const existing = contract({ progressScore: 90 });
+    contractRepository.findByCharacterId.mockResolvedValue(existing);
+    recomputeCharacterUseCase.execute.mockResolvedValue(character('working'));
+    lotRepository.findByCharacterId.mockResolvedValue(lot());
+    workplaceRepository.findById.mockResolvedValue(workplace());
+    contractRepository.countActiveByWorkplaceAndCargo.mockResolvedValue(6); // assistant: vacancySlots 6, all occupied
+    contractRepository.trySave.mockImplementation(async (c) => c);
+
+    const result = await useCase.execute('char-1', T1);
+
+    expect(result.cargoId).toBe('intern');
+    expect(result.hourlyWage).toBe(5);
+    expect(result.progressScore).toBeGreaterThanOrEqual(100); // eligible, just represado waiting for a slot
   });
 
   it('does not credit money when the character is not working (moneyEarned stays 0)', async () => {

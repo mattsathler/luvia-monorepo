@@ -55,6 +55,10 @@ export class ContractMongoRepository implements ContractRepository {
     return documents.map((document) => this.toDomain(document));
   }
 
+  async countActiveByWorkplaceAndCargo(workplaceId: string, cargoId: string): Promise<number> {
+    return this.model.countDocuments({ workplaceId, cargoId }).exec();
+  }
+
   private toFields(contract: Contract) {
     return {
       contractId: contract.id,

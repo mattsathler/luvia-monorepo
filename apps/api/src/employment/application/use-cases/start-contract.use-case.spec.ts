@@ -45,6 +45,7 @@ describe('StartContractUseCase', () => {
       findByCharacterId: jest.fn(),
       trySave: jest.fn(),
       findStaleBatch: jest.fn(),
+      countActiveByWorkplaceAndCargo: jest.fn(),
     };
     const workplaceRepository: jest.Mocked<WorkplaceRepository> = {
       save: jest.fn(),
