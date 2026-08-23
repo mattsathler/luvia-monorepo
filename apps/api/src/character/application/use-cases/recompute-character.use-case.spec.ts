@@ -5,7 +5,7 @@ import { Character } from '../../domain/entities/character.entity';
 
 const T0 = new Date('2026-01-01T00:00:00.000Z');
 
-function restingCharacterAt(now: Date) {
+function idleCharacterAt(now: Date) {
   return new Character({
     id: 'char-1',
     accountId: 'acc-1',
@@ -15,7 +15,7 @@ function restingCharacterAt(now: Date) {
     energy: 50,
     money: 0,
     fame: 0,
-    activity: 'resting',
+    activity: 'idle',
     activityEndsAt: null,
     lastUpdatedAt: now,
   });
@@ -23,7 +23,7 @@ function restingCharacterAt(now: Date) {
 
 describe('RecomputeCharacterUseCase', () => {
   it('recomputes the character and saves it via trySave', async () => {
-    const character = restingCharacterAt(T0);
+    const character = idleCharacterAt(T0);
     const now = new Date(T0.getTime() + 10 * 60_000);
 
     const characterRepository: jest.Mocked<CharacterRepository> = {
@@ -46,9 +46,9 @@ describe('RecomputeCharacterUseCase', () => {
   });
 
   it('falls back to the current state when trySave loses the race to a concurrent update', async () => {
-    const character = restingCharacterAt(T0);
+    const character = idleCharacterAt(T0);
     const now = new Date(T0.getTime() + 10 * 60_000);
-    const alreadyUpdated = restingCharacterAt(now);
+    const alreadyUpdated = idleCharacterAt(now);
 
     const characterRepository: jest.Mocked<CharacterRepository> = {
       save: jest.fn(),
@@ -69,7 +69,7 @@ describe('RecomputeCharacterUseCase', () => {
   });
 
   it('falls back to the just-computed value when the character disappears after losing the race', async () => {
-    const character = restingCharacterAt(T0);
+    const character = idleCharacterAt(T0);
     const now = new Date(T0.getTime() + 10 * 60_000);
 
     const characterRepository: jest.Mocked<CharacterRepository> = {
@@ -103,7 +103,7 @@ describe('RecomputeCharacterUseCase', () => {
   });
 
   it('returns the same character without saving when no time has elapsed', async () => {
-    const character = restingCharacterAt(T0);
+    const character = idleCharacterAt(T0);
 
     const characterRepository: jest.Mocked<CharacterRepository> = {
       save: jest.fn(),

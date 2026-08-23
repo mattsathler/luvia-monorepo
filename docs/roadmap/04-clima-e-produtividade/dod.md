@@ -3,7 +3,7 @@
 ## Backend
 
 - [ ] Clima frio (`foggy`) reduz felicidade do personagem enquanto ele está `working` (fora de casa).
-- [ ] Clima quente (`sunny`) reduz felicidade do personagem enquanto ele está `idle`/`resting` (em casa).
+- [ ] Clima quente (`sunny`) reduz felicidade do personagem enquanto ele está `idle` (em casa).
 - [ ] Nenhum efeito de desconforto térmico nas demais combinações (calor fora de casa, frio em casa).
 - [ ] `working` deixa de usar uma taxa de dinheiro/hora fixa — a taxa escala com a energia e a felicidade atuais do personagem no momento do cálculo.
 - [ ] Hora do jogo tem algum efeito mensurável sobre a produtividade (mecanismo definido no plano 02).

@@ -1,4 +1,4 @@
-export type Activity = 'idle' | 'resting' | 'working';
+export type Activity = 'idle' | 'working';
 
 export const DEFAULT_ACTIVITY: Activity = 'idle';
 
@@ -24,8 +24,7 @@ const MINUTE_MS = 60_000;
  * nada — não é uma regressão, é o comportamento esperado.
  */
 const RATES_PER_MINUTE: Record<Activity, Partial<CharacterStats>> = {
-  idle: {},
-  resting: { energy: 2, happiness: 0.5 },
+  idle: { energy: 2, happiness: 0.5 },
   working: { energy: -1 },
 };
 

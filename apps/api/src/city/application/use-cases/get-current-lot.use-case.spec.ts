@@ -45,7 +45,7 @@ describe('GetCurrentLotUseCase', () => {
 
   // Só existe lote residencial hoje (ver GetCurrentLotUseCase) — toda
   // atividade resolve nele até emprego/eventos ganharem lotes próprios.
-  it.each(['idle', 'resting', 'working'] as const)(
+  it.each(['idle', 'working'] as const)(
     'resolves to the residential lot, named, while %s',
     async (activity) => {
       const { useCase, characterRepository, getCharacterLotUseCase } = buildUseCase();

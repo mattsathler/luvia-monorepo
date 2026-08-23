@@ -4,7 +4,7 @@ import { ChangeActivityDto } from './change-activity.dto';
 
 describe('ChangeActivityDto', () => {
   it('accepts a known activity without activityEndsAt', async () => {
-    const dto = plainToInstance(ChangeActivityDto, { activity: 'resting' });
+    const dto = plainToInstance(ChangeActivityDto, { activity: 'idle' });
     const errors = await validate(dto);
 
     expect(errors).toHaveLength(0);

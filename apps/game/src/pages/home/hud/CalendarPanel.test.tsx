@@ -50,7 +50,7 @@ describe("CalendarPanel", () => {
     it("hides the cancel button while idle", () => {
         render(<CalendarPanel character={{ ...CHARACTER, activity: "idle" }} currentLot={CURRENT_LOT} />);
 
-        expect(screen.getByText("Nenhuma")).toBeInTheDocument();
+        expect(screen.getByText("Descansando")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Cancelar atividade" })).not.toBeInTheDocument();
     });
 
@@ -58,12 +58,12 @@ describe("CalendarPanel", () => {
         const user = userEvent.setup();
         const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
-        render(<CalendarPanel character={{ ...CHARACTER, activity: "resting" }} currentLot={CURRENT_LOT} />);
+        render(<CalendarPanel character={{ ...CHARACTER, activity: "working" }} currentLot={CURRENT_LOT} />);
 
         const cancelButton = screen.getByRole("button", { name: "Cancelar atividade" });
         await user.click(cancelButton);
 
-        expect(logSpy).toHaveBeenCalledWith("Cancelar atividade:", "resting");
+        expect(logSpy).toHaveBeenCalledWith("Cancelar atividade:", "working");
         logSpy.mockRestore();
     });
 

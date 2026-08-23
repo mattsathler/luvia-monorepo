@@ -85,7 +85,7 @@ Troca a atividade atual do personagem (WRYD).
 }
 ```
 
-`activity` é um de `idle`, `resting`, `working`. `activityEndsAt` é opcional (ISO date) — usado por atividades com prazo definido pelo sistema (ex.: eventos, quando esse bounded context existir).
+`activity` é um de `idle`, `working`. `activityEndsAt` é opcional (ISO date) — usado por atividades com prazo definido pelo sistema (ex.: eventos, quando esse bounded context existir).
 
 **Resposta (200):** o personagem atualizado (ver formato acima).
 

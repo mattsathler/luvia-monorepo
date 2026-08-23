@@ -22,7 +22,7 @@ Ver [[planos/01-monorepo-e-design-system]], [[planos/02-autenticacao]], [[planos
 - **Criação de personagem**: nome, gênero, tom de pele, cabelo, olho. Sem skills — personagem nasce com nível 0 em tudo (ver [[../../decisions/0024-personagem-nasce-sem-skills]]).
 - **Guarda-roupa completo**: corpo, rosto, cabelo, blusa, calça, sapato, sobreposição — com prévia ao vivo do personagem montado (composição de camadas em canvas) e seletor com miniaturas.
 - **Seleção de personagem**: lista de personagens da conta, prévia de cada um.
-- **Motor de simulação WRYD no backend** (ver [[../../technical/simulation-tick]] e [[../../decisions/0013-sistema-wryd-tick-em-lotes-e-polling]]): tick em lote, recompute individual sob demanda (lazy), troca de atividade com prorata da atividade anterior, atividades `idle`/`resting`/`working` já com efeito sobre felicidade/energia/dinheiro. **Sem nenhuma UI no frontend ainda** — é infraestrutura pronta, esperando a M02.
+- **Motor de simulação WRYD no backend** (ver [[../../technical/simulation-tick]] e [[../../decisions/0013-sistema-wryd-tick-em-lotes-e-polling]]): tick em lote, recompute individual sob demanda (lazy), troca de atividade com prorata da atividade anterior, atividades `idle`/`working` já com efeito sobre felicidade/energia/dinheiro. **Sem nenhuma UI no frontend ainda** — é infraestrutura pronta, esperando a M02.
 - Cobertura de testes 100% (statements/branches/functions/lines) em todos os pacotes — ver [[../../decisions/0016-cobertura-de-testes-obrigatoria-100]].
 
 ## Fora do escopo

@@ -8,23 +8,12 @@ import { CHUNK_SIZE, useCityGridController } from "./CityGrid.controller";
 /** ~1 chunk de buffer em todas as direções — ver docs/technical/lowys-carregamento-em-chunks.md. */
 const PREFETCH_MARGIN = "640px";
 
-/**
- * Distância mínima (px) que o ponteiro precisa se mover, a partir do
- * pointerdown, pra um gesto virar "arrastar o mapa" em vez de "clicar num
- * tile" — sem isso, todo clique (mesmo parado) dispararia um `scrollLeft`/
- * `scrollTop` de ~0px, e um tremor de mão de 1-2px num clique real seria
- * interpretado como arrasto e engoliria o clique do tile.
- */
-const DRAG_THRESHOLD_PX = 6;
-
 type DragState = {
     pointerId: number;
     startX: number;
     startY: number;
     startScrollLeft: number;
     startScrollTop: number;
-    /** Só vira `true` depois que o movimento passa de `DRAG_THRESHOLD_PX` — é o que diferencia arrasto de clique. */
-    dragged: boolean;
 };
 
 function isoCornersBoundingBox(corners: { x: number; y: number }[], size: number) {
@@ -111,6 +100,15 @@ type CityGridProps = {
     isTileClickable?: (tile: TileData) => boolean;
     /** Lote pra centralizar a rolagem assim que definido/trocado (ex.: clique num resultado do MapSearchPanel, ou `?x=&y=` na URL) — `null`/omitido não move o mapa. */
     targetLot?: { x: number; y: number } | null;
+    /**
+     * Modo explícito, ligado/desligado pelo botão de arrasto no HUD (ver
+     * CalendarPanel/HomeHud) — em vez de tentar adivinhar arrasto vs. clique
+     * por distância percorrida, o próprio jogador escolhe. Ligado: o
+     * ponteiro arrasta o mapa e nenhum clique chega aos tiles. Desligado:
+     * clique normal nos tiles, sem arrasto por ponteiro (rolagem por
+     * scrollbar/trackpad/touch nativo continua disponível via `scroll-auto`).
+     */
+    dragModeEnabled: boolean;
 };
 
 /**
@@ -130,6 +128,7 @@ export function CityGrid({
     onTileClick,
     isTileClickable,
     targetLot,
+    dragModeEnabled,
 }: CityGridProps) {
     const { chunkCoords, tiles, onChunkEnter, onChunkLeave, isChunkLoaded, loadChunk, getLotAt } = useCityGridController({
         dimensions,
@@ -140,8 +139,6 @@ export function CityGrid({
     const containerRef = useRef<HTMLDivElement>(null);
     const placeholderRefs = useRef(new Map<string, HTMLDivElement>());
     const dragRef = useRef<DragState | null>(null);
-    /** Sobrevive um tick além de `dragRef` — só existe pro `click` pós-arrasto (ver `endDrag`/`handleClickCapture`). */
-    const wasDraggedRef = useRef(false);
     /** Evita renavegar pro mesmo lote a cada re-render (ex.: zoom) — só o *lote* muda o alvo, não o tamanho do tile. */
     const lastTargetKeyRef = useRef<string | null>(null);
 
@@ -246,14 +243,19 @@ export function CityGrid({
         return () => observer.disconnect();
     }, [chunkCoords, onChunkEnter, onChunkLeave]);
 
-    // Rolagem por clique-e-arraste, como num app de mapas — a barra de
-    // rolagem nativa fica escondida (`no-scrollbar`) e `touch-none` desliga
-    // o pan por toque nativo do navegador, pra não competir com o
-    // `scrollLeft`/`scrollTop` que este handler seta na mão. Pointer events
-    // cobrem mouse e touch com o mesmo código.
+    // Rolagem por clique-e-arraste, como num app de mapas — só ativa quando
+    // `dragModeEnabled` (botão de arrasto no HUD, ver CalendarPanel/HomeHud).
+    // Tentar adivinhar arrasto vs. clique por distância percorrida (versão
+    // anterior) não dava pra confiar: no Safari/macOS, chamar
+    // `setPointerCapture` no mesmo ciclo pointerdown->pointerup de um clique
+    // parado (mesmo sem nenhum movimento) fazia o navegador nunca sintetizar
+    // o `click` nativo depois — o clique simplesmente não chegava no
+    // `onClick` do `Block`. Com o modo explícito, cada gesto já nasce sabendo
+    // se é arrasto (captura o ponteiro e ignora cliques) ou clique comum (não
+    // mexe em pointer capture, então o `click` do navegador nunca é afetado).
     function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
         const container = containerRef.current;
-        if (!container || event.button !== 0) {
+        if (!container || event.button !== 0 || !dragModeEnabled) {
             return;
         }
 
@@ -263,8 +265,9 @@ export function CityGrid({
             startY: event.clientY,
             startScrollLeft: container.scrollLeft,
             startScrollTop: container.scrollTop,
-            dragged: false,
         };
+        container.classList.remove("cursor-grab");
+        container.classList.add("cursor-grabbing");
         container.setPointerCapture?.(event.pointerId);
     }
 
@@ -275,20 +278,8 @@ export function CityGrid({
             return;
         }
 
-        const dx = event.clientX - drag.startX;
-        const dy = event.clientY - drag.startY;
-
-        if (!drag.dragged) {
-            if (Math.hypot(dx, dy) < DRAG_THRESHOLD_PX) {
-                return;
-            }
-            drag.dragged = true;
-            container.classList.remove("cursor-grab");
-            container.classList.add("cursor-grabbing");
-        }
-
-        container.scrollLeft = drag.startScrollLeft - dx;
-        container.scrollTop = drag.startScrollTop - dy;
+        container.scrollLeft = drag.startScrollLeft - (event.clientX - drag.startX);
+        container.scrollTop = drag.startScrollTop - (event.clientY - drag.startY);
     }
 
     function endDrag(event: ReactPointerEvent<HTMLDivElement>) {
@@ -298,28 +289,20 @@ export function CityGrid({
             return;
         }
 
-        // `wasDragged` sobrevive pro `handleClickCapture` (que roda a
-        // seguir, no `click` que o navegador dispara depois do
-        // pointerup) — mas `dragRef.current` em si precisa ser limpo já
-        // aqui: o `pointerId` do mouse não muda entre gestos (ao
-        // contrário do touch, que gera um novo por toque), então sem
-        // isso um `pointermove` de simplesmente passar o cursor sobre o
-        // mapa (sem o botão pressionado) bate o mesmo `pointerId` do
-        // arrasto anterior e é lido como sua continuação — o mapa
-        // continua "arrastando" sozinho depois que o mouse já soltou.
-        wasDraggedRef.current = drag.dragged;
         dragRef.current = null;
 
         container?.releasePointerCapture?.(event.pointerId);
         container?.classList.remove("cursor-grabbing");
-        container?.classList.add("cursor-grab");
+        if (dragModeEnabled) {
+            container?.classList.add("cursor-grab");
+        }
     }
 
-    // Impede que o clique disparado pelo navegador logo após um arrasto
-    // (pointerup -> click, mesmo destino) chegue ao `onClick` do tile.
+    // Enquanto o modo de arrasto tá ligado, nenhum clique chega aos tiles —
+    // é assim que o jogador arrasta o mapa sem abrir o modal de um lote por
+    // baixo do ponteiro.
     function handleClickCapture(event: ReactMouseEvent<HTMLDivElement>) {
-        if (wasDraggedRef.current) {
-            wasDraggedRef.current = false;
+        if (dragModeEnabled) {
             event.stopPropagation();
         }
     }
@@ -327,7 +310,11 @@ export function CityGrid({
     return (
         <div
             ref={containerRef}
-            className="iso-grid scroll-auto no-scrollbar touch-none cursor-grab h-full w-full"
+            // `touch-none`/`cursor-grab` só com o modo de arrasto ligado —
+            // desligado, o toque nativo (scroll por swipe) e o cursor padrão
+            // do navegador seguem valendo, sem o pointer-drag deste componente
+            // competindo com eles.
+            className={`iso-grid scroll-auto no-scrollbar h-full w-full ${dragModeEnabled ? "touch-none cursor-grab" : ""}`}
             // `--color`, não `backgroundColor` direto — é assim que `Block`
             // (packages/luv-ui) já recebe cor pra poder escurecer com
             // `--sun-y` via `color-mix()` (ver IsoGrid.scss); `backgroundColor`

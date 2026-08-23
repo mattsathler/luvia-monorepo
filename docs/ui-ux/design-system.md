@@ -37,6 +37,10 @@ O Luv.UI define tokens de cor via CSS custom properties, com tema claro (padrão
 
 O tema escuro é ativado via `[data-theme="dark"]` na raiz do documento.
 
+### Estados de carregamento
+
+Nunca renderizar um placeholder de texto pra indicar carregamento (ex.: um `<span>` ou string crua com `"Carregando..."`). Usar sempre o componente `LuvSpinner` (`packages/luv-ui`), passando o texto pela prop `label` quando fizer sentido (`<LuvSpinner label="Carregando cidade..." />`) em vez de um texto solto ao lado.
+
 ### Ícones
 
 Ícones vivem num pacote separado, `packages/luv-icons` (não faz parte do Luv.UI, mas segue o mesmo formato de workspace — `exports`, build ESM com `.d.ts`). Diferente do `luv-ui`, esse pacote não exporta componente React nenhum: só guarda SVGs crus (markup, não `.tsx`) num mapa `icons: Record<string, string>`. Só o Luv.UI depende dele diretamente — as apps nunca importam `luv-icons`, sempre passam pelo `LuvIcon` (`packages/luv-ui/src/components/Icon/LuvIcon.tsx`), que tenta `name` contra esse mapa e injeta o SVG; se não achar, cai para o Material Icons (ligadura de fonte) — assim um nome só (`<LuvIcon name="body" />`) cobre tanto os ícones próprios quanto os do Material Icons, sem a app precisar saber de qual pacote cada um vem. A diretriz de estilo visual dos ícones (arredondado, cute, chibi, no modelo do personagem) está documentada em [[visual-art-style]].

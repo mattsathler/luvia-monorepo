@@ -16,7 +16,7 @@ function characterOwnedBy(accountId: string) {
     energy: 70,
     money: 0,
     fame: 0,
-    activity: 'resting',
+    activity: 'idle',
     activityEndsAt: null,
     lastUpdatedAt: T0,
   });

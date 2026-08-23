@@ -16,7 +16,7 @@ describe('Character.recomputeUntil', () => {
     expect(previousLastUpdatedAt).toEqual(T0);
   });
 
-  it('applies resting effect over the elapsed interval', () => {
+  it('applies idle (descansando) effect over the elapsed interval', () => {
     const character = new Character({
       id: 'char-1',
       accountId: 'acc-1',
@@ -26,7 +26,7 @@ describe('Character.recomputeUntil', () => {
       energy: 50,
       money: 0,
       fame: 0,
-      activity: 'resting',
+      activity: 'idle',
       activityEndsAt: null,
       lastUpdatedAt: T0,
     });
@@ -64,17 +64,6 @@ describe('Character.recomputeUntil', () => {
     expect(recomputed.energy).toBe(45); // -1/min * 5min
   });
 
-  it('does not change stats while idle', () => {
-    const character = characterAt();
-
-    const oneHourLater = new Date(T0.getTime() + 60 * 60_000);
-    const { character: recomputed } = character.recomputeUntil(oneHourLater);
-
-    expect(recomputed.energy).toBe(character.energy);
-    expect(recomputed.happiness).toBe(character.happiness);
-    expect(recomputed.activity).toBe('idle');
-  });
-
   it('closes the activity at activityEndsAt and falls back to idle for the remainder', () => {
     const activityEndsAt = new Date(T0.getTime() + 10 * 60_000);
     const character = new Character({
@@ -86,7 +75,7 @@ describe('Character.recomputeUntil', () => {
       energy: 50,
       money: 0,
       fame: 0,
-      activity: 'resting',
+      activity: 'working',
       activityEndsAt,
       lastUpdatedAt: T0,
     });
@@ -94,8 +83,8 @@ describe('Character.recomputeUntil', () => {
     const thirtyMinutesLater = new Date(T0.getTime() + 30 * 60_000);
     const { character: recomputed } = character.recomputeUntil(thirtyMinutesLater);
 
-    // 10 minutes resting (+2/min energy) then 20 minutes idle (no change)
-    expect(recomputed.energy).toBe(70);
+    // 10 minutes working (-1/min energy) then 20 minutes idle/descansando (+2/min energy)
+    expect(recomputed.energy).toBe(80);
     expect(recomputed.activity).toBe('idle');
     expect(recomputed.activityEndsAt).toBeNull();
     expect(recomputed.lastUpdatedAt).toEqual(thirtyMinutesLater);

@@ -2,7 +2,7 @@ import { useEffect, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import "./LuvModal.scss";
 
-export type LuvModalVariant = "default" | "success" | "error" | "warn" | "info";
+export type LuvModalVariant = "default" | "success" | "error" | "warn" | "info" | "primary" | "secondary";
 
 export type LuvModalProps = {
     isOpen: boolean;

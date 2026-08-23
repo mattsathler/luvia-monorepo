@@ -1,7 +1,7 @@
 import { IsDateString, IsIn, IsOptional } from 'class-validator';
 import { Activity } from '../../domain/entities/activity';
 
-const ACTIVITIES: Activity[] = ['idle', 'resting', 'working'];
+const ACTIVITIES: Activity[] = ['idle', 'working'];
 
 export class ChangeActivityDto {
   @IsIn(ACTIVITIES)

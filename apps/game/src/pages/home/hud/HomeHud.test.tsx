@@ -27,7 +27,7 @@ const CHARACTER: Character = {
     energy: 40,
     money: 2350,
     fame: 1250,
-    activity: "resting",
+    activity: "idle",
     activityEndsAt: null,
     lastUpdatedAt: "2026-01-01T00:00:00.000Z",
     appearance: {
@@ -55,6 +55,8 @@ describe("HomeHud", () => {
                     hour={14.5}
                     weekday={2}
                     weather={{ type: "rainy", temperature: 17 }}
+                    dragModeEnabled={false}
+                    onToggleDragMode={vi.fn()}
                 />
             </MemoryRouter>,
         );
@@ -70,7 +72,15 @@ describe("HomeHud", () => {
     it("shows the world clock placeholder while the hour/weekday/weather haven't synced yet", () => {
         render(
             <MemoryRouter>
-                <HomeHud character={CHARACTER} currentLot={CURRENT_LOT} hour={null} weekday={null} weather={null} />
+                <HomeHud
+                    character={CHARACTER}
+                    currentLot={CURRENT_LOT}
+                    hour={null}
+                    weekday={null}
+                    weather={null}
+                    dragModeEnabled={false}
+                    onToggleDragMode={vi.fn()}
+                />
             </MemoryRouter>,
         );
 

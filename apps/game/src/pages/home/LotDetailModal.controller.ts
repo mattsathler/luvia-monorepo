@@ -53,15 +53,16 @@ export function useLotDetailModalController({ lot, accessToken, currentCharacter
     const isOwnLot = lot?.characterId === currentCharacter.id;
     const ownerName = isOwnLot
         ? `${currentCharacter.firstName} ${currentCharacter.lastName}`
-        : isLoadingOwner
-          ? "Carregando..."
-          : owner
-            ? `${owner.firstName} ${owner.lastName}`
-            : "—";
+        : owner
+          ? `${owner.firstName} ${owner.lastName}`
+          : "Prefeitura";
 
     return {
         typeLabel: lot ? LOT_TYPE_LABELS[lot.type] : "",
         ownerName,
         isOwnLot,
+        // Só relevante quando `!isOwnLot` — o dono do próprio lote já é
+        // conhecido sem consulta (ver useEffect acima).
+        isLoadingOwner,
     };
 }

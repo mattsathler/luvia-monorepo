@@ -16,8 +16,18 @@ type HomePageProps = {
 // O mapa ocupa a tela inteira — qualquer UI futura (HUD, painéis) fica
 // sobreposta a ele, como num jogo, em vez de empurrar o mapa pra baixo.
 export function HomePage({ character, targetLot = null }: HomePageProps) {
-    const { dimensions, currentLot, loadError, handleTileClick, selectedLot, closeLotModal, accessToken, tileSize } =
-        useHomePageController({ character });
+    const {
+        dimensions,
+        currentLot,
+        loadError,
+        handleTileClick,
+        selectedLot,
+        closeLotModal,
+        accessToken,
+        tileSize,
+        dragModeEnabled,
+        toggleDragMode,
+    } = useHomePageController({ character });
     const worldClock = useWorldClock();
     useWorldClockLighting(worldClock?.hour ?? null);
 
@@ -48,6 +58,7 @@ export function HomePage({ character, targetLot = null }: HomePageProps) {
                         onTileClick={handleTileClick}
                         isTileClickable={isTileClickable}
                         targetLot={targetLot}
+                        dragModeEnabled={dragModeEnabled}
                     />
                     <HomeHud
                         character={character}
@@ -55,6 +66,8 @@ export function HomePage({ character, targetLot = null }: HomePageProps) {
                         hour={worldClock?.hour ?? null}
                         weekday={worldClock?.weekday ?? null}
                         weather={worldClock?.weather ?? null}
+                        dragModeEnabled={dragModeEnabled}
+                        onToggleDragMode={toggleDragMode}
                     />
                     <LotDetailModal
                         lot={selectedLot}

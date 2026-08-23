@@ -10,7 +10,7 @@ Ter o mecanismo que faz o tempo passar sobre o estado do personagem, sem depende
 
 ## Escopo
 
-- `Activity` (`idle` | `resting` | `working`) com taxa de efeito por minuto sobre `happiness`/`energy`/`money`/`fame`.
+- `Activity` (`idle` | `working`) com taxa de efeito por minuto sobre `happiness`/`energy`/`money`/`fame`.
 - `Character.recomputeUntil(now)`: aplica o efeito da atividade atual sobre `[lastUpdatedAt, now]`; se `activityEndsAt` cair no meio do intervalo, fecha a atividade até lá e trata o resto como `idle`.
 - `RecomputeCharacterUseCase`: recompute individual sob demanda (lazy), com escrita condicionada ao `lastUpdatedAt` antigo (`trySave`) pra evitar corrida com o tick em lote.
 - `ChangeActivityUseCase`: recomputa a atividade anterior antes de gravar a nova (prorata).

@@ -72,7 +72,7 @@ describe("CityGrid", () => {
 
     it("renders one placeholder per chunk and no tiles before anything intersects", () => {
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
 
         expect(container.querySelectorAll("[data-chunk-x]")).toHaveLength(2);
@@ -81,7 +81,7 @@ describe("CityGrid", () => {
 
     it("centers the scroll position on mount, since the diamond shape only touches the middle of each bounding-box edge, never a corner", () => {
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
 
         const grid = container.querySelector(".iso-grid") as HTMLElement;
@@ -98,7 +98,7 @@ describe("CityGrid", () => {
 
     it("exposes the given background color via --color, so IsoGrid.scss can shade it by sun position like the tiles", () => {
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
 
         expect((container.querySelector(".iso-grid") as HTMLElement).style.getPropertyValue("--color")).toBe("#7bc96f");
@@ -106,7 +106,7 @@ describe("CityGrid", () => {
 
     it("observes with the shared IntersectionObserver rooted at the scroll container", () => {
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
 
         expect(FakeIntersectionObserver.instances).toHaveLength(1);
@@ -123,7 +123,7 @@ describe("CityGrid", () => {
         });
 
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
 
         act(() => FakeIntersectionObserver.instances[0].trigger(targetFor(0, 0), true));
@@ -139,7 +139,7 @@ describe("CityGrid", () => {
         });
 
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
         const observer = FakeIntersectionObserver.instances[0];
         const target = targetFor(0, 0);
@@ -163,7 +163,7 @@ describe("CityGrid", () => {
         }));
 
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
         const observer = FakeIntersectionObserver.instances[0];
 
@@ -194,6 +194,7 @@ describe("CityGrid", () => {
                 backgroundColor="#7bc96f"
                 accessToken="token-123"
                 characterId="char-1"
+                dragModeEnabled={false}
                 onTileClick={onTileClick}
                 isTileClickable={(tile) => tile.type !== "road-r"}
             />,
@@ -209,20 +210,33 @@ describe("CityGrid", () => {
         expect(onTileClick).toHaveBeenCalledWith(expect.objectContaining({ x: 0, y: 0 }), undefined);
     });
 
-    it("hides the native scrollbar and disables native touch panning, since scrolling happens via drag", () => {
+    it("hides the native scrollbar and disables native touch panning when drag mode is on, since scrolling happens via drag", () => {
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={true} />,
         );
 
         const grid = container.querySelector(".iso-grid") as HTMLElement;
 
         expect(grid).toHaveClass("no-scrollbar");
         expect(grid).toHaveClass("touch-none");
+        expect(grid).toHaveClass("cursor-grab");
     });
 
-    it("pans the map by dragging the pointer past the movement threshold", () => {
+    it("keeps native touch panning and the default cursor when drag mode is off", () => {
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+
+        expect(grid).toHaveClass("no-scrollbar");
+        expect(grid).not.toHaveClass("touch-none");
+        expect(grid).not.toHaveClass("cursor-grab");
+    });
+
+    it("pans the map by dragging the pointer, once drag mode is on", () => {
+        const { container } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={true} />,
         );
 
         const grid = container.querySelector(".iso-grid") as HTMLElement;
@@ -241,6 +255,23 @@ describe("CityGrid", () => {
         expect(grid).toHaveClass("cursor-grab");
     });
 
+    it("does not pan the map when drag mode is off, even with pointer movement", () => {
+        const { container } = render(
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
+        );
+
+        const grid = container.querySelector(".iso-grid") as HTMLElement;
+        const startScrollLeft = grid.scrollLeft;
+        const startScrollTop = grid.scrollTop;
+
+        firePointerEvent(grid, "pointerdown", { pointerId: 1, button: 0, clientX: 200, clientY: 200 });
+        firePointerEvent(grid, "pointermove", { pointerId: 1, clientX: 170, clientY: 220 });
+
+        expect(grid.scrollLeft).toBe(startScrollLeft);
+        expect(grid.scrollTop).toBe(startScrollTop);
+        expect(grid).not.toHaveClass("cursor-grabbing");
+    });
+
     it("stops panning once the pointer is released, even though the mouse keeps the same pointerId across gestures", () => {
         // Bug real: como o mouse (ao contrário do touch) reusa o mesmo
         // pointerId entre gestos separados, um `pointermove` sem o botão
@@ -248,7 +279,7 @@ describe("CityGrid", () => {
         // de soltar) tinha o mesmo `pointerId` do arrasto anterior e era
         // lido como sua continuação, arrastando o mapa sozinho.
         const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={true} />,
         );
 
         const grid = container.querySelector(".iso-grid") as HTMLElement;
@@ -266,24 +297,7 @@ describe("CityGrid", () => {
         expect(grid.scrollTop).toBe(scrollTopAfterRelease);
     });
 
-    it("ignores pointer moves under the drag threshold, so a shaky click does not scroll the map", () => {
-        const { container } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
-        );
-
-        const grid = container.querySelector(".iso-grid") as HTMLElement;
-        const startScrollLeft = grid.scrollLeft;
-        const startScrollTop = grid.scrollTop;
-
-        firePointerEvent(grid, "pointerdown", { pointerId: 1, button: 0, clientX: 200, clientY: 200 });
-        firePointerEvent(grid, "pointermove", { pointerId: 1, clientX: 202, clientY: 199 });
-
-        expect(grid.scrollLeft).toBe(startScrollLeft);
-        expect(grid.scrollTop).toBe(startScrollTop);
-        expect(grid).not.toHaveClass("cursor-grabbing");
-    });
-
-    it("swallows the click that follows a real drag, so it does not select the tile underneath", async () => {
+    it("swallows any click while drag mode is on, even without pointer movement, so it does not select the tile underneath", async () => {
         (getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
             tiles: [{ x: 0, y: 0, type: "grass" }],
             lots: [],
@@ -297,6 +311,7 @@ describe("CityGrid", () => {
                 backgroundColor="#7bc96f"
                 accessToken="token-123"
                 characterId="char-1"
+                dragModeEnabled={true}
                 onTileClick={onTileClick}
             />,
         );
@@ -306,8 +321,7 @@ describe("CityGrid", () => {
         const grid = container.querySelector(".iso-grid") as HTMLElement;
 
         firePointerEvent(grid, "pointerdown", { pointerId: 1, button: 0, clientX: 200, clientY: 200 });
-        firePointerEvent(grid, "pointermove", { pointerId: 1, clientX: 170, clientY: 220 });
-        firePointerEvent(grid, "pointerup", { pointerId: 1, clientX: 170, clientY: 220 });
+        firePointerEvent(grid, "pointerup", { pointerId: 1, clientX: 200, clientY: 200 });
         fireEvent.click(button);
 
         expect(onTileClick).not.toHaveBeenCalled();
@@ -320,7 +334,7 @@ describe("CityGrid", () => {
         });
 
         const { container, rerender } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
 
         act(() => FakeIntersectionObserver.instances[0].trigger(targetFor(0, 0), true));
@@ -338,6 +352,7 @@ describe("CityGrid", () => {
                 backgroundColor="#7bc96f"
                 accessToken="token-123"
                 characterId="char-1"
+                dragModeEnabled={false}
                 targetLot={{ x: 2, y: 1 }}
             />,
         );
@@ -354,7 +369,7 @@ describe("CityGrid", () => {
         });
 
         const { container, rerender } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
 
         const grid = container.querySelector(".iso-grid") as HTMLElement;
@@ -368,6 +383,7 @@ describe("CityGrid", () => {
                 backgroundColor="#7bc96f"
                 accessToken="token-123"
                 characterId="char-1"
+                dragModeEnabled={false}
                 targetLot={{ x: 12, y: 3 }}
             />,
         );
@@ -391,6 +407,7 @@ describe("CityGrid", () => {
                 backgroundColor="#7bc96f"
                 accessToken="token-123"
                 characterId="char-1"
+                dragModeEnabled={false}
                 targetLot={{ x: 0, y: 0 }}
             />,
         );
@@ -408,6 +425,7 @@ describe("CityGrid", () => {
                 backgroundColor="#7bc96f"
                 accessToken="token-123"
                 characterId="char-1"
+                dragModeEnabled={false}
                 targetLot={{ x: 0, y: 0 }}
                 onTileClick={vi.fn()}
             />,
@@ -418,7 +436,7 @@ describe("CityGrid", () => {
 
     it("disconnects the observer on unmount", () => {
         const { unmount } = render(
-            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" />,
+            <CityGrid dimensions={dimensions} tileSize={64} backgroundColor="#7bc96f" accessToken="token-123" characterId="char-1" dragModeEnabled={false} />,
         );
         const observer = FakeIntersectionObserver.instances[0];
 

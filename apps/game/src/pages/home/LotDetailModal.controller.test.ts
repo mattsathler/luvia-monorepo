@@ -38,13 +38,14 @@ describe("useLotDetailModalController", () => {
         );
 
         expect(result.current.isOwnLot).toBe(false);
-        expect(result.current.ownerName).toBe("Carregando...");
+        expect(result.current.isLoadingOwner).toBe(true);
 
         await waitFor(() => expect(result.current.ownerName).toBe("Bruno Costa"));
+        expect(result.current.isLoadingOwner).toBe(false);
         expect(getCharacter).toHaveBeenCalledWith("token", "char-2");
     });
 
-    it("falls back to a dash when fetching the owner fails", async () => {
+    it("falls back to Prefeitura when fetching the owner fails", async () => {
         const lot: Lot = { id: "lot-1", characterId: "char-2", type: "residential", x: 0, y: 0 };
         (getCharacter as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network error"));
 
@@ -52,7 +53,8 @@ describe("useLotDetailModalController", () => {
             useLotDetailModalController({ lot, accessToken: "token", currentCharacter: CURRENT_CHARACTER }),
         );
 
-        await waitFor(() => expect(result.current.ownerName).toBe("—"));
+        await waitFor(() => expect(result.current.ownerName).toBe("Prefeitura"));
+        expect(result.current.isLoadingOwner).toBe(false);
     });
 
     it("does not fetch when there is no lot selected", () => {

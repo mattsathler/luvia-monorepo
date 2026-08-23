@@ -15,7 +15,7 @@ Dar consequência de jogabilidade ao clima, à temperatura e à hora do jogo —
 
 ## Escopo
 
-- **Desconforto térmico**: clima frio (`foggy`) enquanto o personagem está fora de casa (`working`) reduz felicidade; clima quente (`sunny`) enquanto está em casa (`idle`/`resting`) também reduz. Sem efeito nas demais combinações.
+- **Desconforto térmico**: clima frio (`foggy`) enquanto o personagem está fora de casa (`working`) reduz felicidade; clima quente (`sunny`) enquanto está em casa (`idle`) também reduz. Sem efeito nas demais combinações.
 - **Produtividade no trabalho**: a taxa de dinheiro/hora de `working` deixa de ser constante (`RATES_PER_MINUTE.working.money`) e passa a escalar com a energia e a felicidade atuais do personagem — quanto mais cansado/infeliz, menos produtivo.
 - **Hora do jogo influencia produtividade**: mecanismo exato (curva por hora do dia) é detalhado no plano 02 — registrado como escopo desta milestone, não como fórmula já fechada.
 - Ponto de integração entre `world` (clima/hora) e `character` (felicidade/produtividade) — hoje esses bounded contexts não têm nenhuma dependência entre si.

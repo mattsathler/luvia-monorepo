@@ -31,7 +31,7 @@ Todos os itens abaixo já estão marcados — esta milestone está concluída. F
 - [x] Personagem tem `activity`, `activityEndsAt` e `lastUpdatedAt` persistidos.
 - [x] Endpoint `POST /characters/:id/activity` troca a atividade, fechando o efeito da anterior antes.
 - [x] Recompute individual (lazy) e tick em lote (scheduler) ambos implementados e não conflitam entre si (condição de corrida tratada via `lastUpdatedAt`).
-- [x] Atividades `idle`, `resting`, `working` com efeito por minuto sobre felicidade/energia/dinheiro.
+- [x] Atividades `idle`, `working` com efeito por minuto sobre felicidade/energia/dinheiro.
 
 ## Qualidade
 

@@ -39,6 +39,7 @@ export function useHomePageController({ character }: UseHomePageControllerParams
     const [loadError, setLoadError] = useState<string | null>(null);
     const [tileSize, setTileSize] = useState(() => clampTileSize(getStoredTileSize() ?? DEFAULT_TILE_SIZE));
     const [selectedLot, setSelectedLot] = useState<Lot | null>(null);
+    const [dragModeEnabled, setDragModeEnabled] = useState(false);
 
     useEffect(() => {
         if (!accessToken) {
@@ -73,6 +74,10 @@ export function useHomePageController({ character }: UseHomePageControllerParams
         setSelectedLot(null);
     }
 
+    function toggleDragMode() {
+        setDragModeEnabled((current) => !current);
+    }
+
     function zoomIn() {
         setTileSize((current) => {
             const next = clampTileSize(current + ZOOM_STEP);
@@ -102,5 +107,7 @@ export function useHomePageController({ character }: UseHomePageControllerParams
         zoomOut,
         canZoomIn: tileSize < MAX_TILE_SIZE,
         canZoomOut: tileSize > MIN_TILE_SIZE,
+        dragModeEnabled,
+        toggleDragMode,
     };
 }

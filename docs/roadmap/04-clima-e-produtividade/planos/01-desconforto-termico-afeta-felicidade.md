@@ -11,7 +11,7 @@ Primeiro ponto de integração entre os bounded contexts `world` (clima) e `char
 ## Escopo
 
 - Clima frio (`foggy`) enquanto `character.activity === 'working'` (fora de casa) reduz felicidade ao longo do tempo.
-- Clima quente (`sunny`) enquanto `character.activity` é `idle` ou `resting` (em casa) reduz felicidade ao longo do tempo.
+- Clima quente (`sunny`) enquanto `character.activity` é `idle` (em casa) reduz felicidade ao longo do tempo.
 - Nenhum efeito nas demais combinações — sem novo estado a manter: o clima do dia já é derivável de `currentWeather(day)` a partir do `day` que o tick/recompute já pode calcular a partir do relógio do mundo.
 - Prorata: se o clima muda no meio de um intervalo de recompute (troca de dia de jogo) ou o personagem troca de atividade no meio do intervalo, cada trecho é calculado com o clima/atividade vigentes nele (mesmo padrão já usado por `recomputeUntil` pra trocas de atividade).
 

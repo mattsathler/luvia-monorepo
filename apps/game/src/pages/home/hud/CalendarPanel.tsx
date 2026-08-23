@@ -6,8 +6,7 @@ import type { CurrentLot } from "../HomePage.controller";
 // sem tipo compartilhado entre os dois apps ainda, então cai pro id cru
 // (`character.activity`) quando não reconhecido.
 const ACTIVITY_LABELS: Record<string, string> = {
-    idle: "Nenhuma",
-    resting: "Descansando",
+    idle: "Descansando",
     working: "Trabalhando",
 };
 
