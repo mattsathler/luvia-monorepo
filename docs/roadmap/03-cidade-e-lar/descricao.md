@@ -10,7 +10,7 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 
 ## Planos
 
-1. [[planos/01-cidade-isometrica-no-jogo]] — 🚧 Em andamento
+1. [[planos/01-cidade-isometrica-no-jogo]] — ✅ Feito
 2. [[planos/02-bounded-context-de-lote]] — ✅ Feito
 3. [[planos/03-lote-residencial-do-jogador]] — 🚧 Em andamento
 4. [[planos/04-personalizacao-de-lote]] — ⏳ Pendente
@@ -28,7 +28,7 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 - **Lote residencial**: todo personagem recebe (ou reivindica) 1 lote residencial (ver [[../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]) — sem lote comercial/industrial ainda, esses vêm na M07 junto com empresas. ✅ Feito.
 - **Personalização de lote**: catálogo fechado de aparência (fachada, telhado etc.), visível na cidade. ⏳ Pendente.
 - **Evolução do lote**: melhorias mecânicas pré-definidas (não construção manual livre — ver [[../../game-design/lots-and-construction]]). ⏳ Pendente.
-- **Interação com a metrópole**: a cidade é navegável por inteiro, não só o próprio lote — lotes de outros jogadores são visíveis (com a personalização deles) e consultáveis (dono, nível), preparando o terreno pra ações sociais que a M06 adiciona por cima. 🚧 Parcial — pan/zoom pela cidade inteira e lotes alheios visíveis/distinguíveis já existem, mais uma busca de lotes (`MapSearchPanel`/`GET /city/lots`); falta personalização visível e "nível" (dependem dos planos 04/05).
+- **Interação com a metrópole**: a cidade é navegável por inteiro, não só o próprio lote — lotes de outros jogadores são visíveis (com a personalização deles) e consultáveis (dono, nível), preparando o terreno pra ações sociais que a M06 adiciona por cima. 🚧 Parcial — pan/zoom pela cidade inteira (com modo de arrasto explícito na HUD) e lotes alheios visíveis/distinguíveis já existem, mais uma busca de lotes (`MapSearchPanel`/`GET /city/lots`, com distância até a casa do jogador) e um "perfil" de lote (`LotDetailModal` com dono/tipo/coordenadas) abrível tanto pelo clique no mapa quanto pela busca; falta personalização visível e "nível" (dependem dos planos 04/05).
 - ~~Navegação: jogador consegue ir da tela de vida (M02) pra cidade e voltar.~~ Não se aplica mais — a M02 não tem tela separada, a Home já é a cidade.
 - **Relógio do mundo e ciclo dia/noite**: o backend passa a ditar a data/hora do jogo (relógio único e global, 96 minutos reais por dia de jogo), sincronizada pelo frontend e usada pra alimentar a iluminação já implementada em `DayCycleControl`. ✅ Feito.
 - **Clima e temperatura**: clima (Ensolarado, Chuvoso, Neblina, com viés pra chuva — Luvia é uma cidade chuvosa) e temperatura (Celsius) determinísticos por dia de jogo, exibidos na HUD. ✅ Feito — inicialmente só cosmético (ver [[../../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]), decisão parcialmente revogada pela M04 (Clima & Produtividade), que dá efeito de jogabilidade a isso.

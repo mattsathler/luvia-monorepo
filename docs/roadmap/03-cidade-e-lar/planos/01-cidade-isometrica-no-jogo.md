@@ -2,7 +2,7 @@
 
 ## Status
 
-🚧 Em andamento. `HomePage` (`/play`) já renderiza a grade isométrica (`IsoGrid`/`Block`) com dados reais de `GET /city`, com o lote do jogador destacado. Não existe rota `/city` separada — ver [[../../../decisions/0025-home-e-a-tela-da-cidade]], que corrige a premissa deste plano de que cidade e dashboard (M02) seriam telas distintas com navegação entre elas. Falta: cidade navegável por inteiro (plano 06), personalização/evolução de lote (planos 04/05). Relógio do mundo e ciclo dia/noite (plano 08) já implementado.
+✅ Feito. `HomePage` (`/play`) renderiza a grade isométrica (`IsoGrid`/`Block`) com dados reais de `GET /city`, com o lote do jogador destacado. Não existe rota `/city` separada — ver [[../../../decisions/0025-home-e-a-tela-da-cidade]], que corrige a premissa deste plano de que cidade e dashboard (M02) seriam telas distintas com navegação entre elas: como a Home já é a cidade, o item "navegação nos dois sentidos" não se aplica mais, e não é um bloqueio deste plano. Navegação pela cidade inteira (pan/zoom, arrastar), personalização e evolução de lote são escopo dos planos 06/04/05, que avançam à parte — não fazem parte do que este plano entrega.
 
 ## Objetivo técnico
 

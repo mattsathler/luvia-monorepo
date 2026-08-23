@@ -19,7 +19,7 @@
 - [x] O lote do jogador aparece destacado/identificável na cidade. (tipo `lot-mine`)
 - [ ] Jogador consegue personalizar a aparência do próprio lote pela UI e ver a mudança refletida na cidade.
 - [ ] Jogador consegue evoluir o lote pela UI e ver a mudança refletida visualmente.
-- [ ] Jogador consegue abrir o "perfil" (dono, nível, aparência) de um lote de outro jogador, sem nenhuma ação social disponível ainda. Parcial: `MapSearchPanel` mostra dono/tipo/coordenadas via busca; falta nível/aparência (planos 04/05) e abrir isso a partir de um clique no mapa.
+- [ ] Jogador consegue abrir o "perfil" (dono, nível, aparência) de um lote de outro jogador, sem nenhuma ação social disponível ainda. Parcial: `LotDetailModal` mostra dono/tipo/coordenadas, abrível tanto por um clique no lote no mapa quanto por um resultado do `MapSearchPanel`; falta nível/aparência (planos 04/05).
 - [ ] ~~Navegação entre a tela de vida (dashboard) e a cidade funciona nos dois sentidos.~~ Não se aplica mais — a Home já é a cidade (ver [[../../decisions/0025-home-e-a-tela-da-cidade]]), não existem duas telas pra navegar entre si.
 
 ## Qualidade

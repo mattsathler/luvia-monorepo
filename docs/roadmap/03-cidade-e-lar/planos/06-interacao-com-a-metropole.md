@@ -2,7 +2,7 @@
 
 ## Status
 
-🚧 Em andamento. Navegação pan/zoom pela cidade **inteira** já existe (`CityGrid.tsx` — arrastar pra rolar, `zoomIn`/`zoomOut` em `HomePage.controller.ts`), e lotes de outros jogadores já aparecem na grade, distinguíveis do próprio (`CityGrid.controller.ts` computa `"lot"` vs `"lot-mine"` por `characterId`). `GET /city/lots?q=` (`SearchLotsUseCase`) já lista/busca todos os lotes da cidade com dono e tipo — construído como a HUD "MapSearchPanel" (ícone de mapa, canto inferior esquerdo), fora de ordem em relação a este plano, mas cobrindo boa parte do que ele pede ("ver e localizar outros lotes"). Falta: personalização visível nos lotes alheios (plano 04, ainda não existe) e um "perfil" de lote clicável a partir do próprio mapa (hoje só existe via a busca — clicar um tile no mapa só loga, não abre nada; ver `HomePage.controller.ts#handleTileClick`).
+🚧 Em andamento. Navegação pan/zoom pela cidade **inteira** já existe (`CityGrid.tsx`, com um modo de arrasto explícito ligado/desligado pela HUD pra não competir com o clique num lote — `dragModeEnabled`/`toggleDragMode` em `HomePage.controller.ts` — e `zoomIn`/`zoomOut`), e lotes de outros jogadores já aparecem na grade, distinguíveis do próprio (`CityGrid.controller.ts` computa `"lot"` vs `"lot-mine"` por `characterId`). `GET /city/lots?q=` (`SearchLotsUseCase`, agora com distância em blocos até a casa do jogador) já lista/busca todos os lotes da cidade com dono e tipo — construído como a HUD "MapSearchPanel" (ícone de mapa, canto inferior esquerdo), fora de ordem em relação a este plano, mas cobrindo boa parte do que ele pede ("ver e localizar outros lotes"). O "perfil" de lote clicável já existe: clicar um tile com lote no mapa abre `LotDetailModal` (dono, tipo, coordenadas — `HomePage.controller.ts#handleTileClick`), e selecionar um resultado no `MapSearchPanel` navega pra `/play?lot=&x=&y=` e centraliza o mapa nele (`CityGrid` reage via `targetLot`), em vez de só logar como antes. Falta só: personalização visível nos lotes alheios (plano 04, ainda não existe) e "nível" no perfil do lote (plano 05, ainda não existe) — as ações do modal (Construir/Visitar) já estão no layout mas desabilitadas de propósito, sem endpoint por trás ainda.
 
 ## Objetivo técnico
 
@@ -12,7 +12,7 @@ A cidade é única e persistente (ver [[../../../decisions/0005-cidade-unica-per
 
 - Tela de cidade (plano 01) renderiza a grade **inteira**, não só o lote do jogador — navegação (pan/zoom ou equivalente) pela cidade completa. ✅ Feito.
 - Lotes de outros jogadores aparecem na grade, com a personalização deles visível (plano 04) — visualização, não interação ainda. ✅ Aparecem e são distinguíveis (`lot`/`lot-mine`); ⏳ sem personalização ainda (plano 04 pendente).
-- Jogador consegue abrir o "perfil" de um lote alheio (dono, nível — sem nenhuma ação social ainda, isso é escopo da M06). 🚧 Parcial: `MapSearchPanel` mostra dono + tipo + coordenadas via busca; falta "nível" (depende do plano 05) e um jeito de abrir isso a partir de um clique no próprio mapa, não só pela busca.
+- Jogador consegue abrir o "perfil" de um lote alheio (dono, nível — sem nenhuma ação social ainda, isso é escopo da M06). 🚧 Parcial: dono, tipo e coordenadas já abrem via `LotDetailModal`, tanto clicando o lote no mapa quanto selecionando pela busca; falta só "nível" (depende do plano 05).
 - Esta é a infraestrutura de navegação que a M06 (ação "Visitar") vai consumir — este plano não inclui nenhuma ação, só a capacidade de ver e localizar outros lotes.
 
 ## Onde no código
