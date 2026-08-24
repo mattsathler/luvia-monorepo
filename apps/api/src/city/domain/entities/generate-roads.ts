@@ -57,12 +57,19 @@ function resolveOrientation(left: boolean, right: boolean, up: boolean, down: bo
     return 'road-corner-lu';
   }
 
+  // Reta: `road-l` desenha a diagonal de tela "\" (eixo horizontal — x
+  // variando, y fixo) e `road-r` desenha "/" (eixo vertical — y variando, x
+  // fixo); confirmado pixel a pixel (`road-r.png` espelhado horizontalmente
+  // bate exatamente com `road-l.png`). A escolha depende só do eixo, nunca
+  // de qual dos dois vizinhos existe — um tile com um só vizinho (dead end,
+  // só acontece na borda do mapa hoje) continua no mesmo eixo do vizinho que
+  // tem, então usa a mesma textura que o caso de 2 vizinhos.
   if (horizontal) {
-    return right ? 'road-l' : 'road-r';
+    return 'road-l';
   }
 
   if (vertical) {
-    return down ? 'road-r' : 'road-l';
+    return 'road-r';
   }
 
   // Tile de rua isolado, sem vizinhos.

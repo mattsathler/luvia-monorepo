@@ -1,8 +1,8 @@
 import { hashNoise2D } from './hash-noise';
 
-/** Tiles de grama entre duas ruas paralelas consecutivas, por padrão. */
-export const MIN_BLOCK_WIDTH = 3;
-export const MAX_BLOCK_WIDTH = 9;
+/** Tiles de grama entre duas ruas paralelas consecutivas, por padrão — no máximo 4 lotes de largura por quarteirão (1 lote = 1 tile). */
+export const MIN_BLOCK_WIDTH = 2;
+export const MAX_BLOCK_WIDTH = 4;
 /** Deslocamento lateral máximo (em tiles) que um jog pode aplicar a uma lane. */
 export const MAX_JOG_OFFSET = 3;
 

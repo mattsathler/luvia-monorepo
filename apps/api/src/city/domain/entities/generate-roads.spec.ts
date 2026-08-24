@@ -228,18 +228,30 @@ describe('resolveRoadOrientation', () => {
     expect(tileAt(result as RawTerrainTile[], 5, 5).type).toBe(expected);
   });
 
-  it('resolves a horizontal-only segment to road-l', () => {
-    const result = resolveRoadOrientation(tileWithNeighbors(true, true, false, false));
+  // road-l desenha a diagonal de tela "\" (eixo horizontal — x variando, y
+  // fixo) e road-r desenha "/" (eixo vertical), confirmado pixel a pixel
+  // (road-r.png espelhado horizontalmente bate exatamente com road-l.png).
+  // A escolha depende só do eixo do tile, nunca de qual dos dois vizinhos
+  // existe — regressão anterior: um tile com um só vizinho (dead end, hoje
+  // só ocorre na borda do mapa) usava a textura do eixo ERRADO sempre que o
+  // vizinho presente era "left" (horizontal) ou "up" (vertical), fazendo a
+  // rua aparecer virada pra diagonal errada bem na ponta.
+  it.each([
+    { left: true, right: true, up: false, down: false },
+    { left: true, right: false, up: false, down: false },
+    { left: false, right: true, up: false, down: false },
+  ] as const)('resolves any horizontal-only segment %o to road-l, regardless of which single neighbor is present', (neighbors) => {
+    const result = resolveRoadOrientation(tileWithNeighbors(neighbors.left, neighbors.right, neighbors.up, neighbors.down));
     expect(tileAt(result as RawTerrainTile[], 5, 5).type).toBe('road-l');
   });
 
-  it('resolves a vertical-only segment differently depending on direction (regression: used to always fall back to the isolated default)', () => {
-    const downOnly = resolveRoadOrientation(tileWithNeighbors(false, false, false, true));
-    const upOnly = resolveRoadOrientation(tileWithNeighbors(false, false, true, false));
-
-    expect(tileAt(downOnly as RawTerrainTile[], 5, 5).type).toBe('road-r');
-    expect(tileAt(upOnly as RawTerrainTile[], 5, 5).type).toBe('road-l');
-    expect(tileAt(upOnly as RawTerrainTile[], 5, 5).type).not.toBe(tileAt(downOnly as RawTerrainTile[], 5, 5).type);
+  it.each([
+    { left: false, right: false, up: true, down: true },
+    { left: false, right: false, up: false, down: true },
+    { left: false, right: false, up: true, down: false },
+  ] as const)('resolves any vertical-only segment %o to road-r, regardless of which single neighbor is present', (neighbors) => {
+    const result = resolveRoadOrientation(tileWithNeighbors(neighbors.left, neighbors.right, neighbors.up, neighbors.down));
+    expect(tileAt(result as RawTerrainTile[], 5, 5).type).toBe('road-r');
   });
 
   it('resolves an isolated road tile with no neighbors to road-r', () => {

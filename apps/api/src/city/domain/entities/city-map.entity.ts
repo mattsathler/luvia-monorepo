@@ -2,13 +2,18 @@ import { generateCityMap } from './generate-city-map';
 import { GridPosition, TerrainTile, isBuildableTerrain } from './terrain-tile';
 
 /**
- * Ver apps/docs/src/city/City.tsx (`generateCity(40)`) — mesmo tamanho já
- * validado visualmente. Sem borda fixa de oceano/praia nesta versão (ver
- * docs/decisions/0027-cidade-sem-borda-fixa-e-so-com-lagoa.md), então 40x40
- * já é todo terreno útil, sem desperdício com anel de borda.
+ * 10x o tamanho original (era 40x40 — ver apps/docs/src/city/City.tsx
+ * `generateCity(40)`, ainda no tamanho antigo). Sem borda fixa de
+ * oceano/praia nesta versão (ver
+ * docs/decisions/0027-cidade-sem-borda-fixa-e-so-com-lagoa.md), então é todo
+ * terreno útil, sem desperdício com anel de borda. Em 400x400 o documento
+ * `city_maps` fica em torno de 5MB (JSON) — bem abaixo do limite de 16MB do
+ * BSON, mas `CityMapMongoRepository#find` ainda lê o documento inteiro pra
+ * cada chunk pedido (`GetCityChunkUseCase`), então esse tamanho já amplifica
+ * bastante a leitura por chunk; revisitar se isso virar gargalo real.
  */
-export const CITY_WIDTH = 40;
-export const CITY_HEIGHT = 40;
+export const CITY_WIDTH = 400;
+export const CITY_HEIGHT = 400;
 export const CITY_SEED = 'luvia-city-v5';
 
 /**
