@@ -26,8 +26,8 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 - **Cidade no jogo**: hoje `IsoGrid`/`Block`/`DayCycleControl` (grid isométrico, blocos, ciclo dia/noite) só existem como showcase em `apps/docs` — passam a ser usados de verdade numa tela de cidade em `apps/game`. ✅ Feito — a própria Home é a cidade (ver [[../../decisions/0025-home-e-a-tela-da-cidade]]), não uma tela separada como o texto original previa.
 - **Bounded context de lote no backend**: persistência de lotes, dono, tipo, posição na grade. ✅ Feito (`apps/api/src/city/`).
 - **Lote residencial**: todo personagem recebe (ou reivindica) 1 lote residencial (ver [[../../decisions/0006-um-lote-de-cada-tipo-por-jogador]]) — sem lote comercial/industrial ainda, esses vêm na M07 junto com empresas. ✅ Feito.
-- **Personalização de lote**: catálogo fechado de aparência (fachada, telhado etc.), visível na cidade. ⏳ Pendente.
-- **Evolução do lote**: melhorias mecânicas pré-definidas (não construção manual livre — ver [[../../game-design/lots-and-construction]]). ⏳ Pendente.
+- **Personalização de lote**: catálogo fechado de Tipos residenciais (ex.: Sobrado), visível na cidade — metade visual do catálogo de Tipo+Nível (ver [[../../decisions/0032-lote-tipo-e-nivel-catalogo-expansivel]]). ⏳ Pendente.
+- **Evolução do lote**: até 10 níveis por Tipo, melhorando estética e mecânica juntas (não construção manual livre — ver [[../../game-design/lots-and-construction]]) — metade mecânica do mesmo catálogo. ⏳ Pendente.
 - **Interação com a metrópole**: a cidade é navegável por inteiro, não só o próprio lote — lotes de outros jogadores são visíveis (com a personalização deles) e consultáveis (dono, nível), preparando o terreno pra ações sociais que a M06 adiciona por cima. 🚧 Parcial — pan/zoom pela cidade inteira (com modo de arrasto explícito na HUD) e lotes alheios visíveis/distinguíveis já existem, mais uma busca de lotes (`MapSearchPanel`/`GET /city/lots`, com distância até a casa do jogador) e um "perfil" de lote (`LotDetailModal` com dono/tipo/coordenadas) abrível tanto pelo clique no mapa quanto pela busca; falta personalização visível e "nível" (dependem dos planos 04/05).
 - ~~Navegação: jogador consegue ir da tela de vida (M02) pra cidade e voltar.~~ Não se aplica mais — a M02 não tem tela separada, a Home já é a cidade.
 - **Relógio do mundo e ciclo dia/noite**: o backend passa a ditar a data/hora do jogo (relógio único e global, 96 minutos reais por dia de jogo), sincronizada pelo frontend e usada pra alimentar a iluminação já implementada em `DayCycleControl`. ✅ Feito.
@@ -55,4 +55,5 @@ Dar ao jogador um lugar: a cidade única e persistente de Luvia (ver [[../../gam
 - [[../../decisions/0028-relogio-do-mundo-global-sincronizado-do-backend]]
 - [[../../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]
 - [[../../decisions/0031-bairros-expansao-do-mundo-sob-demanda]]
+- [[../../decisions/0032-lote-tipo-e-nivel-catalogo-expansivel]]
 - [[../../technical/bairros-e-expansao-do-mundo]]
