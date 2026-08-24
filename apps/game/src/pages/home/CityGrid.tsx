@@ -366,7 +366,12 @@ export function CityGrid({
                 })}
 
                 {tiles.map((tile) => {
-                    const clickable = Boolean(onTileClick) && (!isTileClickable || isTileClickable(tile));
+                    // No modo de arrasto, o clique já é interceptado antes de chegar
+                    // no tile (ver handleClickCapture) — sem isso, o hover/foco de
+                    // "clicável" (Block.scss) ficava aceso mesmo sem o clique fazer
+                    // nada, e um tile ainda dava pra "clicar" via teclado (Enter),
+                    // que não passa pelo handleClickCapture.
+                    const clickable = !dragModeEnabled && Boolean(onTileClick) && (!isTileClickable || isTileClickable(tile));
 
                     return (
                         <Block

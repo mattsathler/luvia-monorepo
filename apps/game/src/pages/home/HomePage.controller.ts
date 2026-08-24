@@ -74,10 +74,6 @@ export function useHomePageController({ character }: UseHomePageControllerParams
         setSelectedLot(null);
     }
 
-    function toggleDragMode() {
-        setDragModeEnabled((current) => !current);
-    }
-
     function zoomIn() {
         setTileSize((current) => {
             const next = clampTileSize(current + ZOOM_STEP);
@@ -108,6 +104,6 @@ export function useHomePageController({ character }: UseHomePageControllerParams
         canZoomIn: tileSize < MAX_TILE_SIZE,
         canZoomOut: tileSize > MIN_TILE_SIZE,
         dragModeEnabled,
-        toggleDragMode,
+        setDragModeEnabled,
     };
 }

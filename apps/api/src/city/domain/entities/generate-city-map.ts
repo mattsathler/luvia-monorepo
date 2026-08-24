@@ -32,7 +32,7 @@ export function generateCityMap(width: number, height: number, seed: string): Te
     }
   }
 
-  tiles = placeRoads(tiles, width, height);
+  tiles = placeRoads(tiles, width, height, seed);
 
   return resolveRoadOrientation(tiles);
 }

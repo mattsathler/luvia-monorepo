@@ -297,7 +297,7 @@ describe("CityGrid", () => {
         expect(grid.scrollTop).toBe(scrollTopAfterRelease);
     });
 
-    it("swallows any click while drag mode is on, even without pointer movement, so it does not select the tile underneath", async () => {
+    it("disables tile clickability entirely while drag mode is on — no click, hover, or keyboard focus affordance", async () => {
         (getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
             tiles: [{ x: 0, y: 0, type: "grass" }],
             lots: [],
@@ -317,12 +317,19 @@ describe("CityGrid", () => {
         );
 
         act(() => FakeIntersectionObserver.instances[0].trigger(targetFor(0, 0), true));
-        const button = await screen.findByRole("button");
+        await waitFor(() => expect(container.querySelector(".tile")).not.toBeNull());
+        const tile = container.querySelector(".tile") as HTMLElement;
         const grid = container.querySelector(".iso-grid") as HTMLElement;
+
+        // Sem `onClick`, o Block nem vira `role="button"` — o hover/pop de
+        // "clicável" (Block.scss `.tile.clickable`) some junto, e Enter no
+        // tile (que não passa pelo handleClickCapture) também não faz nada.
+        expect(tile).not.toHaveClass("clickable");
+        expect(tile).not.toHaveAttribute("role", "button");
 
         firePointerEvent(grid, "pointerdown", { pointerId: 1, button: 0, clientX: 200, clientY: 200 });
         firePointerEvent(grid, "pointerup", { pointerId: 1, clientX: 200, clientY: 200 });
-        fireEvent.click(button);
+        fireEvent.click(tile);
 
         expect(onTileClick).not.toHaveBeenCalled();
     });

@@ -1,40 +1,32 @@
+import { RoadGenerationConfig, buildAllRoadTiles } from './road-spines';
 import { RawTerrainTile, TerrainTile } from './terrain-tile';
 
-/** Ver apps/docs/src/city/ExampleCity.ts — mesmo espaçamento já validado visualmente. */
-export const ROAD_SPACING = 6;
+export type { RoadGenerationConfig } from './road-spines';
 
 /**
- * Marca a grade de ruas (uma a cada `ROAD_SPACING` tiles, ancorada no centro
- * do mapa) só sobre células que ainda são grama — nunca sobrescreve
- * oceano/praia. As células viram o marcador interno `'road'`; a orientação
- * final (reta, cruzamento ou curva de 90°) só é resolvida depois que os
- * demais passes (água, pontos de interesse) já rodaram, porque eles podem
- * remover vizinhos de uma rua — ver `resolveRoadOrientation` e
- * `city-map.entity.ts`.
- *
- * A grade é ancorada em `(mainX, mainY)` — em vez de `x % ROAD_SPACING === 0`
- * — pra garantir um cruzamento exatamente no centro do mapa sem quebrar o
- * espaçamento uniforme ao redor dele. Antes disso, a "rua principal" era uma
- * linha extra e independente da grade (`x === mainX`), o que criava quarteirões
- * disformes sempre que o centro não caía num múltiplo de `ROAD_SPACING` — ex.:
- * em 40x40, a grade absoluta tem ruas em x=18/24, mas o centro é x=20, então
- * sobrava uma fatia de 1 tile de largura entre x=18 e x=20. Ancorando no
- * centro, `mainX`/`mainY` já são a própria linha de grade (distância 0), então
- * todo quarteirão ao redor fica com a mesma largura de `ROAD_SPACING - 1`.
+ * Marca as ruas do mapa (traçado com espaçamento variável e jogs — ver
+ * `road-lanes.ts`/`road-spines.ts`) só sobre células que ainda são grama —
+ * nunca sobrescreve oceano/praia. As células viram o marcador interno
+ * `'road'`; a orientação final (reta, cruzamento ou curva de 90°) só é
+ * resolvida depois que os demais passes (água, pontos de interesse) já
+ * rodaram, porque eles podem remover vizinhos de uma rua — ver
+ * `resolveRoadOrientation` e `city-map.entity.ts`.
  */
-export function placeRoads(tiles: RawTerrainTile[], width: number, height: number): RawTerrainTile[] {
-  const mainX = Math.floor(width / 2);
-  const mainY = Math.floor(height / 2);
+export function placeRoads(
+  tiles: RawTerrainTile[],
+  width: number,
+  height: number,
+  seed: string,
+  config: RoadGenerationConfig = {},
+): RawTerrainTile[] {
+  const roadTiles = buildAllRoadTiles(width, height, seed, config);
 
   return tiles.map((tile) => {
     if (tile.type !== 'grass') {
       return tile;
     }
 
-    const isRoadColumn = (tile.x - mainX) % ROAD_SPACING === 0;
-    const isRoadRow = (tile.y - mainY) % ROAD_SPACING === 0;
-
-    if (isRoadColumn || isRoadRow) {
+    if (roadTiles.has(`${tile.x}:${tile.y}`)) {
       return { ...tile, type: 'road' };
     }
 

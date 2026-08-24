@@ -15,9 +15,9 @@ type HomeHudProps = {
     weekday: number | null;
     /** Só cosmético nesta fase — `null` até a primeira sincronização resolver. */
     weather: Weather | null;
-    /** Ligado: arrastar o mapa; desligado: clicar nos tiles (ver CityGrid.tsx). */
+    /** Ligado: arrastar o mapa (navegar); desligado: clicar num lote pra inspecionar (ver CityGrid.tsx). */
     dragModeEnabled: boolean;
-    onToggleDragMode: () => void;
+    onSetDragMode: (enabled: boolean) => void;
 };
 
 // Camada de UI por cima do mapa (ver HomePage.tsx). `pointer-events-none` no
@@ -33,7 +33,7 @@ export function HomeHud({
     weekday,
     weather,
     dragModeEnabled,
-    onToggleDragMode,
+    onSetDragMode,
 }: HomeHudProps) {
     return (
         <div className="pos-absolute top left w-full h-full pointer-events-none p-12 z-index-top">
@@ -42,23 +42,35 @@ export function HomeHud({
                     <ProfilePanel character={character} />
                 </div>
 
-                <div className="d-flex justify-center items-center gap">
+                <div className="d-flex justify-center items-center gap-16">
                     <WorldClockPanel hour={hour} weekday={weekday} weather={weather} />
 
-                {/* Alterna entre clicar num tile (padrão) e arrastar o mapa —
-                    ver CityGrid.tsx: no Safari/macOS, detectar arrasto por
-                    distância percorrida do ponteiro engolia cliques de mouse
-                    parados, então o modo agora é uma escolha explícita do
-                    jogador em vez de adivinhado. */}
-                <button
-                    type="button"
-                    className={`circle icon border-16 w-40 h-40 pointer-events-auto ${dragModeEnabled ? "bg-game-green" : "card"}`}
-                    aria-label={dragModeEnabled ? "Desativar modo de arrasto" : "Ativar modo de arrasto"}
-                    aria-pressed={dragModeEnabled}
-                    onClick={onToggleDragMode}
-                >
-                    <LuvIcon name="open_with" size={20} className={dragModeEnabled ? "text-game-white" : "text-text"} />
-                </button>
+                    {/* Navegar (arrastar o mapa) e inspecionar (clicar num
+                        lote) são mutuamente exclusivos — ver CityGrid.tsx: no
+                        Safari/macOS, detectar arrasto por distância
+                        percorrida do ponteiro engolia cliques de mouse
+                        parados, então o modo agora é uma escolha explícita do
+                        jogador em vez de adivinhado. */}
+                    <div className="d-flex items-center gap-8 pointer-events-auto">
+                        <button
+                            type="button"
+                            className={`circle icon border-16 w-40 h-40 ${dragModeEnabled ? "bg-game-green" : "card"}`}
+                            aria-label="Navegar pelo mapa"
+                            aria-pressed={dragModeEnabled}
+                            onClick={() => onSetDragMode(true)}
+                        >
+                            <LuvIcon name="open_with" size={20} className={dragModeEnabled ? "text-game-white" : "text-text"} />
+                        </button>
+                        <button
+                            type="button"
+                            className={`circle icon border-16 w-40 h-40 ${dragModeEnabled ? "card" : "bg-game-green"}`}
+                            aria-label="Inspecionar um lote"
+                            aria-pressed={!dragModeEnabled}
+                            onClick={() => onSetDragMode(false)}
+                        >
+                            <LuvIcon name="visibility" size={20} className={dragModeEnabled ? "text-text" : "text-game-white"} />
+                        </button>
+                    </div>
                 </div>
             </div>
 

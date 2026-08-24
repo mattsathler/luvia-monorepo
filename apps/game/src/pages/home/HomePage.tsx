@@ -26,7 +26,7 @@ export function HomePage({ character, targetLot = null }: HomePageProps) {
         accessToken,
         tileSize,
         dragModeEnabled,
-        toggleDragMode,
+        setDragModeEnabled,
     } = useHomePageController({ character });
     const worldClock = useWorldClock();
     useWorldClockLighting(worldClock?.hour ?? null);
@@ -67,7 +67,7 @@ export function HomePage({ character, targetLot = null }: HomePageProps) {
                         weekday={worldClock?.weekday ?? null}
                         weather={worldClock?.weather ?? null}
                         dragModeEnabled={dragModeEnabled}
-                        onToggleDragMode={toggleDragMode}
+                        onSetDragMode={setDragModeEnabled}
                     />
                     <LotDetailModal
                         lot={selectedLot}

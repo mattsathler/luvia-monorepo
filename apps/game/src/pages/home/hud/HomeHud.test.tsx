@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { HomeHud } from "./HomeHud";
@@ -56,7 +57,7 @@ describe("HomeHud", () => {
                     weekday={2}
                     weather={{ type: "rainy", temperature: 17 }}
                     dragModeEnabled={false}
-                    onToggleDragMode={vi.fn()}
+                    onSetDragMode={vi.fn()}
                 />
             </MemoryRouter>,
         );
@@ -79,12 +80,56 @@ describe("HomeHud", () => {
                     weekday={null}
                     weather={null}
                     dragModeEnabled={false}
-                    onToggleDragMode={vi.fn()}
+                    onSetDragMode={vi.fn()}
                 />
             </MemoryRouter>,
         );
 
         expect(screen.getByText("--:--")).toBeInTheDocument();
         expect(screen.getByText("--°C")).toBeInTheDocument();
+    });
+
+    it("shows navigate and inspect as mutually exclusive — only the active mode is pressed", () => {
+        render(
+            <MemoryRouter>
+                <HomeHud
+                    character={CHARACTER}
+                    currentLot={CURRENT_LOT}
+                    hour={14.5}
+                    weekday={2}
+                    weather={{ type: "rainy", temperature: 17 }}
+                    dragModeEnabled={false}
+                    onSetDragMode={vi.fn()}
+                />
+            </MemoryRouter>,
+        );
+
+        expect(screen.getByRole("button", { name: "Navegar pelo mapa" })).toHaveAttribute("aria-pressed", "false");
+        expect(screen.getByRole("button", { name: "Inspecionar um lote" })).toHaveAttribute("aria-pressed", "true");
+    });
+
+    it("calls onSetDragMode with the clicked button's mode", async () => {
+        const user = userEvent.setup();
+        const onSetDragMode = vi.fn();
+
+        render(
+            <MemoryRouter>
+                <HomeHud
+                    character={CHARACTER}
+                    currentLot={CURRENT_LOT}
+                    hour={14.5}
+                    weekday={2}
+                    weather={{ type: "rainy", temperature: 17 }}
+                    dragModeEnabled={false}
+                    onSetDragMode={onSetDragMode}
+                />
+            </MemoryRouter>,
+        );
+
+        await user.click(screen.getByRole("button", { name: "Navegar pelo mapa" }));
+        expect(onSetDragMode).toHaveBeenCalledWith(true);
+
+        await user.click(screen.getByRole("button", { name: "Inspecionar um lote" }));
+        expect(onSetDragMode).toHaveBeenCalledWith(false);
     });
 });
