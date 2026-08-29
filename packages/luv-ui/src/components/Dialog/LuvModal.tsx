@@ -67,11 +67,11 @@ export function LuvModal({
                 role="dialog"
                 aria-modal="true"
                 aria-label={title}
-                className={["dialog", variantClass, "luv-modal", sizeClass].filter(Boolean).join(" ")}
+                className={["dialog", "pixel", variantClass, "luv-modal", sizeClass].filter(Boolean).join(" ")}
                 onClick={stopPropagation}
             >
-                <div className="d-flex items-center justify-between gap-8">
-                    {title && <h3 className="text-text">{title}</h3>}
+                <div className="luv-modal-header">
+                    {title && <h3 className="luv-modal-title">{title}</h3>}
                     <button type="button" className="luv-modal-close" onClick={onClose} aria-label="Fechar">
                         ×
                     </button>

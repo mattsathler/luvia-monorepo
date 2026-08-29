@@ -70,7 +70,7 @@ export function HomePage({ character, targetLot = null }: HomePageProps) {
                         onSetDragMode={setDragModeEnabled}
                     />
                     <LotDetailModal
-                        lot={selectedLot}
+                        selection={selectedLot}
                         accessToken={accessToken}
                         currentCharacter={character}
                         onClose={closeLotModal}

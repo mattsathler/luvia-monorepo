@@ -42,10 +42,31 @@
     box-shadow: none;
 }
 
+// Borda fina e crisp, sem a faixa colorida/pontos de "carta" — mesmo aceno
+// ao mundo em pixel art que .card.pixel (ver docs/decisions/0033).
+@mixin dialog-pixel {
+    border: 2px solid var(--border);
+    box-shadow: none;
+    padding: 24px;
+
+    @media screen and (max-width: 768px) {
+        padding: 16px;
+    }
+
+    &::before,
+    &::after {
+        display: none;
+    }
+}
+
 @mixin dialog-variant($color) {
     &::before {
         background: var(--#{$color}) !important;
     }
+}
+
+@mixin dialog-pixel-variant($color) {
+    border-color: var(--#{$color});
 }
 
 .dialog {
@@ -56,8 +77,16 @@
     @include dialog-flat;
 }
 
+.dialog.pixel {
+    @include dialog-pixel;
+}
+
 @each $name, $value in colors.$color-keys {
     .dialog.#{$name} {
         @include dialog-variant($name);
+    }
+
+    .dialog.pixel.#{$name} {
+        @include dialog-pixel-variant($name);
     }
 }

@@ -27,7 +27,7 @@ function handleSelect(id: string) {
 export function NavigationPanel(_props: { character: Character, currentLot: CurrentLot }) {
     return (
         <div className="d-flex flex-col gap-8">
-            <div className="card mb-8 p-8 d-flex gap-8 items-center pointer-events-auto">
+            <div className="card pixel mb-8 p-8 d-flex gap-8 items-center pointer-events-auto">
                 {NAVIGATION_ITEMS.map((item) => (
                     <button
                         key={item.id}

@@ -10,42 +10,29 @@ describe("LuvStatBar", () => {
         expect(screen.getByText("70/100")).toBeInTheDocument();
     });
 
-    it("renders 10 dots total", () => {
+    it("fills the bar proportionally to value/max", () => {
         render(<LuvStatBar icon="bolt" label="Energia" value={70} max={100} />);
 
         const container = screen.getByText("70/100").closest(".luv-stat-bar")!;
-        expect(container.querySelectorAll(".luv-stat-bar-dot")).toHaveLength(10);
+        const fill = container.querySelector(".luv-stat-bar-fill") as HTMLElement;
+        expect(fill.style.width).toBe("70%");
     });
 
-    it("fills dots proportionally to value/max", () => {
-        render(<LuvStatBar icon="bolt" label="Energia" value={70} max={100} />);
-
-        const container = screen.getByText("70/100").closest(".luv-stat-bar")!;
-        expect(container.querySelectorAll(".luv-stat-bar-dot--filled")).toHaveLength(7);
-    });
-
-    it("rounds to the nearest dot", () => {
-        render(<LuvStatBar icon="bolt" label="Energia" value={24} max={100} />);
-
-        const container = screen.getByText("24/100").closest(".luv-stat-bar")!;
-        expect(container.querySelectorAll(".luv-stat-bar-dot--filled")).toHaveLength(2);
-    });
-
-    it("clamps the filled dots between 0 and 10", () => {
+    it("clamps the fill width between 0% and 100%", () => {
         const { rerender } = render(<LuvStatBar icon="bolt" label="Energia" value={150} max={100} />);
         let container = screen.getByText("150/100").closest(".luv-stat-bar")!;
-        expect(container.querySelectorAll(".luv-stat-bar-dot--filled")).toHaveLength(10);
+        expect((container.querySelector(".luv-stat-bar-fill") as HTMLElement).style.width).toBe("100%");
 
         rerender(<LuvStatBar icon="bolt" label="Energia" value={-10} max={100} />);
         container = screen.getByText("-10/100").closest(".luv-stat-bar")!;
-        expect(container.querySelectorAll(".luv-stat-bar-dot--filled")).toHaveLength(0);
+        expect((container.querySelector(".luv-stat-bar-fill") as HTMLElement).style.width).toBe("0%");
     });
 
-    it("shows no filled dots when max is 0", () => {
+    it("shows no fill when max is 0", () => {
         render(<LuvStatBar icon="bolt" label="Energia" value={0} max={0} />);
 
         const container = screen.getByText("0/0").closest(".luv-stat-bar")!;
-        expect(container.querySelectorAll(".luv-stat-bar-dot--filled")).toHaveLength(0);
+        expect((container.querySelector(".luv-stat-bar-fill") as HTMLElement).style.width).toBe("0%");
     });
 
     it("applies the given color as a CSS variable", () => {

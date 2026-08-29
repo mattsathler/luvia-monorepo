@@ -37,7 +37,7 @@ export function CalendarPanel({ character, currentLot }: CalendarPanelProps) {
             triggerLabel={`Atividade de ${character.firstName}`}
             origin="bottom-center"
             defaultOpen
-            className="border-16 card"
+            className="border-16 card pixel"
             bodyClassName="w-164 d-flex flex-col gap-8 pointer-events-auto items-center"
         >
             <div className="d-flex items-center gap-4">

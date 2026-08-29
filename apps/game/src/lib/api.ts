@@ -285,6 +285,38 @@ export async function searchLots(accessToken: string, query?: string, characterI
     return response.json();
 }
 
+export type NeighborhoodEntry = {
+    kind: "lot" | "workplace";
+    id: string;
+    x: number;
+    y: number;
+    distanceBlocks: number;
+    /** Só presente em `kind: "lot"`. */
+    ownerName?: string;
+    typeName?: string;
+    /** Só presente em `kind: "workplace"` — nome de exibição resolvido no frontend (ver BUILDING_TYPE_LABELS). */
+    buildingTypeId?: string;
+};
+
+// Vizinhança de uma posição da grade (outros lotes e prédios de trabalho
+// mais próximos) — usado pela inspeção de lote, mesmo pra uma posição sem
+// `Lot` ainda (ver GetLotNeighborhoodUseCase na API).
+export async function getLotNeighborhood(
+    accessToken: string,
+    x: number,
+    y: number,
+    excludeLotId?: string,
+): Promise<NeighborhoodEntry[]> {
+    const suffix = excludeLotId ? `?excludeLotId=${encodeURIComponent(excludeLotId)}` : "";
+    const response = await authFetch(`/city/lots/${x}/${y}/neighborhood${suffix}`, accessToken);
+
+    if (!response.ok) {
+        throw new ApiError(await parseErrorMessage(response));
+    }
+
+    return response.json();
+}
+
 export type CurrentLot = {
     name: string;
     x: number;

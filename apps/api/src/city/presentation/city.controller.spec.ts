@@ -3,6 +3,7 @@ import { GetCityUseCase } from '../application/use-cases/get-city.use-case';
 import { GetCityChunkUseCase } from '../application/use-cases/get-city-chunk.use-case';
 import { GetCharacterLotUseCase } from '../application/use-cases/get-character-lot.use-case';
 import { GetCurrentLotUseCase } from '../application/use-cases/get-current-lot.use-case';
+import { GetLotNeighborhoodUseCase } from '../application/use-cases/get-lot-neighborhood.use-case';
 import { SearchLotsUseCase } from '../application/use-cases/search-lots.use-case';
 
 describe('CityController', () => {
@@ -12,6 +13,7 @@ describe('CityController', () => {
     const getCharacterLotUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCharacterLotUseCase>;
     const getCurrentLotUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetCurrentLotUseCase>;
     const searchLotsUseCase = { execute: jest.fn() } as unknown as jest.Mocked<SearchLotsUseCase>;
+    const getLotNeighborhoodUseCase = { execute: jest.fn() } as unknown as jest.Mocked<GetLotNeighborhoodUseCase>;
 
     const controller = new CityController(
       getCityUseCase,
@@ -19,9 +21,18 @@ describe('CityController', () => {
       getCharacterLotUseCase,
       getCurrentLotUseCase,
       searchLotsUseCase,
+      getLotNeighborhoodUseCase,
     );
 
-    return { controller, getCityUseCase, getCityChunkUseCase, getCharacterLotUseCase, getCurrentLotUseCase, searchLotsUseCase };
+    return {
+      controller,
+      getCityUseCase,
+      getCityChunkUseCase,
+      getCharacterLotUseCase,
+      getCurrentLotUseCase,
+      searchLotsUseCase,
+      getLotNeighborhoodUseCase,
+    };
   }
 
   it('getCity() delegates to GetCityUseCase', () => {
@@ -81,5 +92,24 @@ describe('CityController', () => {
     controller.searchLots();
 
     expect(searchLotsUseCase.execute).toHaveBeenCalledWith(undefined, undefined);
+  });
+
+  it('getLotNeighborhood() delegates to GetLotNeighborhoodUseCase with the parsed position and excludeLotId', () => {
+    const { controller, getLotNeighborhoodUseCase } = buildController();
+    getLotNeighborhoodUseCase.execute.mockResolvedValue('neighborhood' as never);
+
+    const result = controller.getLotNeighborhood(1, 2, 'lot-1');
+
+    expect(getLotNeighborhoodUseCase.execute).toHaveBeenCalledWith(1, 2, 'lot-1');
+    expect(result).resolves.toBe('neighborhood');
+  });
+
+  it('getLotNeighborhood() works without excludeLotId', () => {
+    const { controller, getLotNeighborhoodUseCase } = buildController();
+    getLotNeighborhoodUseCase.execute.mockResolvedValue('neighborhood' as never);
+
+    controller.getLotNeighborhood(1, 2);
+
+    expect(getLotNeighborhoodUseCase.execute).toHaveBeenCalledWith(1, 2, undefined);
   });
 });

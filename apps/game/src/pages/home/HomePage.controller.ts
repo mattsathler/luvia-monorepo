@@ -3,6 +3,7 @@ import type { TileData } from "luv-ui";
 import { useAuth } from "../../auth/AuthContext";
 import { getCity, getCurrentLot, type Character, type City, type CurrentLot, type Lot } from "../../lib/api";
 import { getStoredTileSize, setStoredTileSize } from "./city-zoom-storage";
+import type { LotSelection } from "./LotDetailModal.controller";
 
 export type { CurrentLot } from "../../lib/api";
 
@@ -23,9 +24,12 @@ function clampTileSize(size: number): number {
     return Math.min(MAX_TILE_SIZE, Math.max(MIN_TILE_SIZE, size));
 }
 
-// Rua é só passagem, não tem informação própria pra consultar.
+// Só lotes são inspecionáveis — "grass" (ainda sem dono), "lot" e "lot-mine"
+// (ver buildChunkTiles em CityGrid.controller.ts). Rua, água e prédios
+// públicos (landmark) não são lotes (ver docs/game-design/lots-and-construction.md)
+// e não abrem o modal de inspeção.
 export function isTileClickable(tile: TileData): boolean {
-    return !tile.type.startsWith("road");
+    return tile.type === "grass" || tile.type === "lot" || tile.type === "lot-mine";
 }
 
 type UseHomePageControllerParams = {
@@ -38,7 +42,7 @@ export function useHomePageController({ character }: UseHomePageControllerParams
     const [currentLot, setCurrentLot] = useState<CurrentLot | null>(null);
     const [loadError, setLoadError] = useState<string | null>(null);
     const [tileSize, setTileSize] = useState(() => clampTileSize(getStoredTileSize() ?? DEFAULT_TILE_SIZE));
-    const [selectedLot, setSelectedLot] = useState<Lot | null>(null);
+    const [selectedLot, setSelectedLot] = useState<LotSelection | null>(null);
     const [dragModeEnabled, setDragModeEnabled] = useState(false);
 
     useEffect(() => {
@@ -62,12 +66,12 @@ export function useHomePageController({ character }: UseHomePageControllerParams
             .catch(() => setLoadError("Não foi possível carregar a cidade. Tente novamente."));
     }, [accessToken, character.id]);
 
-    // Só lotes têm informação pra mostrar — clique em terreno livre não faz
-    // nada (rua já é filtrada antes, em `isTileClickable`).
-    function handleTileClick(_tile: TileData, lot?: Lot) {
-        if (lot) {
-            setSelectedLot(lot);
-        }
+    // Todo lote é inspecionável, com ou sem dono/construção (ver regra I do
+    // pedido de inspeção de lote) — `isTileClickable` já garante que só
+    // tiles de lote chegam aqui; `lot` vem `undefined` pra um tile ainda sem
+    // `Lot` reivindicado.
+    function handleTileClick(tile: TileData, lot?: Lot) {
+        setSelectedLot({ x: tile.x, y: tile.y, lot: lot ?? null });
     }
 
     function closeLotModal() {

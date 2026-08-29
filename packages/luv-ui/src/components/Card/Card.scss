@@ -24,6 +24,13 @@
     background-color: color-mix(in srgb, var(--surface) 50%, transparent);
 }
 
+// Borda fina e sem blur (sem sombra suave por baixo) — aceno ao mundo em
+// pixel art nos painéis de HUD, sem abrir mão do preenchimento/raio
+// arredondados do card (ver docs/decisions/0033).
+@mixin card-pixel {
+    border: 2px solid var(--border);
+}
+
 @mixin card-variant($color) {
     background-color: var(--#{$color}) !important;
 }
@@ -42,6 +49,10 @@
 
 .card.translucid {
     @include card-translucid;
+}
+
+.card.pixel {
+    @include card-pixel;
 }
 
 @each $name, $value in colors.$color-keys {

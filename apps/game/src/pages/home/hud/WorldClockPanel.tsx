@@ -55,7 +55,7 @@ type WorldClockPanelProps = {
 
 export function WorldClockPanel({ hour, weekday, weather }: WorldClockPanelProps) {
     return (
-        <div className="card border-16 p-8 px-16 d-flex gap-8 items-center pointer-events-auto">
+        <div className="card pixel border-16 p-8 px-16 d-flex gap-8 items-center pointer-events-auto">
             <div className="pr-8">
                 <LuvIcon name={weather === null ? "cloud" : WEATHER_ICONS[weather.type]} size={32} className={weather ? 'text-game-' + WEATHER_COLORS[weather.type] : "placeholder"} />
             </div>

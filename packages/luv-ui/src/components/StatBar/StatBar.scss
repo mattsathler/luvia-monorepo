@@ -7,7 +7,7 @@
 
 .luv-stat-bar-header {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     gap: 8px;
     color: var(--text);
@@ -27,21 +27,19 @@
     white-space: nowrap;
 }
 
-.luv-stat-bar-dots {
-    display: flex;
-    gap: 4px;
+.luv-stat-bar-track {
+    --luv-stat-bar-track-color: color-mix(in srgb, var(--luv-stat-bar-color, var(--theme)) 60%, black);
+
+    border: 1px solid var(--luv-stat-bar-track-color);
     width: 100%;
+    height: 16px;
+    border-radius: 4px;
+    background-color: var(--luv-stat-bar-track-color);
+    overflow: hidden;
 }
 
-.luv-stat-bar-dot {
-    flex: 1;
-    aspect-ratio: 1;
-    border-radius: 9999px;
-    border: 2px solid var(--luv-stat-bar-color, var(--theme));
-    background-color: transparent;
-    transition: background-color 0.2s ease;
-}
-
-.luv-stat-bar-dot--filled {
+.luv-stat-bar-fill {
+    height: 100%;
     background-color: var(--luv-stat-bar-color, var(--theme));
+    transition: width 0.3s ease;
 }

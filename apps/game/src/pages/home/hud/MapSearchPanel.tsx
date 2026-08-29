@@ -22,7 +22,7 @@ export function MapSearchPanel({ character }: MapSearchPanelProps) {
             }
             triggerLabel="Buscar lotes"
             origin="bottom-left"
-            className="border-16 card p-16"
+            className="border-16 card pixel p-16"
             bodyClassName="w-276 d-flex flex-col gap-8 pointer-events-auto pr-24"
         >
             <LuvInput

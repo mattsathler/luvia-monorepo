@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HomePage } from "./HomePage";
 import { useAuth } from "../../auth/AuthContext";
-import { getCharacter, getCity, getCityChunk, getCurrentLot } from "../../lib/api";
+import { getCharacter, getCity, getCityChunk, getCurrentLot, getLotNeighborhood } from "../../lib/api";
 import type { Character, City } from "../../lib/api";
 
 // Diferente de HomePage.test.tsx (que mocka CityGrid inteiro — ver o
@@ -25,6 +25,7 @@ vi.mock("../../lib/api", async () => {
         getCity: vi.fn(),
         getCityChunk: vi.fn(),
         getCharacter: vi.fn(),
+        getLotNeighborhood: vi.fn(),
     };
 });
 
@@ -112,6 +113,7 @@ describe("HomePage — clicking a lot on the real map opens LotDetailModal", () 
         (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: "token-123" });
         (getCurrentLot as ReturnType<typeof vi.fn>).mockResolvedValue({ name: "Residência", x: 0, y: 0 });
         (getCity as ReturnType<typeof vi.fn>).mockResolvedValue(CITY);
+        (getLotNeighborhood as ReturnType<typeof vi.fn>).mockResolvedValue([]);
     });
 
     it("opens the modal with the owner's name for another character's lot", async () => {
@@ -131,7 +133,7 @@ describe("HomePage — clicking a lot on the real map opens LotDetailModal", () 
 
         const dialog = screen.getByRole("dialog");
         expect(dialog).toBeInTheDocument();
-        expect(within(dialog).getByText("Detalhes do lote")).toBeInTheDocument();
+        expect(within(dialog).getByText("Inspecionar lote")).toBeInTheDocument();
         expect(await within(dialog).findByText("Beto Costa")).toBeInTheDocument();
     });
 
@@ -176,7 +178,7 @@ describe("HomePage — clicking a lot on the real map opens LotDetailModal", () 
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
-    it("does not open the modal when clicking terrain with no lot on it", async () => {
+    it("opens the modal as available, with no owner, when clicking a lot that was never claimed", async () => {
         (getCityChunk as ReturnType<typeof vi.fn>).mockResolvedValue({
             tiles: [{ x: 0, y: 0, type: "grass" }],
             lots: [],
@@ -190,6 +192,9 @@ describe("HomePage — clicking a lot on the real map opens LotDetailModal", () 
             tile.click();
         });
 
-        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+        const dialog = screen.getByRole("dialog");
+        expect(dialog).toBeInTheDocument();
+        expect(within(dialog).getByText("Disponível")).toBeInTheDocument();
+        expect(getCharacter).not.toHaveBeenCalled();
     });
 });

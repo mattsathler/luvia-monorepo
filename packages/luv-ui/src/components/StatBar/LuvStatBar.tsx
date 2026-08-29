@@ -11,14 +11,10 @@ export type LuvStatBarProps = {
     color?: string;
 };
 
-const DOT_COUNT = 10;
-
-// Status limitados (0..max), como felicidade e energia do personagem, viram
-// 10 bolinhas (uma por 10% do total) em vez de uma barra contínua — ver
-// docs/ui-ux (protótipo da janela de perfil).
+// Barra de progresso pra status limitados (0..max), como felicidade e
+// energia do personagem — ver docs/ui-ux (protótipo da janela de perfil).
 export function LuvStatBar({ icon, label, value, max, color }: LuvStatBarProps) {
-    const ratio = max > 0 ? Math.min(1, Math.max(0, value / max)) : 0;
-    const filledDots = Math.round(ratio * DOT_COUNT);
+    const percent = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
     const style = color ? ({ "--luv-stat-bar-color": `var(--${color})` } as CSSProperties) : undefined;
 
     return (
@@ -32,13 +28,8 @@ export function LuvStatBar({ icon, label, value, max, color }: LuvStatBarProps) 
                     {value}/{max}
                 </span>
             </div>
-            <div className="luv-stat-bar-dots">
-                {Array.from({ length: DOT_COUNT }, (_, index) => (
-                    <span
-                        key={index}
-                        className={`luv-stat-bar-dot${index < filledDots ? " luv-stat-bar-dot--filled" : ""}`}
-                    />
-                ))}
+            <div className="luv-stat-bar-track">
+                <div className="luv-stat-bar-fill" style={{ width: `${percent}%` }} />
             </div>
         </div>
     );

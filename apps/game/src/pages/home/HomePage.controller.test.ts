@@ -28,11 +28,14 @@ vi.mock("../../lib/api", async () => {
 const CHARACTER = { id: "char-1" } as Character;
 
 describe("isTileClickable", () => {
-    it.each(["road-r", "road-l", "road-i", "road-corner-dr", "road-corner-dl", "road-corner-lu", "road-corner-ru"] as const)("is false for road tiles (%s)", (type) => {
-        expect(isTileClickable({ x: 0, y: 0, z: 0, type })).toBe(false);
-    });
+    it.each(["road-r", "road-l", "road-i", "road-corner-dr", "road-corner-dl", "road-corner-lu", "road-corner-ru", "ocean", "landmark"] as const)(
+        "is false for non-lot tiles (%s)",
+        (type) => {
+            expect(isTileClickable({ x: 0, y: 0, z: 0, type })).toBe(false);
+        },
+    );
 
-    it.each(["grass", "ocean", "landmark", "lot", "lot-mine"] as const)("is true for non-road tiles (%s)", (type) => {
+    it.each(["grass", "lot", "lot-mine"] as const)("is true for lot tiles, with or without an owner (%s)", (type) => {
         expect(isTileClickable({ x: 0, y: 0, z: 0, type })).toBe(true);
     });
 });
@@ -42,13 +45,13 @@ describe("useHomePageController handleTileClick", () => {
         (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ accessToken: null });
     });
 
-    it("does nothing when the clicked tile has no lot", () => {
+    it("selects a lot-less position (a lot that's never been claimed) — every lot is inspectable", () => {
         const { result } = renderHook(() => useHomePageController({ character: CHARACTER }));
         act(() => {
             result.current.handleTileClick({ x: 1, y: 2, z: 0, type: "grass" });
         });
 
-        expect(result.current.selectedLot).toBeNull();
+        expect(result.current.selectedLot).toEqual({ x: 1, y: 2, lot: null });
     });
 
     it("selects the lot when the clicked tile has one", () => {
@@ -59,7 +62,7 @@ describe("useHomePageController handleTileClick", () => {
             result.current.handleTileClick({ x: 1, y: 2, z: 0, type: "lot" }, lot);
         });
 
-        expect(result.current.selectedLot).toEqual(lot);
+        expect(result.current.selectedLot).toEqual({ x: 1, y: 2, lot });
     });
 
     it("closeLotModal clears the selected lot", () => {

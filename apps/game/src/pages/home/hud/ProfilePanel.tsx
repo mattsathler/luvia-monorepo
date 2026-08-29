@@ -22,13 +22,10 @@ export function ProfilePanel({ character }: ProfilePanelProps) {
             }
             triggerLabel={`Perfil de ${character.firstName}`}
             defaultOpen
-            className="border-16 card p-16"
+            className="border-16 card pixel p-16"
             bodyClassName="w-164 d-flex flex-col gap-8 pointer-events-auto"
         >
             <div className="d-flex gap-8">
-
-                <LuvDivider orientation="vertical"></LuvDivider>
-
                 <div className="d-flex flex-col gap-8">
                     <strong className="text-text">
                         {character.firstName} {character.lastName}
@@ -36,10 +33,10 @@ export function ProfilePanel({ character }: ProfilePanelProps) {
 
                     <div className="d-flex flex-col gap-4">
                         <LuvStatBar icon="sentiment_satisfied" label="Felicidade" value={character.happiness} max={MAX_STAT} color="game-green" />
-                        <LuvStatBar icon="bolt" label="Energia" value={character.energy} max={MAX_STAT} color="game-yellow" />
+                        <LuvStatBar icon="bolt" label="Energia" value={character.energy} max={MAX_STAT} color="game-orange" />
                     </div>
 
-                    <LuvDivider></LuvDivider>
+                    <LuvDivider className="bg-border"></LuvDivider>
 
                     <div className="d-grid grid-cols-2 items-center text-text">
                         <span className="d-flex items-center gap-4 justify-center items-center">

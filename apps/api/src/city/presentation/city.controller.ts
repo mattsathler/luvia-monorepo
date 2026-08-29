@@ -3,6 +3,7 @@ import { GetCharacterLotUseCase } from '../application/use-cases/get-character-l
 import { GetCityChunkUseCase } from '../application/use-cases/get-city-chunk.use-case';
 import { GetCityUseCase } from '../application/use-cases/get-city.use-case';
 import { GetCurrentLotUseCase } from '../application/use-cases/get-current-lot.use-case';
+import { GetLotNeighborhoodUseCase } from '../application/use-cases/get-lot-neighborhood.use-case';
 import { SearchLotsUseCase } from '../application/use-cases/search-lots.use-case';
 
 @Controller('city')
@@ -13,6 +14,7 @@ export class CityController {
     private readonly getCharacterLotUseCase: GetCharacterLotUseCase,
     private readonly getCurrentLotUseCase: GetCurrentLotUseCase,
     private readonly searchLotsUseCase: SearchLotsUseCase,
+    private readonly getLotNeighborhoodUseCase: GetLotNeighborhoodUseCase,
   ) {}
 
   @Get()
@@ -44,5 +46,17 @@ export class CityController {
   @Get('current-lot/:characterId')
   getCurrentLot(@Param('characterId') characterId: string) {
     return this.getCurrentLotUseCase.execute(characterId);
+  }
+
+  // Vale pra qualquer posição da grade, com ou sem `Lot` ali — a inspeção de
+  // lote (ver docs/ui-ux, protótipo "Inspecionar lote") mostra a vizinhança
+  // mesmo de um lote ainda não reivindicado.
+  @Get('lots/:x/:y/neighborhood')
+  getLotNeighborhood(
+    @Param('x', ParseIntPipe) x: number,
+    @Param('y', ParseIntPipe) y: number,
+    @Query('excludeLotId') excludeLotId?: string,
+  ) {
+    return this.getLotNeighborhoodUseCase.execute(x, y, excludeLotId);
   }
 }
