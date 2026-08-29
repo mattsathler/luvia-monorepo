@@ -50,3 +50,4 @@ A roupa (`clothes/0.png`, um short) já nasce posicionada na altura do quadril d
 
 - [[0019-personagem-montado-em-camadas-com-rig-2d]]
 - [[../ui-ux/visual-art-style]]
+- [[0033-mundo-e-personagem-em-pixel-art-com-hud-vetorizada-coesa]]

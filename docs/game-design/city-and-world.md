@@ -12,7 +12,7 @@ Existe apenas uma cidade. Todos vivem nela. A cidade é persistente.
 
 ### Mundo
 
-A visualização principal é isométrica. Vetorizado / ilustrado. Cozy. Poucos elementos animados. Sem excesso de efeitos.
+A visualização principal é isométrica. Pixel art — substitui o estilo vetorizado/ilustrado original, mas o mecanismo isométrico e a iluminação dia/noite não mudam (ver [[../decisions/0033-mundo-e-personagem-em-pixel-art-com-hud-vetorizada-coesa]]). Cozy. Poucos elementos animados. Sem excesso de efeitos.
 
 ### Terreno
 
@@ -46,6 +46,7 @@ Luvia é uma cidade chuvosa (o próprio nome do jogo remete a "chuva") — chuva
 - [[../decisions/0029-clima-cosmetico-e-cidade-chuvosa]]
 - [[../decisions/0030-clima-temperatura-e-hora-afetam-felicidade-e-produtividade]]
 - [[../decisions/0031-bairros-expansao-do-mundo-sob-demanda]]
+- [[../decisions/0033-mundo-e-personagem-em-pixel-art-com-hud-vetorizada-coesa]]
 - [[../technical/lowys-carregamento-em-chunks]]
 - [[../technical/relogio-do-mundo]]
 - [[../technical/clima-e-temperatura]]

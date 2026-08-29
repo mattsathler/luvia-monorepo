@@ -23,3 +23,4 @@ Faltava também uma categoria pra jaqueta/casaco (peça de sobreposição que co
 
 - [[0020-assets-de-personagem-em-canvas-fixo-com-blank-area]]
 - [[0019-personagem-montado-em-camadas-com-rig-2d]]
+- [[0033-mundo-e-personagem-em-pixel-art-com-hud-vetorizada-coesa]]

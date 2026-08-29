@@ -40,3 +40,4 @@ Sendo projeto solo, o item mais caro do plano original era puramente de arte e a
 - [[../vision/principles]]
 - [[0008-luv-ui-como-design-system-obrigatorio]]
 - [[0024-personagem-nasce-sem-skills]]
+- [[0033-mundo-e-personagem-em-pixel-art-com-hud-vetorizada-coesa]]
